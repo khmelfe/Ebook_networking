@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Payment";
+    var cart = (Ebook_Libary_project.Models.Cart)ViewBag.Cart; // Get the cart from ViewBag
+}
+
+<h2>Payment</h2>
+
+@if (cart != null)
+{
+    if (cart.Items.Count > 0)
+    {
+        <h3>Your Cart Items:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Format</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in cart.Items)
+                {
+                    var details = item.Value;
+                    <tr>
+                        <td>@details.Action</td>
+                        <td>@details.Format</td>
+                        <td>@details.Price.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Your cart is currently empty.</p>
+    }
+
+    <br />
+    <h4>Total: <span style="color: green;">@cart.CalculateTotalPrice().ToString("C")</span></h4>
+
+    if (cart != null && (cart.Items.Count > 0 || cart.CalculateTotalPrice() == 0))
+
+    {
+        <h3>Payment Details</h3>
+        <form method="post" action="/User/Payment/ProcessPayment">
+            <div>
+                <label for="cardNumber">Card Number:</label><br />
+                <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" placeholder="1234 5678 9012 3456" maxlength="19" /><br />
+            </div>
+
+            <div>
+                <label for="expiry">Expiry Date:</label><br />
+                <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required pattern="\d{2}/\d{2}" /><br />
+            </div>
+
+            <div>
+                <label for="cvv">CVV:</label><br />
+                <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3" /><br />
+            </div>
+
+            <button type="submit" class="btn btn-success">Confirm Payment</button>
+        </form>
+    }
+    else
+    {
+        <p>You cannot proceed with payment as your cart is empty.</p>
+    }
+}
+else
+{
+    <p>Unable to retrieve cart details.</p>
+}

@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Book Page";
+}
+
+<h2>Book Page</h2>
+
+<div class="book-container">
+    <div class="book-image">
+        <p>Image Placeholder</p>
+    </div>
+
+    <div class="book-details">
+        <h2>@Model.Name</h2>
+        <p><strong>Author:</strong> @Model.Author</p>
+        <p><strong>Buying Price:</strong> $@Model.BuyingPrice</p>
+        <p><strong>Borrow Price:</strong> $@Model.BorrowPrice</p>
+        <p><strong>Available Copies:</strong> @Model.AvailableCopies</p>
+
+        <form id="addToCartForm">
+            <input type="hidden" name="bookId" value="@Model.Id" />
+            <label>
+                <input type="radio" name="action" value="borrow" required /> Borrow
+            </label>
+            <br />
+            <label>
+                <input type="radio" name="action" value="buy" required /> Buy
+            </label>
+            <br />
+
+            <div class="formats">
+                <strong>Select Format:</strong>
+                <select name="format" required>
+                    <option value="PDF">PDF</option>
+                    <option value="MP3">MP3</option>
+                    <option value="EPUB">EPUB</option>
+                </select>
+            </div>
+
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('addToCartForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/User/AddToCart', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
