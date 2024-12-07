@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+@model Ebook_Libary_project.Models.UserModel
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HTML Login Form</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('/Content/Images/2780906.jpg');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center min-height: 100vh;
+        }
+
+        .main {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            transition: transform 0.2s;
+            width: 500px;
+            position: absolute;
+            left: 51.1%;
+            top: 17%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        label {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-align: left;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            background-color: #4CAF50;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+   
+</head>
+
+<body>
+    
+    {
+
+    <div class="main">
+        <h1>Welcome User</h1>
+        <h3>Enter your login credentials</h3>
+
+
+
+
+        <form method="post" action="Sumbit">
+            <div>
+                <label for="Username">
+                    Username:
+                </label>
+                <input type="Username" id="Username" name="Username" value="@Model.Username"
+                       placeholder="Enter your Username" required />
+
+                </div>
+                <div>
+                    <label for="Password">
+                        Password:
+                    </label>
+
+                    <input type="password" id="password" name="password" value="@Model.Password"
+                           placeholder="Enter your Password" required> 
+                    </div>
+                    <div class="wrap">
+                        <div class="wrap">
+                            <button type="submit" onclick="myFunction()">Submit</button>
+                        </div>
+                    </div>
+
+                    <p>
+                        Not registered?
+                        <a href="#" style="text-decoration: none;">
+                            Create an account
+                        </a>
+                    </p>
+                </form>
+                <script>
+                     function myFunction() {
+                         var msg = '@TempData["ErrorMessage"]'; // Properly wrap the Razor output
+                         alert(msg.trim() ? msg : 'No error message found.');
+                     }
+                </script>
+
+            </div>
+        
+    }
+</body>
+
+</html>
+
+
+
