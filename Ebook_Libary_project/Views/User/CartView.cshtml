@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Cart";
+    var cart = (Ebook_Libary_project.Models.Cart)ViewBag.Cart; // Get the cart from ViewBag
+}
+
+<h2>Cart</h2>
+
+@if (cart != null && cart.Items.Count > 0)
+{
+    <p>Your cart contains the following items:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Action</th>
+                <th>Format</th>
+                <th>Price</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in cart.Items)
+            {
+                int bookId = item.Key;
+                var details = item.Value;
+                <tr>
+                    <td>@details.Action</td>
+                    <td>@details.Format</td>
+                    <td>@details.Price.ToString("C")</td>
+                    <td>
+                        <form method="post" action="/User/Cart/RemoveFromCart">
+                            <input type="hidden" name="bookId" value="@bookId" />
+                            <button type="submit" class="button">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p><strong>Total Price:</strong> @cart.CalculateTotalPrice().ToString("C")</p>
+
+    <a class="btn btn-primary" href="@Url.Action("Paymentvi", "Payment", new { id = 0 })">Pay!!!!!!</a>
+
+
+}
+else
+{
+    <p>Your cart is empty.</p>
+}
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
