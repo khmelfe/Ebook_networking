@@ -3,13 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
+using EbookLibraryProject.Models;
 namespace Ebook_Libary_project.Controllers.user
 {
     public class UserController : Controller
     {
         List<Book> books = BookDatabase.Books;
-
+        Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", password: "securePass123", age: 25)
+        {
+            admin = false // Set admin status
+        };
         // View for individual book page
         public ActionResult BookPage(int id)
         {
@@ -32,11 +35,26 @@ namespace Ebook_Libary_project.Controllers.user
 
                 decimal price = action == "buy" ? book.BuyingPrice : book.BorrowPrice;
 
+                if (action == "borrow")
+
+                {
+                    if (book.AvailableCopies <= 0) return Json(new { success = true, message = "no copies left go to waiting!" });
+                    if (exampleUser.BorrowBook(book.Id, 3))
+                    {
+                        book.BorrowBook(exampleUser.Id.ToString());
+                       
+                    }
+                    exampleUser.ShowBorrowedBooks();
+
+                }
+
+
                 var cart = Cart.GetCart(); // Access the shared cart
                 if (!cart.Items.ContainsKey(bookId)) // If the book isn't already in the cart
                 {
                     cart.AddBookToCart(bookId, action, price, format);
                 }
+
 
                 return Json(new { success = true, message = "Book added to cart successfully!" });
             }
