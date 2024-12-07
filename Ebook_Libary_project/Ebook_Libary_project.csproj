@@ -120,16 +120,16 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Bookdatabase.cs" />
-    <Compile Include="Controllers\User\CartController.cs" />
-    <Compile Include="Controllers\User\PaymentController.cs" />
-    <Compile Include="Controllers\User\UserController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+<<<<<<< HEAD
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Usermodel.cs" />
+=======
+>>>>>>> ba3d232512715342bf83d0f3891e62b51782147b
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Userdatabase.cs" />
   </ItemGroup>
@@ -150,6 +150,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Images\2780906.jpg" />
+    <Content Include="Content\Images\Login_page.png" />
+    <Content Include="Content\Images\wall-wallpaper-concrete-colored-painted-textured-concept.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -180,14 +183,13 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\User\bookPage.cshtml" />
-    <Content Include="Views\User\CartView.cshtml" />
-    <Content Include="Views\User\PaymentView.cshtml" />
-    <Content Include="Views\User\Paymentv.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\admin\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
