@@ -8,8 +8,9 @@ namespace Ebook_Libary_project.Controllers.User
         [HttpGet]
         public ActionResult Paymentvi()
         {
-            
-             return View("~/Views/User/PaymentView.cshtml");
+            var cart = Ebook_Libary_project.Models.Cart.GetCart();
+            ViewBag.Cart = cart;
+            return View("~/Views/User/PaymentView.cshtml");
         }
 
        
