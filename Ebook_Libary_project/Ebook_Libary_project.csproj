@@ -124,12 +124,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-<<<<<<< HEAD
+
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Usermodel.cs" />
-=======
->>>>>>> ba3d232512715342bf83d0f3891e62b51782147b
+
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Userdatabase.cs" />
   </ItemGroup>
