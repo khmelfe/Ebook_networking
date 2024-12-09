@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\bin\Ebook_Libary_project.dll.config
 C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\bin\Ebook_Libary_project.dll
 C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\bin\Ebook_Libary_project.pdb
@@ -78,7 +77,6 @@ C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\obj\Debug\
 C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\obj\Debug\Ebook_Li.470F2DF5.Up2Date
 C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.dll
 C:\Users\filex\source\repos\Ebook_Libary_project\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.pdb
-=======
 C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\Ebook_Libary_project.dll.config
 C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\Ebook_Libary_project.dll
 C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\Ebook_Libary_project.pdb
@@ -158,4 +156,3 @@ C:\Users\97254\Desktop\proj\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.
 C:\Users\97254\Desktop\proj\Ebook_Libary_project\obj\Debug\Ebook_Li.470F2DF5.Up2Date
 C:\Users\97254\Desktop\proj\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.dll
 C:\Users\97254\Desktop\proj\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.pdb
->>>>>>> 56e77377e1f6fe610f5d3193c537c6c1eec62e10
