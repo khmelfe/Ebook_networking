@@ -44,6 +44,7 @@
         </nav>
     </header>
     <div id="id01" class="modal">
+        <!-- Login Form -->
         <form id="loginForm" class="modal-content animate">
             <div class="imgcontainer">
                 <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
@@ -64,19 +65,115 @@
             </div>
 
             <div class="container" style="background-color:#f1f1f1">
+                
+                <button type="button" div class="login_container" class="registerbtn" onclick="switchToRegister()">Register</button>
                 <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
                 <span class="psw">Forgot <a href="#">password?</a></span>
             </div>
 
-            <!-- Error message display -->
             <div id="errorMessage" style="color: red; display: none;">
                 Invalid username or password. Please try again.
             </div>
         </form>
+
+        <!-- Registration Form -->
+        <form id="registerForm" class="modal-content animate" style="display: none;">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="login_container">
+                <label for="newUname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="newUsername" name="newUname" required>
+
+                <label for="email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Email" id="email" name="email" required>
+
+                <label for="newPsw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" id="newPassword" name="newPsw" required>
+
+                <label for="confirmPsw"><b>Confirm Password</b></label>
+                <input type="password" placeholder="Confirm Password" id="confirmPassword" name="confirmPsw" required>
+
+                <button type="submit" id="registerButton">Register</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button"  div class="login_container" onclick="switchToLogin()">Back to Login</button>
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+
+            </div>
+        </form>
+    </div>
+
+    @*<div id="id01" class="modal">
+        <form id="loginForm" class="modal-content animate">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="login_container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="username" name="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" id="password" name="psw" required>
+
+                <button type="button" id="loginButton">Login</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+                <div class="container" style="text-align: center; margin-top: 10px;">
+                    <button type="button" class="registerbtn" onclick="document.getElementById('id02').style.display='block'; document.getElementById('id01').style.display='none';">
+                        Register
+                    </button>
+                </div>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
+
+            <div id="id02" class="modal">
+                <form id="registerForm" class="modal-content animate">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    </div>
+
+                    <div class="register_container">
+                        <label for="newUname"><b>Username</b></label>
+                        <input type="text" placeholder="Enter Username" id="newUsername" name="newUname" required>
+
+                        <label for="email"><b>Email</b></label>
+                        <input type="email" placeholder="Enter Email" id="email" name="email" required>
+
+                        <label for="newPsw"><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" id="newPassword" name="newPsw" required>
+
+                        <label for="confirmPsw"><b>Confirm Password</b></label>
+                        <input type="password" placeholder="Confirm Password" id="confirmPassword" name="confirmPsw" required>
+
+                        <button type="submit" id="registerButton">Register</button>
+                    </div>
+
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+                    </div>
+                </form>
+            </div>*@
+
+    <!-- Error message display -->
+    <div id="errorMessage" style="color: red; display: none;">
+        Invalid username or password. Please try again.
+    </div>
+    </form>
     </div>
 
 
-    
+
     <!-- Main Content -->
     <div class="container">
         @RenderBody()
@@ -93,6 +190,17 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <script>
+        function switchToRegister() {
+            document.getElementById('loginForm').style.display = 'none'; // Hide login form
+            document.getElementById('registerForm').style.display = 'block'; // Show register form
+        }
+
+        function switchToLogin() {
+            document.getElementById('registerForm').style.display = 'none'; // Hide register form
+            document.getElementById('loginForm').style.display = 'block'; // Show login form
+        }
+
+
         // When the user clicks the button, open the modal
         document.getElementById('openLoginButton').onclick = function () {
             document.getElementById('id01').style.display = 'block';
@@ -112,7 +220,7 @@
 
         // Register click event to login button
         document.getElementById("loginButton").onclick = function () {
-            
+
             // Prevent form submission
             event.preventDefault();
 
@@ -130,17 +238,19 @@
                     if (response.success) {
                         document.getElementById("errorMessage").style.display = "none";
                         document.getElementById('id01').style.display = 'none'; // Close modal
-                        alert("Login successful!"); // You can redirect here or show another success message
+                        alert("Login successful!");
+                        window.location.reload(); // Reloads the current page
+
                     } if (!response.success) {
                         alert("Invalid username or password.");
                     }
-                    
+
                 },
                 error: function (xhr, status, error) {
                     console.log("Error occurred: " + error);
                     alert("An error occurred while logging in. Please try again.");
                 }
-        });
+            });
         };
     </script>
 
