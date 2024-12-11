@@ -28,22 +28,18 @@ namespace Ebook_Libary_project
                 url: "User/Payment/{action}/0",
                 defaults: new { controller = "Payment", action = "Paymentvi", id = UrlParameter.Optional }
             );
-
+            //Main_Page
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Ebook_libary_Home", action = "Ebook_home", id = UrlParameter.Optional }
             );
             routes.MapRoute(
                 name: "Login",
                 url: "Login",
                 defaults: new { controller = "Login", action = "Login", id = UrlParameter.Optional }
             );
-            routes.MapRoute(
-                name: "Ebook_home",
-                url: "Ebook_home",
-                defaults: new { controller = "Ebook_home", action = "Ebook_home", id = UrlParameter.Optional }
-            );
+         
         }
 
     }
