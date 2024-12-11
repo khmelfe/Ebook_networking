@@ -203,6 +203,7 @@
     <Content Include="Views\User\Paymentv.cshtml" />
     <Content Include="Views\User\PaymentView.cshtml" />
     <Content Include="Views\Login\_LoginPartial.cshtml" />
+    <Content Include="Views\Login\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
