@@ -39,7 +39,12 @@ namespace Ebook_Libary_project
                 url: "Login",
                 defaults: new { controller = "Login", action = "Login", id = UrlParameter.Optional }
             );
-         
+            routes.MapRoute(
+              name: "Dashboard",
+              url: "Dashboard",
+              defaults: new { controller = "User", action = "Dashboard", id = UrlParameter.Optional }
+          );
+
         }
 
     }
