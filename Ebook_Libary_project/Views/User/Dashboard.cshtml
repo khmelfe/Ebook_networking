@@ -1,0 +1,340 @@
+@*@{
+        ViewBag.Title = "Dashboard";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+    }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link href="@Url.Content("~/Content/Dashboard.css")" rel="stylesheet" type="text/css" />
+        <style>
+            button {
+                background-color: #04AA6D;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+            }
+
+                button:hover {
+                    opacity: 0.8;
+                }
+            .btn-primary {
+                --bs-btn-color: #fff;
+                --bs-btn-bg: #808080;
+                --bs-btn-border-color: #0d6efd;
+                --bs-btn-hover-color: #fff;
+                --bs-btn-hover-bg: #0b5ed7;
+                --bs-btn-hover-border-color: #0a58ca;
+                --bs-btn-focus-shadow-rgb: 49, 132, 253;
+                --bs-btn-active-color: #fff;
+                --bs-btn-active-bg: #0a58ca;
+                --bs-btn-active-border-color: #0a53be;
+                --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+                --bs-btn-disabled-color: #fff;
+                --bs-btn-disabled-bg: #0d6efd;
+                --bs-btn-disabled-border-color: #0d6efd;
+            }
+
+        </style>
+    </head>
+    <body>
+
+            <div class="row content">
+                <div class="col-sm-3 sidenav_dash hidden-xs">
+                    <h2>Logo</h2>
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active"><a href="#section1">Dashboard</a></li>
+                        <li><a href="#section2">Age</a></li>
+                        <li><a href="#section3">Gender</a></li>
+                        <li><a href="#section3">Geo</a></li>
+                    </ul><br>
+                </div>
+                <br>
+
+                <div class="col-sm-9">
+                    <div class="well">
+                        <h4>Dashboard</h4>
+                        <p>Some text..</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="well">
+                                <h4>Users</h4>
+                                <p>1 Million</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="well">
+                                <h4>Pages</h4>
+                                <p>100 Million</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="well">
+                                <h4>Sessions</h4>
+                                <p>10 Million</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="well">
+                                <h4>Bounce</h4>
+                                <p>30%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="well">
+                                <p>Text</p>
+                                <p>Text</p>
+                                <p>Text</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="well">
+                                <p>Text</p>
+                                <p>Text</p>
+                                <p>Text</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="well">
+                                <p>Text</p>
+                                <p>Text</p>
+                                <p>Text</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="well">
+                                <p>Text</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="well">
+                                <p>Text</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </body>
+    </html>*@
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="@Url.Content("~/Content/Dashboard.css")" rel="stylesheet" type="text/css">
+    <style>
+        /* Basic layout styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+
+        .col {
+            padding: 10px;
+            flex: 1;
+        }
+
+        /* Sidebar styles */
+        .sidenav_dash {
+            width: 25%;
+            background-color: white;
+            margin-top:1.6%;
+            color: white;
+            height: 25%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+            .sidenav_dash h2 {
+                color: #0094ff;
+                margin-bottom: 20px;
+            }
+
+            .sidenav_dash ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+                .sidenav_dash ul li {
+                    margin: 10px 0;
+                }
+
+                    .sidenav_dash ul li a {
+                        text-decoration: none;
+                        color: black;
+                        font-size: 18px;
+                    }
+
+                        .sidenav_dash ul li a:hover {
+                            color: #04AA6D;
+                        }
+
+        /* Main content styles */
+        .main-content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .well {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .well h4 {
+                margin-top: 0;
+            }
+
+        /* Button styles */
+        button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #039a5f;
+            }
+
+        .stats-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .stats-box h4 {
+                margin: 0;
+            }
+
+            .stats-box p {
+                font-size: 24px;
+                font-weight: bold;
+                margin: 10px 0 0;
+            }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="sidenav_dash">
+            <h2>Logo</h2>
+            <ul>
+                <li><a href="#section1">Dashboard</a></li>
+                <li><a href="#section2">Age</a></li>
+                <li><a href="#section3">Gender</a></li>
+                <li><a href="#section4">Geo</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="well">
+                <h4>Dashboard</h4>
+                <p>Some text...</p>
+            </div>
+
+            <!-- Statistics Row -->
+            <div class="row">
+                <div class="col">
+                    <div class="stats-box">
+                        <h4>Users</h4>
+                        <p>1 Million</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="stats-box">
+                        <h4>Pages</h4>
+                        <p>100 Million</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="stats-box">
+                        <h4>Sessions</h4>
+                        <p>10 Million</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="stats-box">
+                        <h4>Bounce</h4>
+                        <p>30%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Rows -->
+            <div class="row">
+                <div class="col">
+                    <div class="well">
+                        <p>Text</p>
+                        <p>Text</p>
+                        <p>Text</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="well">
+                        <p>Text</p>
+                        <p>Text</p>
+                        <p>Text</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="well">
+                        <p>Text</p>
+                        <p>Text</p>
+                        <p>Text</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col" style="flex: 2;">
+                    <div class="well">
+                        <p>Text</p>
+                    </div>
+                </div>
+                <div class="col" style="flex: 1;">
+                    <div class="well">
+                        <p>Text</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

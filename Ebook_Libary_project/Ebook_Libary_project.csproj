@@ -155,6 +155,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Dashbord.css" />
     <Content Include="Content\Images\2780906.jpg" />
     <Content Include="Content\Images\Login_page.png" />
     <Content Include="Content\Images\wall-wallpaper-concrete-colored-painted-textured-concept.jpg" />
@@ -203,7 +204,7 @@
     <Content Include="Views\User\Paymentv.cshtml" />
     <Content Include="Views\User\PaymentView.cshtml" />
     <Content Include="Views\Login\_LoginPartial.cshtml" />
-    <Content Include="Views\Login\Dashboard.cshtml" />
+    <Content Include="Views\User\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
