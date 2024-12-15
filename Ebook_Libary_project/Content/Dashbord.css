@@ -1,0 +1,31 @@
+﻿
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {
+    height: 550px
+}
+
+/* Set gray background color and 100% height */
+.sidenav_dash {
+    background-color: #f1f1f1;
+    height: 100%;
+}
+
+/* On small screens, set height to 'auto' for the grid */
+@media screen and (max-width: 767px) {
+    .row.content {
+        height: auto;
+    }
+}
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+    button:hover {
+        opacity: 0.8;
+    }

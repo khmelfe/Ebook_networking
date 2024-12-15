@@ -61,5 +61,10 @@ namespace Ebook_Libary_project.Controllers.user
 
             return Json(new { success = false, message = "Invalid action." });
         }
+        public ActionResult Dashboard()
+        {
+            //need to add restrictions to admin
+            return View("Dashboard");
+        }
     }
 }
