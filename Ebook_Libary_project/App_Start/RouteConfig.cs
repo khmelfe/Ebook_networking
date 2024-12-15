@@ -25,7 +25,7 @@ namespace Ebook_Libary_project
 
             routes.MapRoute(
                 name: "Payment",
-                url: "User/Payment/{action}/0",
+                url: "User/Payment/{action}",
                 defaults: new { controller = "Payment", action = "Paymentvi", id = UrlParameter.Optional }
             );
             //Main_Page
