@@ -48,18 +48,6 @@ namespace Ebook_Libary_project.Models
         // Method to return a book
 
 
-        public string ReturnBook()
-        {
-            if (WaitingList.Count > 0)
-            {
-                string nextCustomer = WaitingList.Dequeue(); // Notify the next customer
-                return $"Book returned. Notified {nextCustomer}.";
-            }
-            else
-            {
-                AvailableCopies++;
-                return "Book returned successfully.";
-            }
-        }
+      
     }
 }
