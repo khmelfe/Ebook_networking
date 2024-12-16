@@ -23,6 +23,10 @@ namespace Ebook_Libary_project.Models
         {
             WaitingList = new Queue<string>();
         }
+        public string GetName()
+        {
+            return Name; // You can add extra logic here if needed
+        }
 
         // Method to borrow a book
         public decimal BorrowBook(string customerId)

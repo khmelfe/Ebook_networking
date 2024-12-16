@@ -15,5 +15,11 @@ namespace Ebook_Libary_project.Controllers
             return View("EbooK_home");
         }
 
+        public ActionResult Ebookhome()
+        {
+            var books = BookDatabase.getlist(); // Access books from the database
+            return View(books);
+        }
     }
+
 }

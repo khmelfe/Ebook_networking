@@ -72,6 +72,7 @@ namespace Ebook_Libary_project
                     WaitingList = new Queue<string>()
                 }
             };
+
         }
 
         // Improved method to get a book by ID using LINQ
@@ -80,5 +81,10 @@ namespace Ebook_Libary_project
             // Using LINQ to find the book by its ID
             return Books.FirstOrDefault(b => b.Id == id);
         }
+        public static List<Book> getlist()
+        {
+            return Books;
+        }
+
     }
 }
