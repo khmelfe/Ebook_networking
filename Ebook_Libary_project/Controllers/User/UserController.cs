@@ -4,10 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EbookLibraryProject.Models;
+using EbookLibraryProject;
+using Ebook_Library_Project;
+
+
 namespace Ebook_Libary_project.Controllers.user
 {
     public class UserController : Controller
     {
+        //move to main page!!!!
+        static Userdatabase userDb = new Userdatabase();
+
         List<Book> books = BookDatabase.Books;
         Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", password: "securePass123", age: 25)
         {
@@ -39,12 +46,9 @@ namespace Ebook_Libary_project.Controllers.user
 
                 {
                     if (book.AvailableCopies <= 0) return Json(new { success = true, message = "no copies left go to waiting!" });
-                    if (exampleUser.BorrowBook(book.Id, 3))
-                    {
+                    
                         book.BorrowBook(exampleUser.Id.ToString());
                        
-                    }
-                    exampleUser.ShowBorrowedBooks();
 
                 }
 

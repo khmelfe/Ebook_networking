@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
-using System.Web;
 
-namespace Ebook_Libary_project
+namespace Ebook_Library_Project
 {
     public class Userdatabase
     {
-
-
-
-        string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
 
         // Add a book to the bought list
-        public void BuyBook(int bookId,int userId)
+        public void BuyBook(int bookId, int userId)
         {
             string query = "INSERT INTO BoughtBooks (UserID, BookID, PurchaseDate) VALUES (@UserID, @BookID, @PurchaseDate)";
 
@@ -44,7 +38,6 @@ namespace Ebook_Libary_project
         public string ReturnBook(int userId, int bookId)
         {
             string message = string.Empty;
-            string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -109,21 +102,158 @@ namespace Ebook_Libary_project
         // Method to borrow a book
         public void BorrowBook(int userId, int bookId)
         {
-            string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-
-            string query = "INSERT INTO BorrowedBooks (UserID, BookID ReturnDate) VALUES (@UserID, @BookID, @BorrowDate, @ReturnDate)";
+            string query = "INSERT INTO BorrowedBooks (UserID, BookID, BorrowDate, ReturnDate) VALUES (@UserID, @BookID, @BorrowDate, @ReturnDate)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserID", userId);
-                command.Parameters.AddWithValue("@BookID", bookId);   
+                command.Parameters.AddWithValue("@BookID", bookId);
+                command.Parameters.AddWithValue("@BorrowDate", DateTime.Now);
                 command.Parameters.AddWithValue("@ReturnDate", DateTime.Now.AddDays(14)); // Example: 2-week borrow period
 
                 connection.Open();
                 command.ExecuteNonQuery();
             }
         }
+
+        // Function to change the price for buying or borrowing a book
+        public void UpdateBookPrice(int bookId, decimal newPrice, string action)
+        {
+            string column = action.ToLower() == "buying" ? "BuyPrice" : "BorrowPrice";
+            string query = $"UPDATE Books SET {column} = @NewPrice WHERE Id = @BookID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@NewPrice", newPrice);
+                command.Parameters.AddWithValue("@BookID", bookId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        // Function to change the return date for a borrowed book
+        public void UpdateReturnDate(int userId, int bookId, int days)
+        {
+            string query = "UPDATE BorrowedBooks SET ReturnDate = DATEADD(day, @Days, ReturnDate) WHERE UserID = @UserID AND BookID = @BookID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Days", days);
+                command.Parameters.AddWithValue("@UserID", userId);
+                command.Parameters.AddWithValue("@BookID", bookId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        // Function to remove a user from all tables and return borrowed books
+        public void RemoveUser(int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Return borrowed books
+                string returnBooksQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID";
+
+                using (SqlCommand returnBooksCommand = new SqlCommand(returnBooksQuery, connection))
+                {
+                    returnBooksCommand.Parameters.AddWithValue("@UserID", userId);
+                    returnBooksCommand.ExecuteNonQuery();
+                }
+
+                // Remove user from BoughtBooks, WaitingList, and other tables
+                string[] deleteQueries = {
+                    "DELETE FROM BoughtBooks WHERE UserID = @UserID",
+                    "DELETE FROM WaitingList WHERE UserID = @UserID",
+                    "DELETE FROM Users WHERE Id = @UserID"
+                };
+
+                foreach (string query in deleteQueries)
+                {
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserID", userId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        // Function to add a book to the Books table
+        public void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice)
+        {
+            
+            string query = "INSERT INTO Books (Title, Author, AvailableCopies, BuyPrice, BorrowPrice, 0) VALUES (@Title, @Author, @AvailableCopies, @BuyPrice, @BorrowPrice, @Sale)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Title", title);
+                command.Parameters.AddWithValue("@Author", author);
+                command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
+                command.Parameters.AddWithValue("@BuyPrice", buyPrice);
+                command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+
+        public void AddToWaitingList(int userId, int bookId)
+        {
+            string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Check if the user is already in the waiting list for the given book
+                string checkQuery = "SELECT COUNT(*) FROM WaitingList WHERE UserID = @UserID AND BookID = @BookID";
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@UserID", userId);
+                    checkCommand.Parameters.AddWithValue("@BookID", bookId);
+                    int count = (int)checkCommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        Debug.WriteLine("User is already in the waiting list for this book.");
+                        return;
+                    }
+                }
+
+                // Get the next available queue number for the given book
+                string queueQuery = "SELECT ISNULL(MAX(NumberInQueue), 0) + 1 FROM WaitingList WHERE BookID = @BookID";
+                int nextQueueNumber = 1;
+
+                using (SqlCommand queueCommand = new SqlCommand(queueQuery, connection))
+                {
+                    queueCommand.Parameters.AddWithValue("@BookID", bookId);
+                    nextQueueNumber = (int)queueCommand.ExecuteScalar();
+                }
+
+                // Add the user to the waiting list with the calculated queue number
+                string insertQuery = "INSERT INTO WaitingList (UserID, BookID, NumberInQueue) VALUES (@UserID, @BookID, @NumberInQueue)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@UserID", userId);
+                    insertCommand.Parameters.AddWithValue("@BookID", bookId);
+                    insertCommand.Parameters.AddWithValue("@NumberInQueue", nextQueueNumber);
+
+                    insertCommand.ExecuteNonQuery();
+                    Debug.WriteLine("User added to the waiting list.");
+                }
+            }
+        }
+
+
 
     }
 }
