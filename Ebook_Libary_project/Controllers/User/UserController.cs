@@ -4,10 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EbookLibraryProject.Models;
+using EbookLibraryProject;
+using Ebook_Library_Project;
+
+
 namespace Ebook_Libary_project.Controllers.user
 {
     public class UserController : Controller
     {
+        //move to main page!!!!
+        static Userdatabase userDb = new Userdatabase();
+
         List<Book> books = BookDatabase.Books;
         Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", password: "securePass123", age: 25)
         {
@@ -25,42 +32,39 @@ namespace Ebook_Libary_project.Controllers.user
 
         // Action to add a book to the cart
         [HttpPost]
-        //public ActionResult AddToCart(int bookId, string action, string format)
-        //{
-        //    if (action == "buy" || action == "borrow")
-        //    {
-        //        var book = books.FirstOrDefault(b => b.Id == bookId);
-        //        if (book == null)
-        //            return HttpNotFound(); // Handle book not found
+        public ActionResult AddToCart(int bookId, string action, string format)
+        {
+            if (action == "buy" || action == "borrow")
+            {
+                var book = books.FirstOrDefault(b => b.Id == bookId);
+                if (book == null)
+                    return HttpNotFound(); // Handle book not found
 
-        //        decimal price = action == "buy" ? book.BuyingPrice : book.BorrowPrice;
+                decimal price = action == "buy" ? book.BuyingPrice : book.BorrowPrice;
 
-        //        if (action == "borrow")
+                if (action == "borrow")
 
-        //        {
-        //            if (book.AvailableCopies <= 0) return Json(new { success = true, message = "no copies left go to waiting!" });
-        //            if (exampleUser.BorrowBook(book.Id, 3))
-        //            {
-        //                book.BorrowBook(exampleUser.Id.ToString());
+                {
+                    if (book.AvailableCopies <= 0) return Json(new { success = true, message = "no copies left go to waiting!" });
+                    
+                        book.BorrowBook(exampleUser.Id.ToString());
                        
-        //            }
-        //            exampleUser.ShowBorrowedBooks();
 
-        //        }
+                }
 
 
-        //        var cart = Cart.GetCart(); // Access the shared cart
-        //        if (!cart.Items.ContainsKey(bookId)) // If the book isn't already in the cart
-        //        {
-        //            cart.AddBookToCart(bookId, action, price, format);
-        //        }
+                var cart = Cart.GetCart(); // Access the shared cart
+                if (!cart.Items.ContainsKey(bookId)) // If the book isn't already in the cart
+                {
+                    cart.AddBookToCart(bookId, action, price, format);
+                }
 
 
-        //        return Json(new { success = true, message = "Book added to cart successfully!" });
-        //    }
+                return Json(new { success = true, message = "Book added to cart successfully!" });
+            }
 
-        //    return Json(new { success = false, message = "Invalid action." });
-        //}
+            return Json(new { success = false, message = "Invalid action." });
+        }
         public ActionResult Dashboard()
         {
             //need to add restrictions to admin

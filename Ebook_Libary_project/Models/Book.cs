@@ -10,6 +10,8 @@ namespace Ebook_Libary_project.Models
     {
         // Book properties
         public int Id { get; set; } // Unique identifier
+
+        public int Sale { get; set; } // Unique identifier
         public string ImagePath { get; set; } // Path to the book's image
         public string Name { get; set; } // Book title
         public string Author { get; set; } // Author name
@@ -22,6 +24,7 @@ namespace Ebook_Libary_project.Models
         public Book()
         {
             WaitingList = new Queue<string>();
+            Sale = 0;
         }
         public string GetName()
         {
