@@ -5,14 +5,14 @@ using System.Diagnostics;
 
 namespace Ebook_Library_Project
 {
-    public class Userdatabase
+    public static class Userdatabase
     {
         private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
 
         // Add a book to the bought list
-        public void BuyBook(int bookId, int userId)
+        public static void BuyBook(int bookId, int userId)
         {
-            string query = "INSERT INTO BoughtBooks (UserID, BookID, PurchaseDate) VALUES (@UserID, @BookID, @PurchaseDate)";
+            string query = "INSERT INTO BoughtBooks (UserID, BookID) VALUES (@UserID, @BookID)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -20,7 +20,6 @@ namespace Ebook_Library_Project
 
                 command.Parameters.AddWithValue("@UserID", userId);
                 command.Parameters.AddWithValue("@BookID", bookId);
-                command.Parameters.AddWithValue("@PurchaseDate", DateTime.Now);
 
                 try
                 {
@@ -35,7 +34,7 @@ namespace Ebook_Library_Project
             }
         }
 
-        public string ReturnBook(int userId, int bookId)
+        public static string ReturnBook(int userId, int bookId)
         {
             string message = string.Empty;
 
@@ -100,7 +99,7 @@ namespace Ebook_Library_Project
         }
 
         // Method to borrow a book
-        public void BorrowBook(int userId, int bookId)
+        public static void BorrowBook(int userId, int bookId)
         {
             string query = "INSERT INTO BorrowedBooks (UserID, BookID, ReturnDate) VALUES (@UserID, @BookID, @ReturnDate)";
 
@@ -117,7 +116,7 @@ namespace Ebook_Library_Project
         }
 
         // Function to change the price for buying or borrowing a book
-        public void UpdateBookPrice(int bookId, decimal newPrice, string action)
+        public static void UpdateBookPrice(int bookId, decimal newPrice, string action)
         {
             string column = action.ToLower() == "buying" ? "BuyPrice" : "BorrowPrice";
             string query = $"UPDATE Books SET {column} = @NewPrice WHERE Id = @BookID";
@@ -134,7 +133,7 @@ namespace Ebook_Library_Project
         }
 
         // Function to change the return date for a borrowed book
-        public void UpdateReturnDate(int userId, int bookId, int days)
+        public static void UpdateReturnDate(int userId, int bookId, int days)
         {
             string query = "UPDATE BorrowedBooks SET ReturnDate = DATEADD(day, @Days, ReturnDate) WHERE UserID = @UserID AND BookID = @BookID";
 
@@ -151,7 +150,7 @@ namespace Ebook_Library_Project
         }
 
         // Function to remove a user from all tables and return borrowed books
-        public void RemoveUser(int userId)
+        public static void RemoveUser(int userId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -185,7 +184,7 @@ namespace Ebook_Library_Project
         }
 
         // Function to add a book to the Books table
-        public void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice)
+        public static void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice)
         {
             string query = "INSERT INTO Books (Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Sale) VALUES (@Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, 0)";
 
@@ -205,7 +204,7 @@ namespace Ebook_Library_Project
 
 
 
-        public void AddToWaitingList(int userId, int bookId)
+        public static void AddToWaitingList(int userId, int bookId)
         {
             string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
 
@@ -252,7 +251,7 @@ namespace Ebook_Library_Project
             }
         }
 
-        public void AddUser(string name,string mail,  string password, int age, Boolean admin)
+        public static void AddUser(string name,string mail,  string password, int age, Boolean admin)
         {
 
             string query = "INSERT INTO Users (name, mail, admin, age, password) VALUES (@Name, @Mail, @Admin, @Age, @Password)";

@@ -38,7 +38,7 @@
                         </li>
 
                     </ul>
-                    <ul class="navbar-nav" style="display:none">
+                    <ul class="navbar-nav" style="display:block">
                         <li class="nav-item" id="viewCartButton">
                             <a class="btn btn-primary" href="/User/Cart/CartView">View Cart</a>
 
@@ -139,6 +139,9 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
     <script>
+
+        document.getElementById("viewCartButton").style.display = "block";  // Show View Cart button
+
         function switchToRegister() {
             document.getElementById('loginForm').style.display = 'none'; // Hide login form
             document.getElementById('registerForm').style.display = 'block'; // Show register form
@@ -234,7 +237,7 @@
             };
         } else {
             // If the token is not present, show the login button
-            document.getElementById("viewCartButton").style.display = "none";  // Hide View Cart button
+           // document.getElementById("viewCartButton").style.display = "none";  // Hide View Cart button
             document.getElementById("logoutButton").style.display = "none";  // Hide Logout button
         }
 
@@ -255,7 +258,7 @@
         } else {
             // If the token is not present, show the login button
             document.getElementById("openLoginButtonWrapper").style.display = "block";  // Show Login button
-            document.getElementById("viewCartButton").style.display = "none";  // Hide View Cart button
+           // document.getElementById("viewCartButton").style.display = "none";  // Hide View Cart button
             document.getElementById("logoutButton").style.display = "none";
         }
         

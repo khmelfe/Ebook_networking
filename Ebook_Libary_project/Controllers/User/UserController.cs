@@ -7,23 +7,26 @@ using EbookLibraryProject.Models;
 using EbookLibraryProject;
 using Ebook_Library_Project;
 using System.Net.Mail;
+using System.Diagnostics;
 
 
 namespace Ebook_Libary_project.Controllers.user
 {
     public class UserController : Controller
     {
-        //move to main page!!!!
-        static Userdatabase userDb = new Userdatabase();
+       // static Userdatabase userDb = new Userdatabase();
 
-        List<Book> books = BookDatabase.Books;
+        // Static list of books from BookDatabase
+        static List<Book> books = BookDatabase.Books;
 
-        Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", mail: "mail@mail.com", password: "securePass123", age: 25)
+        // Static example user
+        static UserController()
         {
-            admin = false // Set admin status
-        };
-        
-        
+            Usermodel.Initialize(1, "John Doe", "john.doe@mail.com", "securePass123", 25, false);
+        }
+
+
+
         // View for individual book page
         public ActionResult BookPage(int id)
         {
@@ -44,25 +47,13 @@ namespace Ebook_Libary_project.Controllers.user
                 var book = books.FirstOrDefault(b => b.Id == bookId);
                 if (book == null)
                     return HttpNotFound(); // Handle book not found
-
                 decimal price = action == "buy" ? book.BuyingPrice : book.BorrowPrice;
-
-                if (action == "borrow")
-
-                {
-                    if (book.AvailableCopies > 0)
-
-                    { userDb.BorrowBook(exampleUser.Id,book.Id); }
-                    else
-                    { userDb.AddToWaitingList(exampleUser.Id, book.Id); }
-                       
-
-                }
-
+                if (action == "borrow" && book.AvailableCopies == 0) action = "waitinglist";
 
                 var cart = Cart.GetCart(); // Access the shared cart
                 if (!cart.Items.ContainsKey(bookId)) // If the book isn't already in the cart
                 {
+                    Debug.WriteLine("Book purchased successfully."+ action);
                     cart.AddBookToCart(bookId, action, price, format);
                 }
 
