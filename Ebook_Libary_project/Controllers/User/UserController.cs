@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using EbookLibraryProject.Models;
 using EbookLibraryProject;
 using Ebook_Library_Project;
+using System.Net.Mail;
 
 
 namespace Ebook_Libary_project.Controllers.user
@@ -16,10 +17,12 @@ namespace Ebook_Libary_project.Controllers.user
         static Userdatabase userDb = new Userdatabase();
 
         List<Book> books = BookDatabase.Books;
-        Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", password: "securePass123", age: 25)
+        Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", mail: "mail@mail.com", password: "securePass123", age: 25)
         {
             admin = false // Set admin status
         };
+        
+        
         // View for individual book page
         public ActionResult BookPage(int id)
         {
@@ -45,9 +48,11 @@ namespace Ebook_Libary_project.Controllers.user
                 if (action == "borrow")
 
                 {
-                    if (book.AvailableCopies <= 0) return Json(new { success = true, message = "no copies left go to waiting!" });
-                    
-                        book.BorrowBook(exampleUser.Id.ToString());
+                    if (book.AvailableCopies > 0)
+
+                    { userDb.BorrowBook(exampleUser.Id,book.Id); }
+                    else
+                    { userDb.AddToWaitingList(exampleUser.Id, book.Id); }
                        
 
                 }

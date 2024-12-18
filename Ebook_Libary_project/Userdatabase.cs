@@ -188,8 +188,7 @@ namespace Ebook_Library_Project
         // Function to add a book to the Books table
         public void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice)
         {
-            
-            string query = "INSERT INTO Books (Title, Author, AvailableCopies, BuyPrice, BorrowPrice, 0) VALUES (@Title, @Author, @AvailableCopies, @BuyPrice, @BorrowPrice, @Sale)";
+            string query = "INSERT INTO Books (Title, Author, AvailableCopies, BuyPrice, BorrowPrice, Sale) VALUES (@Title, @Author, @AvailableCopies, @BuyPrice, @BorrowPrice, 0)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -204,6 +203,7 @@ namespace Ebook_Library_Project
                 command.ExecuteNonQuery();
             }
         }
+
 
 
         public void AddToWaitingList(int userId, int bookId)
@@ -256,7 +256,7 @@ namespace Ebook_Library_Project
         public void AddUser(string name,string mail,  string password, int age, Boolean admin)
         {
 
-            string query = "INSERT INTO Books (name,admin,password,age) VALUES (@Name, @Admin, @Age,@Password,)";
+            string query = "INSERT INTO Users (name, mail, admin, age, password) VALUES (@Name, @Mail, @Admin, @Age, @Password)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
