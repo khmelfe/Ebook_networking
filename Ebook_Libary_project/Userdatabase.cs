@@ -102,14 +102,13 @@ namespace Ebook_Library_Project
         // Method to borrow a book
         public void BorrowBook(int userId, int bookId)
         {
-            string query = "INSERT INTO BorrowedBooks (UserID, BookID, BorrowDate, ReturnDate) VALUES (@UserID, @BookID, @BorrowDate, @ReturnDate)";
+            string query = "INSERT INTO BorrowedBooks (UserID, BookID, ReturnDate) VALUES (@UserID, @BookID, @ReturnDate)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserID", userId);
                 command.Parameters.AddWithValue("@BookID", bookId);
-                command.Parameters.AddWithValue("@BorrowDate", DateTime.Now);
                 command.Parameters.AddWithValue("@ReturnDate", DateTime.Now.AddDays(14)); // Example: 2-week borrow period
 
                 connection.Open();
@@ -188,15 +187,15 @@ namespace Ebook_Library_Project
         // Function to add a book to the Books table
         public void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice)
         {
-            string query = "INSERT INTO Books (Title, Author, AvailableCopies, BuyPrice, BorrowPrice, Sale) VALUES (@Title, @Author, @AvailableCopies, @BuyPrice, @BorrowPrice, 0)";
+            string query = "INSERT INTO Books (Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Sale) VALUES (@Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, 0)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Title", title);
+                command.Parameters.AddWithValue("@Name", title);
                 command.Parameters.AddWithValue("@Author", author);
                 command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
-                command.Parameters.AddWithValue("@BuyPrice", buyPrice);
+                command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
                 command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
 
                 connection.Open();

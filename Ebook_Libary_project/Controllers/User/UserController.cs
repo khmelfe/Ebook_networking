@@ -17,6 +17,7 @@ namespace Ebook_Libary_project.Controllers.user
         static Userdatabase userDb = new Userdatabase();
 
         List<Book> books = BookDatabase.Books;
+
         Usermodel exampleUser = new Usermodel(id: 1, name: "John Doe", mail: "mail@mail.com", password: "securePass123", age: 25)
         {
             admin = false // Set admin status
@@ -26,6 +27,7 @@ namespace Ebook_Libary_project.Controllers.user
         // View for individual book page
         public ActionResult BookPage(int id)
         {
+            
             var book = books.FirstOrDefault(b => b.Id == id);
             if (book == null)
                 return HttpNotFound(); // Handle book not found
