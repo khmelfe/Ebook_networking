@@ -12,14 +12,16 @@ namespace EbookLibraryProject.Models
         public int Id { get; set; }
         public bool admin { get; set; }
         public string Name { get; set; }
+        public string Mail { get; set; }
         public string Password { get; set; }
         public int Age { get; set; }
 
         // Constructor
-        public Usermodel(int id, string name, string password, int age)
+        public Usermodel(int id, string name,string mail, string password, int age)
         {
             Id = id;
             Name = name;
+            Mail = mail;
             Password = password;
             Age = age;
         }

@@ -235,5 +235,5 @@ C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\obj\Debug\Eboo
 C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\obj\Debug\Ebook_Li.470F2DF5.Up2Date
 C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.dll
 C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\obj\Debug\Ebook_Libary_project.pdb
-C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\bin\System.Data.SqlClient.dll
-C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\bin\System.Data.SqlClient.xml
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\System.Data.SqlClient.dll
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\System.Data.SqlClient.xml
