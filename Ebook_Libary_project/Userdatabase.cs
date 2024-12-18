@@ -253,7 +253,23 @@ namespace Ebook_Library_Project
             }
         }
 
+        public void AddUser(string name, string password, int age, Boolean admin)
+        {
 
+            string query = "INSERT INTO Books (name,admin,password,age) VALUES (@Name, @Admin, @Age,@Password,)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Name", name);
+                command.Parameters.AddWithValue("@Admin", admin);
+                command.Parameters.AddWithValue("@Age", age);
+                command.Parameters.AddWithValue("@Password", password);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
 
     }
 }
