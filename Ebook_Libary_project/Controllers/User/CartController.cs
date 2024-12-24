@@ -15,6 +15,8 @@ namespace Ebook_Libary_project.Controllers.user
 
         // POST: Remove an item from the cart
         [HttpPost]
+
+
         public ActionResult RemoveFromCart(int bookId)
         {
             var cart = Cart.GetCart(); // Access the shared cart
@@ -23,3 +25,5 @@ namespace Ebook_Libary_project.Controllers.user
         }
     }
 }
+
+

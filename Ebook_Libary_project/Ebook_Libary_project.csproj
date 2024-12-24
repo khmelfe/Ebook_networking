@@ -209,8 +209,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Customer\AddCustmoer.cshtml" />
-    <Content Include="Views\Customer\Customer.cshtml" />
     <Content Include="Views\Ebook_libary_Home\Ebook_home.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\User\bookPage.cshtml" />
@@ -219,6 +217,7 @@
     <Content Include="Views\User\PaymentView.cshtml" />
     <Content Include="Views\Login\_LoginPartial.cshtml" />
     <Content Include="Views\User\Dashboard.cshtml" />
+    <Content Include="Views\Shared\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
