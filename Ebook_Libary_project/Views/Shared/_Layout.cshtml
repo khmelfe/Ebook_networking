@@ -104,6 +104,14 @@
                 <label for="confirmPsw"><b>Confirm Password</b></label>
                 <input type="password" placeholder="Confirm Password" id="confirmPassword" name="confirmPsw" required>
 
+                <label for="age"><b>Enter Age</b></label>
+                <input type="text" placeholder="Enter age" id="age" name="age" required>
+
+                <label for="isadmin">
+                    <input type="checkbox" id="isadmin" name="isadmin">
+                    Do you want to be an admin?
+                </label>
+
                 <button type="submit" id="registerButton">Register</button>
             </div>
 
@@ -199,7 +207,52 @@
                 alert("An error occurred while logging in. Please try again.");
             }
         });
-    };
+     };
+        //registoration.
+        document.getElementById("registerButton").onclick = function (event) {
+            // Prevent form submission
+            event.preventDefault();
+
+
+            var username = document.getElementById("newUsername").value;
+            var password = document.getElementById("newPassword").value;
+            var email = document.getElementById("email").value;
+            var age = document.getElementById("age").value;
+            var con_password = document.getElementById("confirmPassword").value;
+            var isAdmin = document.getElementById("isadmin").checked;
+
+            if (!username || !password || !email || !age || !con_password) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            $.ajax({
+                url: '/Login/Checking_info_register', // The server-side endpoint for Regstrations.
+                type: 'POST',
+                data: {
+                    name: username,
+                    password: password,
+                    mail: email,
+                    age: age,
+                    con_pass: con_password,
+                    isadmin: isAdmin 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert("User created successfully!");
+                        
+                        window.location.reload();
+                    } else {
+                        alert(response.message || "An error occurred. Please try again.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle AJAX request errors (network or server-side issues)
+                    console.error("Error:", error, "Response Text:", xhr.responseText);
+                    alert(`An unexpected error occurred: ${xhr.responseText || error}`);
+                }
+            });
+        };
 
     // Function to get a cookie by name
     function getCookie(name) {

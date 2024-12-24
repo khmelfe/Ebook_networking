@@ -19,11 +19,13 @@ namespace Ebook_Libary_project.Controllers.user
         // Static list of books from BookDatabase
         static List<Book> books = BookDatabase.Books;
 
+        //public static Usermodel currentuser ;
+    
         // Static example user
-        static UserController()
-        {
-            Usermodel.Initialize(1, "John Doe", "john.doe@mail.com", "securePass123", 25, false);
-        }
+        //static UserController()
+        //{
+        //    currentuser = new Usermodel;
+        //}
 
 
 

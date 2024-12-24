@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
 using System.Web;
@@ -24,9 +25,9 @@ namespace Ebook_Libary_project.Controllers
         public JsonResult Submit(string username, string password)
         {
             // Simple validation for username and password (you can extend it)
-            if (username == "fel" && password == "123")
+            if (Ebook_Library_Project.Userdatabase.userexist(username, password))
             {
-                SendTestEmail();
+                //SendTestEmail();
                 return Json(new { success = true });
             }
             else
@@ -34,25 +35,28 @@ namespace Ebook_Libary_project.Controllers
                 return Json(new { success = false });
             }
         }
-        private void SendTestEmail()
+        
+        [HttpPost]
+        public JsonResult Checking_info_register(string name, string password, string con_pass, string mail, string age, bool isadmin)
         {
-            string toEmail = "mailprojects827@gmail.com";
-            string subject = "Test Email";
-            string body = "This is a test email sent from my MVC application.";
-
+            Debug.WriteLine("Getout");
             try
             {
-                using (SmtpClient client = new SmtpClient())
+                
+                bool Valid = RegistrationModel.ValitdateUser(name, password, con_pass, mail, age, isadmin);
+                int age_dig = int.Parse(age);
+                if (Valid)
                 {
-                    client.Send("mailprojects827@gmail.com", toEmail, subject, body);
+                    Ebook_Library_Project.Userdatabase.AddUser(name, mail, password, age_dig, isadmin);
+                    return Json(new { success = true, message = "User was Created." });
                 }
+                return Json(new { success = false });
             }
-            catch (Exception ex)
-            {
-                // Handle any errors
-                Console.WriteLine("Error sending email: " + ex.Message);
+            catch (Exception ex) {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
-        }
+
+        } 
     }
 
 }
