@@ -14,6 +14,15 @@ namespace Ebook_Libary_project.Controllers
         {
             var cart = Cart.GetCart();
 
+            ViewBag.Cart = cart;
+            return View("~/Views/User/PaymentView.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult paymentconfirm()
+        {
+            var cart = Cart.GetCart();
+            Debug.WriteLine("paying.");
             foreach (var item in cart.Items)
             {
                 int bookId = item.Key;
@@ -21,6 +30,7 @@ namespace Ebook_Libary_project.Controllers
 
                 if (action == "borrow")
                 {
+                    Debug.WriteLine("Book borrowed successfully.");
                     Userdatabase.BorrowBook(Usermodel.Id, bookId);
                 }
                 else if (action == "buy")
@@ -33,9 +43,8 @@ namespace Ebook_Libary_project.Controllers
                     Userdatabase.AddToWaitingList(Usermodel.Id, bookId);
                 }
             }
-
-            ViewBag.Cart = cart;
-            return View("~/Views/User/PaymentView.cshtml");
+           
+            return RedirectToAction("Ebook_home", "Ebook_libary_Home");
         }
     }
 }
