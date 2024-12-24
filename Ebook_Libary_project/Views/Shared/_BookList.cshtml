@@ -1,0 +1,32 @@
+@model List<Ebook_Libary_project.Models.Book>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.GetName()</td>
+                    @*<td>@book.</td>
+                    <td>@book.Author</td>
+                    <td>@book.Price.ToString("C")</td>*@
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">No books available.</td>
+            </tr>
+        }
+    </tbody>
+</table>

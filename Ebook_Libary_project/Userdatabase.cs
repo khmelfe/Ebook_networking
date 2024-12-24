@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-
+        //private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        private static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         // Add a book to the bought list
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
@@ -300,20 +301,52 @@ namespace Ebook_Library_Project
 
         public static void AddUser(string name,string mail,  string password, int age, Boolean admin)
         {
-
+            string queryCheck = "SELECT COUNT(*) FROM Users WHERE name = @Name";
             string query = "INSERT INTO Users (name, mail, admin, age, password) VALUES (@Name, @Mail, @Admin, @Age, @Password)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                connection.Open();
+                using(SqlCommand checkCommand = new SqlCommand(queryCheck, connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@Name", name);
+                    int count = (int)checkCommand.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        throw new Exception("A user with the same username already exists. Please choose a different username.");
+                    }
+                }
+                using (SqlCommand insertCommand = new SqlCommand(query, connection))
+                {
+                    insertCommand.Parameters.AddWithValue("@Name", name);
+                    insertCommand.Parameters.AddWithValue("@Mail", mail);
+                    insertCommand.Parameters.AddWithValue("@Admin", admin);
+                    insertCommand.Parameters.AddWithValue("@Age", age);
+                    insertCommand.Parameters.AddWithValue("@Password", password);
+
+                    insertCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static bool userexist(string name, string password)
+        {
+            string query = "SELECT COUNT(*) FROM Users WHERE name = @Name AND password = @Password";
+            
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Name", name);
-                command.Parameters.AddWithValue("@Mail", mail);
-                command.Parameters.AddWithValue("@Admin", admin);
-                command.Parameters.AddWithValue("@Age", age);
                 command.Parameters.AddWithValue("@Password", password);
 
                 connection.Open();
-                command.ExecuteNonQuery();
+
+                int count = (int)command.ExecuteScalar();
+                //if (count > 0){
+                      
+                //}
+                return count > 0; // Returns true if user exists, false otherwise
             }
         }
 

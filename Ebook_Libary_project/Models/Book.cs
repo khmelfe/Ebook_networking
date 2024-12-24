@@ -26,6 +26,10 @@ namespace Ebook_Libary_project.Models
             
             Sale = 0;
         }
+        public string GetName()
+        {
+            return Name; // You can add extra logic here if needed
+        }
 
      
 
