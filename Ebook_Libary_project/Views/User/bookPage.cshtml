@@ -1,13 +1,20 @@
 ﻿@{
     ViewBag.Title = "Book Page";
-
 }
 @model Ebook_Libary_project.Models.Book
+
 <h2>Book Page</h2>
 
 <div class="book-container">
     <div class="book-image">
-        <p>Image Placeholder</p>
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img src="@Url.Content(Model.ImagePath)" alt="@Model.Name" style="width: 200px; height: 300px; object-fit: cover;" />
+        }
+        else
+        {
+            <p>Image Placeholder</p>
+        }
     </div>
 
     <div class="book-details">
@@ -66,4 +73,3 @@
             });
     });
 </script>
-
