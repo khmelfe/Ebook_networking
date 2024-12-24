@@ -11,8 +11,8 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        //private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        private static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+       // private static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         // Add a book to the bought list
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {

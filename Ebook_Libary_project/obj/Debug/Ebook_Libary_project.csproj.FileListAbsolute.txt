@@ -244,3 +244,8 @@ C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\bin\roslyn\vbc
 C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\bin\roslyn\vbc.exe.config
 C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\bin\roslyn\vbc.rsp
 C:\Users\filex\Source\Repos\Ebook_networking\Ebook_Libary_project\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\roslyn\Microsoft.Managed.Core.CurrentVersions.targets
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\roslyn\System.Buffers.dll
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\roslyn\System.Memory.dll
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\roslyn\System.Numerics.Vectors.dll
+C:\Users\97254\Desktop\proj\Ebook_Libary_project\bin\roslyn\System.Runtime.CompilerServices.Unsafe.dll
