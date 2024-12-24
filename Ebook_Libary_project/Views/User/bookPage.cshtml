@@ -1,7 +1,8 @@
 ﻿@{
     ViewBag.Title = "Book Page";
-}
 
+}
+@model Ebook_Libary_project.Models.Book
 <h2>Book Page</h2>
 
 <div class="book-container">
@@ -10,11 +11,10 @@
     </div>
 
     <div class="book-details">
-        <h2>@Model.Name</h2>
-        <p><strong>Author:</strong> @Model.Author</p>
-        <p><strong>Buying Price:</strong> $@Model.BuyingPrice</p>
-        <p><strong>Borrow Price:</strong> $@Model.BorrowPrice</p>
-        <p><strong>Available Copies:</strong> @Model.AvailableCopies</p>
+        <h1>@Model.Name</h1>
+        <p>Author: @Model.Author</p>
+        <p>Price: @Model.BuyingPrice</p>
+        <p>Available Copies: @Model.AvailableCopies</p>
 
         <form id="addToCartForm">
             <input type="hidden" name="bookId" value="@Model.Id" />
@@ -43,7 +43,7 @@
 
 <script>
     document.getElementById('addToCartForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent the default form submission behavior
 
         const formData = new FormData(this);
 
@@ -53,10 +53,17 @@
         })
             .then(response => response.json())
             .then(data => {
+                // Check if the server returned a success message
                 if (data.success) {
-                    alert(data.message);
+                    alert(data.message); // Show success message
+                } else {
+                    alert(data.message); // Show error message
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding the book to the cart.');
+            });
     });
 </script>
+

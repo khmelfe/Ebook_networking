@@ -18,37 +18,16 @@ namespace Ebook_Libary_project.Models
         public decimal BuyingPrice { get; set; } // Price for buying
         public decimal BorrowPrice { get; set; } // Price for borrowing
         public int AvailableCopies { get; set; } // Number of books available for borrowing
-        public Queue<string> WaitingList { get; set; } // Queue for waiting list (customer IDs or names)
+      
 
         // Constructor
         public Book()
         {
-            WaitingList = new Queue<string>();
+            
             Sale = 0;
         }
 
-        // Method to borrow a book
-        public decimal BorrowBook(string customerId)
-        {
-            if (AvailableCopies > 0)
-            {
-                AvailableCopies--;
-                
-            }
-            else
-            {
-                WaitingList.Enqueue(customerId);
-               
-            }
-            return BorrowPrice;
-        }
-
-        public decimal BuyBook(string customerId)
-        {
-           
-            return BuyingPrice;
-        }
-        // Method to return a book
+     
 
 
       
