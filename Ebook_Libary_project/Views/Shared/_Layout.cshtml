@@ -295,7 +295,42 @@
         document.getElementById("openLoginButton").style.display = "block"; // Show login button
         document.getElementById("viewCartButton").style.display = "none";  // Hide View Cart button
         document.getElementById("logoutButton").style.display = "none";  // Hide Logout button
-    }
+        }
+
+        const userId = getCookie("userId");
+
+        if (userId) {
+            // Send an AJAX request to fetch user details
+            $.ajax({
+                url: '/YourController/GetUserDetailsFromCookie', // Your server-side endpoint
+                type: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        const user = response.data;
+                        console.log("User details:", user);
+
+                        // Example: Build a user object
+                        const userObj = {
+                            id: user.Id,
+                            name: user.Name,
+                            mail: user.Mail,
+                            password: user.Password,
+                            age: user.Age,
+                            isAdmin: user.IsAdmin
+                        };
+
+                        console.log("User Object:", userObj);
+                    } else {
+                        alert(response.message || "Failed to retrieve user details.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching user details:", error);
+                }
+            });
+        } else {
+            console.log("User is not logged in or the cookie is missing.");
+        }
     </script>
 
 

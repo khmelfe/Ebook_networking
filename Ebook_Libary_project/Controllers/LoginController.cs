@@ -8,13 +8,15 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using System.Xml.Linq;
 using Ebook_Libary_project.Models;
+using Ebook_Library_Project;
+using EbookLibraryProject.Models;
 
 namespace Ebook_Libary_project.Controllers
 {
     public class LoginController : Controller
     {
-        EmailController emailController = new EmailController();
 
         public ActionResult Login()
         {
@@ -27,7 +29,12 @@ namespace Ebook_Libary_project.Controllers
             // Simple validation for username and password (you can extend it)
             if (Ebook_Library_Project.Userdatabase.userexist(username, password))
             {
-                //SendTestEmail();
+                Userdatabase.GetUser_details(username, password);
+               
+                var emailService = new EmailService();
+                string subject = "Welcome to Your App!";
+                string body = $"Hi {Usermodel.Name},<br><br>Thank you for registering at Your App!";
+                emailService.SendEmail(Usermodel.Mail, subject, body);
                 return Json(new { success = true });
             }
             else

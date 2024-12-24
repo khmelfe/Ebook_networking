@@ -1,4 +1,5 @@
 ﻿using Ebook_Libary_project.Models;
+using EbookLibraryProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -349,6 +350,42 @@ namespace Ebook_Library_Project
                 return count > 0; // Returns true if user exists, false otherwise
             }
         }
+
+        public static void GetUser_details(string name, string password){
+
+            string query = "SELECT id, name, mail, password, age, admin FROM Users WHERE name = @Name AND password = @Password";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Name", name);
+                command.Parameters.AddWithValue("@Password", password);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) // If a user is found
+                    {
+                        // Map the user details to the Usermodel
+                           Usermodel.Initialize(
+
+                            reader.GetInt32(0), // Assuming 'id' is the first column
+                            reader.GetString(1), // 'name'
+                            reader.GetString(2), // 'mail'
+                            reader.GetString(3), // 'password'
+                            reader.GetInt32(4), // 'age'
+                            reader.GetBoolean(5) // 'admin'
+                        );
+
+                       
+                    }
+                }
+            }
+
+
+        }
+
+        
 
         // Check if a user exists in the WaitingList for a book
         public static bool CheckIfExistsInWaitingList(int userId, int bookId)
