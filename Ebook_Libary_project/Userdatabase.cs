@@ -1,5 +1,6 @@
 ﻿using Ebook_Libary_project.Models;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -11,6 +12,65 @@ namespace Ebook_Library_Project
         private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
 
         // Add a book to the bought list
+        public static List<int> GetBoughtBookIdsByUser(int userId)
+        {
+            string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var bookIds = new List<int>();
+                    while (reader.Read())
+                    {
+                        bookIds.Add((int)reader["BookID"]);
+                    }
+                    return bookIds;
+                }
+            }
+        }
+
+        public static List<int> GetBorrowedBookIdsByUser(int userId)
+        {
+            string query = "SELECT BookID FROM BorrowedBooks WHERE UserID = @UserId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var bookIds = new List<int>();
+                    while (reader.Read())
+                    {
+                        bookIds.Add((int)reader["BookID"]);
+                    }
+                    return bookIds;
+                }
+            }
+        }
+
+        public static List<int> GetAllBookIds()
+        {
+            string query = "SELECT Id FROM Books";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var bookIds = new List<int>();
+                    while (reader.Read())
+                    {
+                        bookIds.Add((int)reader["Id"]);
+                    }
+                    return bookIds;
+                }
+            }
+        }
+
         public static void BuyBook(int bookId, int userId)
         {
             string query = "INSERT INTO BoughtBooks (UserID, BookID) VALUES (@UserID, @BookID)";

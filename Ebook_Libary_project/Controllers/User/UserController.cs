@@ -13,15 +13,12 @@ namespace Ebook_Libary_project.Controllers.user
 {
     public class UserController : Controller
     {
-       
 
-      
+
+     
 
         // Static example user
-        static UserController ()
-        {
-            Usermodel.Initialize(1, "John Doe", "john.doe@mail.com", "securePass123", 25, false);
-        }
+        
 
         Book book;
 
