@@ -125,17 +125,20 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Bookdatabase.cs" />
     <Compile Include="Controllers\Ebook_libary_HomeController.cs" />
+    <Compile Include="Controllers\EmailController .cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\User\CartController.cs" />
     <Compile Include="Controllers\User\PaymentController.cs" />
     <Compile Include="Controllers\User\UserController.cs" />
+    <Compile Include="EmailService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\Usermodel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
