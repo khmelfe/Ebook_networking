@@ -3,53 +3,154 @@
     var cart = (Ebook_Libary_project.Models.Cart)ViewBag.Cart; // Get the cart from ViewBag
 }
 
-<h2>Cart</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
 
-@if (cart != null && cart.Items.Count > 0)
-{
-    <p>Your cart contains the following items:</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Book Title</th>
-                <th>Action</th>
-                <th>Format</th>
-                <th>Price</th>
-                <th>Remove</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in cart.Items)
-            {
-                int bookId = item.Key;
-                var details = item.Value;
-                <tr>
-                    <td>@details.Action</td>
-                    <td>@details.Format</td>
-                    <td>@details.Price.ToString("C")</td>
-                    <td>
-                        <form method="post" action="/User/Cart/RemoveFromCart">
-                            <input type="hidden" name="bookId" value="@bookId" />
-                            <button type="submit" class="button">Remove</button>
-                        </form>
-                    </td>
-                </tr>
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+            table th, table td {
+                border: 1px solid #ddd;
+                padding: 10px;
+                text-align: center;
             }
-        </tbody>
-    </table>
 
-    <p><strong>Total Price:</strong> @cart.CalculateTotalPrice().ToString("C")</p>
+            table th {
+                background-color: #f2f2f2;
+                color: #333;
+            }
 
-    <a class="btn btn-primary" href="@Url.Action("Paymentvi", "Payment", new { id = 0 })">Pay!!!!!!</a>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            text-align: center;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
+            .btn:hover {
+                background-color: #218838;
+            }
 
-}
-else
-{
-    <p>Your cart is empty.</p>
-}
+        .button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-@if (ViewBag.Message != null)
-{
-    <p>@ViewBag.Message</p>
-}
+            .button:hover {
+                background-color: #c82333;
+            }
+
+        .total-price {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .empty-message {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+            margin-top: 20px;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Your Cart</h2>
+
+        @if (cart != null && cart.Items.Count > 0)
+        {
+            <p>Your cart contains the following items:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Action</th>
+                        <th>Format</th>
+                        <th>Price</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in cart.Items)
+                    {
+                        int bookId = item.Key;
+                        var details = item.Value;
+                        <tr>
+                            <td>@Ebook_Library_Project.Userdatabase.GetBookById(bookId).Name</td>
+                            <td>@details.Action</td>
+                            <td>@details.Format</td>
+                            <td>@details.Price.ToString("C")</td>
+                            <td>
+                                <form method="post" action="/User/Cart/RemoveFromCart">
+                                    <input type="hidden" name="bookId" value="@bookId" />
+                                    <button type="submit" class="button">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <p class="total-price">Total Price: @cart.CalculateTotalPrice().ToString("C")</p>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a class="btn" href="@Url.Action("Paymentvi", "Payment", new { id = 0 })">Proceed to Payment</a>
+            </div>
+        }
+        else
+        {
+            <p class="empty-message">Your cart is empty.</p>
+        }
+
+        @if (ViewBag.Message != null)
+        {
+            <p class="message">@ViewBag.Message</p>
+        }
+    </div>
+</body>
+</html>

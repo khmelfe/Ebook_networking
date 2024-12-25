@@ -5,34 +5,82 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace Ebook_Libary_project.Controllers
 {
     public class Ebook_libary_HomeController : Controller
     {
-        //GET: Ebook_libary_Home
-        static Ebook_libary_HomeController()
-        {
-            Usermodel.Initialize(1, "John Doe", "john.doe@mail.com", "securePass123", 25, false);
-        }
-
+        // GET: Ebook_libary_Home
         public ActionResult Ebook_home()
         {
-            //Userdatabase.AddUser("Jane Doe", "jane.doe@mail.com", "securePass456", 30, false);
+            // Check and return books
+            List<(int UserId, int BookId)> booksToReturn = CheckBooks();
+            if (booksToReturn != null)
+            {
+                ReturnBooks(booksToReturn);
+            }
 
-            // Step 2: Add book 6 to the books table
-            Userdatabase.AddBook("Book 6", "Author 6", availableCopies: 3, buyPrice: 20.99m, borrowPrice: 4.99m);
-
-            // Step 3: Add the new user to the waiting list for book 6
-            Userdatabase.AddToWaitingList(userId: 2, bookId: 6);
-
-            // Step 4: User 1 borrows book 6 with a return date of today
-            Userdatabase.BorrowBook(userId: 1, bookId: 6);
-           // Userdatabase.UpdateReturnDate(1, 6, 0);
-            Console.WriteLine("Operations completed successfully.");
             return View("EbooK_home");
         }
 
-    }
+        public List<(int UserId, int BookId)> CheckBooks()
+        {
+            string query = "SELECT UserID, BookID, ReturnDate FROM BorrowedBooks";
+            List<(int UserId, int BookId)> booksToReturn = new List<(int, int)>();
 
+            using (SqlConnection connection = new SqlConnection(Userdatabase.connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                try
+                {
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Collect data from the reader
+                        while (reader.Read())
+                        {
+                            int userId = (int)reader["UserID"];
+                            int bookId = (int)reader["BookID"];
+                            DateTime returnDate = (DateTime)reader["ReturnDate"];
+
+                            Debug.WriteLine($"Queued for return check: UserID={userId}, BookID={bookId}, ReturnDate={returnDate}");
+
+                            if (returnDate.Date == DateTime.Today)
+                            {
+                                booksToReturn.Add((userId, bookId));
+                            }
+                        }
+                    }
+
+                    return booksToReturn;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error while checking and returning books: {ex.Message}");
+                }
+            }
+
+            return null; // Return null if there was an exception
+        }
+
+        private void ReturnBooks(List<(int UserId, int BookId)> booksToReturn)
+        {
+            // Process books to return
+            foreach (var book in booksToReturn)
+            {
+                try
+                {
+                    string message = Userdatabase.ReturnBook(book.UserId, book.BookId);
+                    Debug.WriteLine($"Return process completed for UserID: {book.UserId}, BookID: {book.BookId}. Message: {message}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error processing return for UserID: {book.UserId}, BookID: {book.BookId}. Exception: {ex.Message}");
+                }
+            }
+        }
+    }
 }

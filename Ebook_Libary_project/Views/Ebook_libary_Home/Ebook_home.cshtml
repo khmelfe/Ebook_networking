@@ -33,28 +33,6 @@
             border-radius: 5px;
         }
 
-            .topnav .search-container {
-                display: flex;
-                max-width: 300px;
-                margin-right: 5px;
-            }
-
-            .topnav input[type=text] {
-                padding: 6px;
-                font-size: 17px;
-                border: none;
-                flex-grow: 1;
-            }
-
-            .topnav button {
-                padding: 5px 10px;
-                margin-left: 5px;
-                background: #ddd;
-                font-size: 20px;
-                border: none;
-                cursor: pointer;
-            }
-
         .scrollmenu {
             display: flex;
             overflow-x: auto;
@@ -112,56 +90,36 @@
                             <p>Author: @book.Author</p>
                             @if (book.Sale > 0)
                             {
+                                decimal saleFactor = book.Sale / 100m;
+                                decimal discountedBuyingPrice = book.BuyingPrice * (1 - saleFactor);
+                                decimal discountedBorrowPrice = book.BorrowPrice * (1 - saleFactor);
+
                                 <p>
                                     <span style="text-decoration: line-through; color: red;">
-                                        Original Price: @book.BuyingPrice.ToString("C")
+                                        Buying Price: @book.BuyingPrice.ToString("C")
                                     </span>
                                 </p>
-                                <p>Sale Price: <span style="color: green;">@(book.BuyingPrice - book.Sale).ToString("C")</span></p>
+                                <p>
+                                    <span style="color: green;">
+                                        Discounted Buying Price: @discountedBuyingPrice.ToString("C")
+                                    </span>
+                                </p>
+                                <p>
+                                    <span style="text-decoration: line-through; color: red;">
+                                        Borrowing Price: @book.BorrowPrice.ToString("C")
+                                    </span>
+                                </p>
+                                <p>
+                                    <span style="color: green;">
+                                        Discounted Borrowing Price: @discountedBorrowPrice.ToString("C")
+                                    </span>
+                                </p>
                             }
                             else
                             {
-                                <p>Price: @book.BuyingPrice.ToString("C")</p>
+                                <p>Buying Price: @book.BuyingPrice.ToString("C")</p>
+                                <p>Borrowing Price: @book.BorrowPrice.ToString("C")</p>
                             }
-                        </a>
-                    </div>
-                }
-            }
-        }
-    </div>
-
-    <h2>My List</h2>
-    <div class="scrollmenu">
-        @{
-            var boughtBooks = Userdatabase.GetBoughtBookIdsByUser(Usermodel.Id);
-            var borrowedBooks = Userdatabase.GetBorrowedBookIdsByUser(Usermodel.Id);
-
-            foreach (var bookId in boughtBooks)
-            {
-                var book = Userdatabase.GetBookById(bookId);
-                if (book != null)
-                {
-                    <div class="column">
-                        <a href="@Url.Action("BookPage", "User", new { id = book.Id })" style="text-decoration: none; color: inherit;">
-                            <h3>@book.Name</h3>
-                            <p>Author: @book.Author</p>
-                            <p>Status: Bought</p>
-                        </a>
-                    </div>
-                }
-            }
-
-            foreach (var bookId in borrowedBooks)
-            {
-                var book = Userdatabase.GetBookById(bookId);
-                if (book != null)
-                {
-                    <div class="column">
-                        <a href="@Url.Action("BookPage", "User", new { id = book.Id })" style="text-decoration: none; color: inherit;">
-                            <h3>@book.Name</h3>
-                            <p>Author: @book.Author</p>
-                            <p>Return Date: @(DateTime.Now.AddDays(14).ToString("yyyy-MM-dd"))</p>
-                            <p>Status: Borrowed</p>
                         </a>
                     </div>
                 }
