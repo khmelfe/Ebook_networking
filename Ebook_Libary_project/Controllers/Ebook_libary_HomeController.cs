@@ -11,7 +11,6 @@ namespace Ebook_Libary_project.Controllers
     public class Ebook_libary_HomeController : Controller
     {
         //GET: Ebook_libary_Home
-
         static Ebook_libary_HomeController()
         {
             Usermodel.Initialize(1, "John Doe", "john.doe@mail.com", "securePass123", 25, false);
@@ -34,7 +33,6 @@ namespace Ebook_Libary_project.Controllers
             return View("EbooK_home");
         }
 
-       
     }
 
 }
