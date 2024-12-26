@@ -166,6 +166,16 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Dashbord.css" />
     <Content Include="Content\Images\2780906.jpg" />
+    <Content Include="Content\Images\img1.jpg" />
+    <Content Include="Content\Images\img10.jpg" />
+    <Content Include="Content\Images\img2.jpg" />
+    <Content Include="Content\Images\img3.jpg" />
+    <Content Include="Content\Images\img4.jpg" />
+    <Content Include="Content\Images\img5.jpg" />
+    <Content Include="Content\Images\img6.jpg" />
+    <Content Include="Content\Images\img7.jpg" />
+    <Content Include="Content\Images\img8.jpg" />
+    <Content Include="Content\Images\img9.jpg" />
     <Content Include="Content\Images\Login_page.png" />
     <Content Include="Content\Images\wall-wallpaper-concrete-colored-painted-textured-concept.jpg" />
     <Content Include="Content\img_avatar2.png" />
