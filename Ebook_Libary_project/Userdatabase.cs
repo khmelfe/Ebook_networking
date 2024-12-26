@@ -371,7 +371,7 @@ namespace Ebook_Library_Project
 
                             reader.GetInt32(0), // Assuming 'id' is the first column
                             reader.GetString(1), // 'name'
-                            reader.GetString(2), // 'mail'
+                            reader.GetString(2), // 'mail
                             reader.GetString(3), // 'password'
                             reader.GetInt32(4), // 'age'
                             reader.GetBoolean(5) // 'admin'
