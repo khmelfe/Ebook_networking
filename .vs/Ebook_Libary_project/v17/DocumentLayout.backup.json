@@ -8,12 +8,20 @@
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\controllers\\emailcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\emailcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|C:\\Users\\filex\\source\\repos\\Ebook_networking\\ebook_libary_project\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -24,20 +32,12 @@
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\models\\usermodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\controllers\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\controllers\\emailcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\emailcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
 =======
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\97254\\desktop\\proj\\ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -45,6 +45,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\97254\\desktop\\proj\\ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\97254\\desktop\\proj\\ebook_libary_project\\controllers\\emailcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\emailcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\97254\\desktop\\proj\\ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,7 +66,7 @@
 <<<<<<< HEAD
           "SelectedChildIndex": 22,
 =======
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
 >>>>>>> 6a0946ec98f514618435b4081b413fef0ab40839
           "Children": [
             {
@@ -74,70 +78,34 @@
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
-<<<<<<< HEAD
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:139:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:140:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:141:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:137:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:138:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{74946827-37a0-11d2-a273-00c04f8ef4ff}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 5,
+<<<<<<< HEAD
+              "DocumentIndex": 1,
               "Title": "Userdatabase.cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Userdatabase.cs",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeToolTip": "Ebook_Libary_project\\Userdatabase.cs",
-              "ViewState": "AgIAAFMBAAAAAAAAAAArwHEBAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAE0BAAAAAAAAAIA8wGEBAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-24T19:43:49.882Z",
+=======
+              "DocumentIndex": 2,
+              "Title": "EmailController .cs",
+              "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\EmailController .cs",
+              "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\EmailController .cs",
+              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\EmailController .cs",
+              "RelativeToolTip": "Ebook_Libary_project\\Controllers\\EmailController .cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAASwBYAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-24T18:46:48.095Z",
+>>>>>>> 6a0946ec98f514618435b4081b413fef0ab40839
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
+<<<<<<< HEAD
               "Title": "EmailService.cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\EmailService.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\EmailService.cs",
@@ -150,7 +118,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Web.config",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Web.config",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Web.config",
@@ -163,7 +131,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 2,
               "Title": "EmailController .cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\EmailController .cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\EmailController .cs",
@@ -176,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Ebook_home.cshtml",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
@@ -189,7 +157,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Usermodel.cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Models\\UserModel.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Models\\UserModel.cs",
@@ -202,7 +170,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "UserController.cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\User\\UserController.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\User\\UserController.cs",
@@ -215,7 +183,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
@@ -224,42 +192,37 @@
               "ViewState": "AgIAACQBAAAAAAAAAAAqwEcBAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-24T16:03:36.563Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LoginController.cs",
-              "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\LoginController.cs",
-              "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\LoginController.cs",
-              "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\LoginController.cs",
-              "RelativeToolTip": "Ebook_Libary_project\\Controllers\\LoginController.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAQwCUAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-16T22:21:22.23Z",
-              "EditorCaption": ""
 =======
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "Userdatabase.cs",
               "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Userdatabase.cs",
               "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeToolTip": "Ebook_Libary_project\\Userdatabase.cs",
-              "ViewState": "AgIAADIBAAAAAAAAAAAqwDwBAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAABwBAAAAAAAAAAAqwCYBAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-24T18:43:04.599Z",
+>>>>>>> 6a0946ec98f514618435b4081b413fef0ab40839
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+<<<<<<< HEAD
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\LoginController.cs",
+              "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "Ebook_Libary_project\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAACAAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-16T22:21:22.23Z",
+=======
               "Title": "Ebook_libary_HomeController.cs",
               "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
               "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs*",
               "RelativeToolTip": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs*",
-              "ViewState": "AgIAABMAAAAAAAAAAAAAABUAAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAAB8AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-24T18:42:25.08Z",
               "EditorCaption": ""
@@ -275,8 +238,8 @@
               "ViewState": "AgIAADIAAAAAAAAAAAAAAKAAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-24T16:18:00.527Z",
-              "EditorCaption": ""
 >>>>>>> 6a0946ec98f514618435b4081b413fef0ab40839
+              "EditorCaption": ""
             }
           ]
         }
