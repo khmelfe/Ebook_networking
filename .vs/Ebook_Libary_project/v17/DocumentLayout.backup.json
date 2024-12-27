@@ -96,7 +96,7 @@
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Userdatabase.cs",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeToolTip": "Ebook_Libary_project\\Userdatabase.cs",
-              "ViewState": "AgIAAGoBAAAAAAAAAAAewHQBAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAEwBAAAAAAAAAAAmwF8BAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-26T18:25:57.909Z",
               "EditorCaption": ""
@@ -109,7 +109,7 @@
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\LoginController.cs",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\LoginController.cs",
               "RelativeToolTip": "Ebook_Libary_project\\Controllers\\LoginController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAADEAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAQwCQAAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-26T18:00:27.706Z",
               "EditorCaption": ""
@@ -122,7 +122,7 @@
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\User\\UserController.cs",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\User\\UserController.cs",
               "RelativeToolTip": "Ebook_Libary_project\\Controllers\\User\\UserController.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABkAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAQwBkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-24T18:53:41.223Z",
               "EditorCaption": ""
@@ -137,7 +137,8 @@
               "RelativeToolTip": "Ebook_Libary_project\\Models\\UserModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-26T17:58:48.966Z"
+              "WhenOpened": "2024-12-26T17:58:48.966Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -147,7 +148,7 @@
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAOwAAAAAAAAAAAAMwAIBAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAkwAsBAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-24T16:03:36.563Z",
               "EditorCaption": ""
