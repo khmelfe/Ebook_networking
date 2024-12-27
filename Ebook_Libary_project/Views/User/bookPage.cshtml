@@ -1,69 +1,255 @@
 ﻿@{
     ViewBag.Title = "Book Page";
-
 }
 @model Ebook_Libary_project.Models.Book
-<h2>Book Page</h2>
 
-<div class="book-container">
-    <div class="book-image">
-        <p>Image Placeholder</p>
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
 
-    <div class="book-details">
-        <h1>@Model.Name</h1>
-        <p>Author: @Model.Author</p>
-        <p>Price: @Model.BuyingPrice</p>
-        <p>Available Copies: @Model.AvailableCopies</p>
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
 
-        <form id="addToCartForm">
-            <input type="hidden" name="bookId" value="@Model.Id" />
-            <label>
-                <input type="radio" name="action" value="borrow" required /> Borrow
-            </label>
-            <br />
-            <label>
-                <input type="radio" name="action" value="buy" required /> Buy
-            </label>
-            <br />
+        .book-container {
+            display: flex;
+            gap: 20px;
+        }
 
-            <div class="formats">
-                <strong>Select Format:</strong>
-                <select name="format" required>
-                    <option value="PDF">PDF</option>
-                    <option value="MP3">MP3</option>
-                    <option value="EPUB">EPUB</option>
-                </select>
+        .book-image img {
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-details {
+            flex: 1;
+        }
+
+            .book-details h1 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .book-details p {
+                margin: 5px 0;
+            }
+
+        .price-details {
+            margin-top: 20px;
+        }
+
+            .price-details .original-price {
+                text-decoration: line-through;
+                color: red;
+            }
+
+            .price-details .sale-price {
+                color: green;
+                font-weight: bold;
+                font-size: 18px;
+            }
+
+        .form-section {
+            margin-top: 20px;
+        }
+
+            .form-section select {
+                margin-top: 10px;
+                padding: 5px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            .form-section button {
+                background-color: #28a745;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+
+                .form-section button:hover {
+                    background-color: #218838;
+                }
+
+        .placeholder {
+            width: 200px;
+            height: 300px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            border-radius: 5px;
+        }
+
+        .review-section {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid #ccc;
+        }
+
+            .review-section h2 {
+                margin-bottom: 20px;
+            }
+
+        .review {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f5f5f5;
+        }
+
+            .review textarea {
+                width: 100%;
+                height: 100px;
+                margin-top: 10px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+
+            .review button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+
+                .review button:hover {
+                    background-color: #0056b3;
+                }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="book-container">
+            <div class="book-image">
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <img src="@Url.Content(Model.ImagePath)" alt="@Model.Name" />
+                }
+                else
+                {
+                    <div class="placeholder">No Image</div>
+                }
             </div>
 
-            <button type="submit">Add to Cart</button>
-        </form>
+            <div class="book-details">
+                <h1>@Model.Name</h1>
+                <p><strong>Author:</strong> @Model.Author</p>
+                <p><strong>Available Copies:</strong> @Model.AvailableCopies</p>
+
+                <div class="price-details">
+                    if (Model.Sale > 0)
+                    {
+                        @{
+                            decimal saleFactor = Model.Sale / 100m;
+                            decimal discountedBuyingPrice = Model.BuyingPrice * (1 - saleFactor);
+                            decimal discountedBorrowPrice = Model.BorrowPrice * (1 - saleFactor);
+                        }
+                        <p><strong>Original Buying Price:</strong> <span class="original-price">@Model.BuyingPrice.ToString("C")</span></p>
+                        <p><strong>Discounted Buying Price:</strong> <span class="sale-price">@discountedBuyingPrice.ToString("C")</span></p>
+                        <p><strong>Original Borrowing Price:</strong> <span class="original-price">@Model.BorrowPrice.ToString("C")</span></p>
+                        <p><strong>Discounted Borrowing Price:</strong> <span class="sale-price">@discountedBorrowPrice.ToString("C")</span></p>
+                    }
+                    else
+                    {
+                        <p><strong>Buying Price:</strong> @Model.BuyingPrice.ToString("C")</p>
+                        <p><strong>Borrowing Price:</strong> @Model.BorrowPrice.ToString("C")</p>
+                    }
+                </div>
+
+                <div class="form-section">
+                    <form id="addToCartForm">
+                        <input type="hidden" name="bookId" value="@Model.Id" />
+                        <label>
+                            <input type="radio" name="action" value="borrow" required /> Borrow
+                        </label>
+                        <label>
+                            <input type="radio" name="action" value="buy" required /> Buy
+                        </label>
+
+                        <select name="format" required>
+                            <option value="">Select Format</option>
+                            <option value="PDF">PDF</option>
+                            <option value="MP3">MP3</option>
+                            <option value="EPUB">EPUB</option>
+                        </select>
+
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </div>
+
+                <div class="form-section">
+                    <form method="post" action="@Url.Action("Buynow", "User")">
+                        <input type="hidden" name="bookId" value="@Model.Id" />
+                        <input type="hidden" name="action" value="buy" />
+                        <select name="format" required>
+                            <option value="">Select Format</option>
+                            <option value="PDF">PDF</option>
+                            <option value="MP3">MP3</option>
+                            <option value="EPUB">EPUB</option>
+                        </select>
+                        <button type="submit">Buy Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="review-section">
+            <h2>User Reviews</h2>
+            <p>No reviews yet. Be the first to leave a review!</p>
+            <div class="review">
+                <textarea placeholder="Write your review here..."></textarea>
+                <button>Submit Review</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    document.getElementById('addToCartForm').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent the default form submission behavior
+    <script>
+        document.getElementById('addToCartForm').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        const formData = new FormData(this);
+            const formData = new FormData(this);
 
-        fetch('/User/AddToCart', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Check if the server returned a success message
-                if (data.success) {
-                    alert(data.message); // Show success message
-                } else {
-                    alert(data.message); // Show error message
-                }
+            fetch('/User/AddToCart', {
+                method: 'POST',
+                body: formData
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while adding the book to the cart.');
-            });
-    });
-</script>
-
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while adding the book to the cart.');
+                });
+        });
+    </script>
+</body>
+</html>

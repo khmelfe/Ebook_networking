@@ -28,8 +28,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/About">About</a>
                         </li>
-                        @*Only admins*@
-                        <li class="nav-item" style="display:none">
+                        <li class="nav-item" id="DashBoard" style="display:none">
                             <a class="nav-link" href="/User/Dashboard">Dashboard</a>
                         </li>
                         <li class="nav-item">
@@ -71,6 +70,7 @@
                     <input type="checkbox" checked="checked" name="remember"> Remember me
                 </label>
             </div>
+
 
             <div class="container" style="background-color:#f1f1f1">
 
@@ -175,7 +175,7 @@
             document.getElementById('id01').style.display = 'none';
         }
     };
-
+    
     // Login button functionality
     document.getElementById("loginButton").onclick = function (event) {
         // Prevent form submission
@@ -184,7 +184,8 @@
         // Get the form data
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
-
+        var isadmin;
+        var cookie = null;
         // AJAX request to handle login
         $.ajax({
             url: '/Login/Submit', // The server-side endpoint for login
@@ -192,8 +193,9 @@
             data: { username: username, password: password },
             success: function (response) {
                 if (response.success) {
+                    isadmin = response.isadmin;
                     // Save username as a cookie (15 min expiry)
-                    document.cookie = `username=${username}; path=/; max-age=900;`;
+                    document.cookie = `username=${username}; path=/; max-age=300;`;
                     document.getElementById("errorMessage").style.display = "none";
                     document.getElementById('id01').style.display = 'none'; // Close modal
                     alert("Login successful!");
@@ -207,7 +209,11 @@
                 alert("An error occurred while logging in. Please try again.");
             }
         });
-     };
+        };
+        //Need to fix it to work with all, right now as a demo we use user id 6.
+      
+
+        
         //registoration.
         document.getElementById("registerButton").onclick = function (event) {
             // Prevent form submission
@@ -270,7 +276,10 @@
     // Check if the user is logged in
     const username = getCookie("username");
 
-    if (username) {
+        if (username) {
+            if (isadmin) {
+                document.getElementById('DashBoard').style.display = 'block';
+            }
         // User is logged in
         document.getElementById("openLoginButton").style.display = "none"; // Hide login button
         document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, ${username}!</p>`);
@@ -331,6 +340,11 @@
         } else {
             console.log("User is not logged in or the cookie is missing.");
         }
+
+
+
+       
+
     </script>
 
 

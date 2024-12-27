@@ -3,17 +3,21 @@ using EbookLibraryProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.Web.Helpers;
+using System.Web.Mvc;
+
+
 
 namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        private static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-       // private static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
-        // Add a book to the bought list
+        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -97,69 +101,7 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static string ReturnBook(int userId, int bookId)
-        {
-            string message = string.Empty;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
-                // Check if there is anyone in the waiting list for this book
-                string waitingListQuery = "SELECT TOP 1 UserID FROM WaitingList WHERE BookID = @BookID ORDER BY NumberInQueue";
-
-                using (SqlCommand waitingListCommand = new SqlCommand(waitingListQuery, connection))
-                {
-                    waitingListCommand.Parameters.AddWithValue("@BookID", bookId);
-
-                    object nextUserIdObj = waitingListCommand.ExecuteScalar();
-
-                    if (nextUserIdObj != null)
-                    {
-                        int nextUserId = Convert.ToInt32(nextUserIdObj);
-
-                        // Update the queue numbers for all users in the waiting list for this book
-                        string updateQueueQuery = "UPDATE WaitingList SET NumberInQueue = NumberInQueue - 1 WHERE BookID = @BookID";
-
-                        using (SqlCommand updateQueueCommand = new SqlCommand(updateQueueQuery, connection))
-                        {
-                            updateQueueCommand.Parameters.AddWithValue("@BookID", bookId);
-                            updateQueueCommand.ExecuteNonQuery();
-                        }
-
-                        // Remove the current entry from BorrowedBooks
-                        string deleteBorrowedQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID AND BookID = @BookID";
-
-                        using (SqlCommand deleteBorrowedCommand = new SqlCommand(deleteBorrowedQuery, connection))
-                        {
-                            deleteBorrowedCommand.Parameters.AddWithValue("@UserID", userId);
-                            deleteBorrowedCommand.Parameters.AddWithValue("@BookID", bookId);
-                            deleteBorrowedCommand.ExecuteNonQuery();
-                        }
-
-                        // Call BorrowBook for the next user in line
-                        BorrowBook(nextUserId, bookId);
-
-                        message = $"Book returned and borrowed by the next user in line (UserID: {nextUserId}).";
-                    }
-                    else
-                    {
-                        // No one in the waiting list, increase available copies
-                        string updateCopiesQuery = "UPDATE Books SET AvailableCopies = AvailableCopies + 1 WHERE Id = @BookID";
-
-                        using (SqlCommand updateCopiesCommand = new SqlCommand(updateCopiesQuery, connection))
-                        {
-                            updateCopiesCommand.Parameters.AddWithValue("@BookID", bookId);
-                            updateCopiesCommand.ExecuteNonQuery();
-                        }
-
-                        message = "Book returned successfully. Available copies increased.";
-                    }
-                }
-            }
-
-            return message;
-        }
+       
 
         // Method to borrow a book
         public static void BorrowBook(int userId, int bookId)
@@ -247,13 +189,24 @@ namespace Ebook_Library_Project
         }
 
         // Function to add a book to the Books table
-        public static void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice)
+        public static void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice, string image)
         {
-            string query = "INSERT INTO Books (Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Sale) VALUES (@Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, 0)";
+            string query = "INSERT INTO Books (ImagePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Sale) VALUES (@ImagePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, 0)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
+
+                // If the image path is null or empty, set the parameter value to DBNull
+                if (string.IsNullOrEmpty(image))
+                {
+                    command.Parameters.AddWithValue("@ImagePath", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@ImagePath", image);
+                }
+
                 command.Parameters.AddWithValue("@Name", title);
                 command.Parameters.AddWithValue("@Author", author);
                 command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
@@ -264,6 +217,7 @@ namespace Ebook_Library_Project
                 command.ExecuteNonQuery();
             }
         }
+
 
 
 
@@ -364,28 +318,69 @@ namespace Ebook_Library_Project
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.Read()) // If a user is found
-                    {
-                        // Map the user details to the Usermodel
-                           Usermodel.Initialize(
+                    //if (reader.Read()) // If a user is found
+                    //{
+                    //    // Map the user details to the Usermodel
+                    //       Usermodel.Initialize(
 
-                            reader.GetInt32(0), // Assuming 'id' is the first column
-                            reader.GetString(1), // 'name'
-                            reader.GetString(2), // 'mail
-                            reader.GetString(3), // 'password'
-                            reader.GetInt32(4), // 'age'
-                            reader.GetBoolean(5) // 'admin'
-                        );
+                    //        reader.GetInt32(0), // Assuming 'id' is the first column
+                    //        reader.GetString(1), // 'name'
+                    //        reader.GetString(2), // 'mail
+                    //        reader.GetString(3), // 'password'
+                    //        reader.GetInt32(4), // 'age'
+                    //        reader.GetBoolean(5) // 'admin'
+                    //    );
 
                        
-                    }
+                    //}
                 }
             }
 
 
         }
+        ////Is admin
+        [HttpPost]
+        public static bool IsUser_admin(int UserID)
+        {
+            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
+            bool isAdmin = false;
+            
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserID", UserID);
 
-        
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
+                            if (isAdmin)
+                            {
+                                 return true; //user is an admin
+
+                            }
+                            else
+                            {
+                                return false;  //User is not an admin
+                            }
+                        }
+                        else
+                        {
+                            return false;//server problems
+                        }
+
+                    }
+                }
+
+            
+         
+        }
+
+
+
+
 
         // Check if a user exists in the WaitingList for a book
         public static bool CheckIfExistsInWaitingList(int userId, int bookId)
@@ -492,6 +487,94 @@ namespace Ebook_Library_Project
 
             return totalBooks;
         }
+
+
+        public static string ReturnBook(int userId, int bookId)
+        {
+            string message = string.Empty;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Check if there is anyone in the waiting list for this book
+                string waitingListQuery = "SELECT TOP 1 UserID, NumberInQueue FROM WaitingList WHERE BookID = @BookID ORDER BY NumberInQueue";
+
+                using (SqlCommand waitingListCommand = new SqlCommand(waitingListQuery, connection))
+                {
+                    waitingListCommand.Parameters.AddWithValue("@BookID", bookId);
+
+                    // Explicitly close any lingering readers before executing
+                    SqlDataReader reader = null;
+                    try
+                    {
+                        reader = waitingListCommand.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            int nextUserId = (int)reader["UserID"];
+                            int numberInQueue = (int)reader["NumberInQueue"];
+
+                            // Close the reader before executing the next command
+                            reader.Close();
+
+                            // Remove the current entry from BorrowedBooks
+                            string deleteBorrowedQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID AND BookID = @BookID";
+
+                            using (SqlCommand deleteBorrowedCommand = new SqlCommand(deleteBorrowedQuery, connection))
+                            {
+                                deleteBorrowedCommand.Parameters.AddWithValue("@UserID", userId);
+                                deleteBorrowedCommand.Parameters.AddWithValue("@BookID", bookId);
+                                deleteBorrowedCommand.ExecuteNonQuery();
+                            }
+
+                            // Update queue numbers only if more than one user is in the queue
+                            if (numberInQueue > 1)
+                            {
+                                string updateQueueQuery = @"
+                        UPDATE WaitingList
+                        SET NumberInQueue = NumberInQueue - 1
+                        WHERE BookID = @BookID AND NumberInQueue > 1";
+
+                                using (SqlCommand updateQueueCommand = new SqlCommand(updateQueueQuery, connection))
+                                {
+                                    updateQueueCommand.Parameters.AddWithValue("@BookID", bookId);
+                                    updateQueueCommand.ExecuteNonQuery();
+                                }
+                            }
+
+                            // Assign the book to the next user in line
+                            BorrowBook(nextUserId, bookId);
+
+                            message = $"Book returned and borrowed by the next user in line (UserID: {nextUserId}).";
+                        }
+                        else
+                        {
+                            // Close the reader before executing the next command
+                            reader.Close();
+
+                            // No one in the waiting list, increase available copies
+                            string updateCopiesQuery = "UPDATE Books SET AvailableCopies = AvailableCopies + 1 WHERE Id = @BookID";
+
+                            using (SqlCommand updateCopiesCommand = new SqlCommand(updateCopiesQuery, connection))
+                            {
+                                updateCopiesCommand.Parameters.AddWithValue("@BookID", bookId);
+                                updateCopiesCommand.ExecuteNonQuery();
+                            }
+
+                            message = "Book returned successfully. Available copies increased.";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        reader?.Close(); // Ensure the reader is closed in case of an exception
+                        throw new Exception($"Error processing ReturnBook: {ex.Message}", ex);
+                    }
+                }
+            }
+
+            return message;
+        }
+
 
 
     }
