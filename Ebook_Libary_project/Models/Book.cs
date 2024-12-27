@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
+using System;
 namespace Ebook_Libary_project.Models
 
 {
-    public class Book
+    public class BookModel
     {
         // Book properties
         public int Id { get; set; } // Unique identifier
@@ -21,7 +18,7 @@ namespace Ebook_Libary_project.Models
       
 
         // Constructor
-        public Book()
+        public BookModel()
         {
             
             Sale = 0;

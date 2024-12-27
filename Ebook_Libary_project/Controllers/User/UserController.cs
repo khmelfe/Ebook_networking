@@ -7,6 +7,7 @@ using EbookLibraryProject.Models;
 using System.Diagnostics;
 using Microsoft.Ajax.Utilities;
 using Ebook_Library_Project;
+using System;
 
 
 namespace Ebook_Libary_project.Controllers.user
@@ -21,7 +22,7 @@ namespace Ebook_Libary_project.Controllers.user
 
         
 
-        Book book;
+        BookModel book;
 
         // View for individual book page
         public ActionResult BookPage(int id)
@@ -107,5 +108,45 @@ namespace Ebook_Libary_project.Controllers.user
             //need to add restrictions to admin
             return View("Dashboard");
         }
+
+
+        [HttpPost]
+        public JsonResult AddReview(int bookid, string review)
+        {
+            try
+            {
+                int userid = UserSession.GetCurrentUserId(); // Get current user ID
+
+                if (Userdatabase.ReviewExists(userid, bookid))
+                {
+                    return Json(new { success = false, message = "You have already reviewed this book." });
+                }
+
+                Userdatabase.AddReview(bookid, userid, review);
+                return Json(new { success = true, message = "Review added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult GetReviews(int bookid)
+        {
+            try
+            {
+                var reviews = Userdatabase.GetReviewsById(bookid); // Method to fetch reviews
+                return Json(new { success = true, reviews }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+
+
     }
 }
