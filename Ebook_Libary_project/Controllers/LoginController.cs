@@ -26,23 +26,34 @@ namespace Ebook_Libary_project.Controllers
         [HttpPost]
         public JsonResult Submit(string username, string password)
         {
-            // Simple validation for username and password (you can extend it)
-            if (Ebook_Library_Project.Userdatabase.userexist(username, password))
+            try
             {
-                Userdatabase.GetUser_details(username, password);
-               
-                var emailService = new EmailService();
-                string subject = "Welcome to Your App!";
-                string body = $"Hi {Usermodel.Name},<br><br>Thank you for registering at Your App!";
-                emailService.SendEmail(Usermodel.Mail, subject, body);
-                return Json(new { success = true });
+                if (Ebook_Library_Project.Userdatabase.userexist(username, password))
+                {
+                    int userId = Userdatabase.GetUser_details(username, password);
+                    Debug.WriteLine("Logged in successfully with user ID: " + userId);
+
+                    // Optional: Send a welcome email (if needed)
+                    var emailService = new EmailService();
+                    string subject = "Welcome to Your App!";
+                    string email = Userdatabase.GetUserEmailById(userId);
+                    string body = $"Hi {Userdatabase.GetUserNameById(userId)},<br><br>Thank you for registering at Your App!";
+                    emailService.SendEmail(email, subject, body);
+
+                    return Json(new { success = true, userId });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Invalid username or password." });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Json(new { success = false });
+                Debug.WriteLine("Error during login: " + ex.Message);
+                return Json(new { success = false, message = "An error occurred during login. Please try again." });
             }
         }
-        
+
         [HttpPost]
         public JsonResult Checking_info_register(string name, string password, string con_pass, string mail, string age, bool isadmin)
         {

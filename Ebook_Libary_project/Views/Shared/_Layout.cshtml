@@ -39,7 +39,7 @@
 
                     </ul>
                     <ul class="navbar-nav">
-                        <li class="nav-item" id="viewCartButton" style="display:none">
+                        <li class="nav-item" id="viewCartButton" style="display:block">
                             <a class="btn btn-primary" href="/User/Cart/CartView">View Cart</a>
 
 
@@ -146,73 +146,74 @@
 
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-   
+
     <script>
-    // Switch between Login and Register forms
-    function switchToRegister() {
-        document.getElementById('loginForm').style.display = 'none'; // Hide login form
-        document.getElementById('registerForm').style.display = 'block'; // Show register form
-    }
-
-    function switchToLogin() {
-        document.getElementById('registerForm').style.display = 'none'; // Hide register form
-        document.getElementById('loginForm').style.display = 'block'; // Show login form
-    }
-
-    // Open the login modal
-    document.getElementById('openLoginButton').onclick = function () {
-        document.getElementById('id01').style.display = 'block';
-    };
-
-    // Close the login modal
-    document.querySelector('.close').onclick = function () {
-        document.getElementById('id01').style.display = 'none';
-    };
-
-    // Close modal when clicking outside of it
-    window.onclick = function (event) {
-        if (event.target == document.getElementById('id01')) {
-            document.getElementById('id01').style.display = 'none';
+        // Helper Functions
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(";").shift();
         }
-    };
 
-    // Login button functionality
-    document.getElementById("loginButton").onclick = function (event) {
-        // Prevent form submission
-        event.preventDefault();
+        function deleteCookie(name) {
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            console.log("Deleted cookie:", name);
+        }
 
-        // Get the form data
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
+        function switchToRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
 
-        // AJAX request to handle login
-        $.ajax({
-            url: '/Login/Submit', // The server-side endpoint for login
-            type: 'POST',
-            data: { username: username, password: password },
-            success: function (response) {
-                if (response.success) {
-                    // Save username as a cookie (15 min expiry)
-                    document.cookie = `username=${username}; path=/; max-age=900;`;
-                    document.getElementById("errorMessage").style.display = "none";
-                    document.getElementById('id01').style.display = 'none'; // Close modal
-                    alert("Login successful!");
-                    window.location.reload(); // Reload the page to reflect login state
-                } else {
-                    alert("Invalid username or password.");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Error occurred: " + error);
-                alert("An error occurred while logging in. Please try again.");
+        function switchToLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        }
+
+        document.getElementById('openLoginButton').onclick = function () {
+            document.getElementById('id01').style.display = 'block';
+        };
+
+        document.querySelector('.close').onclick = function () {
+            document.getElementById('id01').style.display = 'none';
+        };
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('id01')) {
+                document.getElementById('id01').style.display = 'none';
             }
-        });
-     };
-        //registoration.
-        document.getElementById("registerButton").onclick = function (event) {
-            // Prevent form submission
+        };
+
+        // Login Functionality
+        document.getElementById("loginButton").onclick = function (event) {
             event.preventDefault();
 
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            $.ajax({
+                url: '/Login/Submit',
+                type: 'POST',
+                data: { username, password },
+                success: function (response) {
+                    if (response.success) {
+                        document.cookie = `userId=${response.userId}; path=/; max-age=900;`;
+                        alert("Login successful!");
+                        window.location.reload(); // Reload the page to reflect login state
+                    } else {
+                        alert(response.message || "Invalid username or password.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Login error:", error);
+                    alert("An error occurred during login. Please try again.");
+                }
+            });
+        };
+
+        // Registration Functionality
+        document.getElementById("registerButton").onclick = function (event) {
+            event.preventDefault();
 
             var username = document.getElementById("newUsername").value;
             var password = document.getElementById("newPassword").value;
@@ -227,111 +228,43 @@
             }
 
             $.ajax({
-                url: '/Login/Checking_info_register', // The server-side endpoint for Regstrations.
+                url: '/Login/Checking_info_register',
                 type: 'POST',
-                data: {
-                    name: username,
-                    password: password,
-                    mail: email,
-                    age: age,
-                    con_pass: con_password,
-                    isadmin: isAdmin 
-                },
+                data: { name: username, password, mail: email, age, con_pass: con_password, isadmin: isAdmin },
                 success: function (response) {
                     if (response.success) {
-                        alert("User created successfully!");
-                        
+                        alert("User registered successfully!");
                         window.location.reload();
                     } else {
                         alert(response.message || "An error occurred. Please try again.");
                     }
                 },
                 error: function (xhr, status, error) {
-                    // Handle AJAX request errors (network or server-side issues)
-                    console.error("Error:", error, "Response Text:", xhr.responseText);
-                    alert(`An unexpected error occurred: ${xhr.responseText || error}`);
+                    console.error("Registration error:", error);
+                    alert("An unexpected error occurred. Please try again.");
                 }
             });
         };
 
-    // Function to get a cookie by name
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(";").shift();
-    }
-
-    // Function to delete a cookie
-    function deleteCookie(name) {
-        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-        console.log("Cookie deleted:", name);
-    }
-
-    // Check if the user is logged in
-    const username = getCookie("username");
-
-    if (username) {
-        // User is logged in
-        document.getElementById("openLoginButton").style.display = "none"; // Hide login button
-        document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, ${username}!</p>`);
-
-        document.getElementById("viewCartButton").style.display = "block";  // Show View Cart button
-        document.getElementById("logoutButton").style.display = "block";  // Show Logout button
-
-        // Logout button functionality
+        // Logout Functionality
         document.getElementById("logoutButtonElement").onclick = function () {
-            // Clear all relevant cookies to log out
-            deleteCookie("username");
-            deleteCookie("auth_token"); // If applicable
-
-            // Debug: Log remaining cookies
-            console.log("Remaining cookies after logout:", document.cookie);
-
-            // Redirect to the home page
+            deleteCookie("userId");
+            alert("Logged out successfully.");
             window.location.href = '/';
         };
-    } else {
-        // User is not logged in
-        document.getElementById("openLoginButton").style.display = "block"; // Show login button
-        document.getElementById("viewCartButton").style.display = "none";  // Hide View Cart button
-        document.getElementById("logoutButton").style.display = "none";  // Hide Logout button
-        }
 
+        // Check Login State
         const userId = getCookie("userId");
-
         if (userId) {
-            // Send an AJAX request to fetch user details
-            $.ajax({
-                url: '/YourController/GetUserDetailsFromCookie', // Your server-side endpoint
-                type: 'GET',
-                success: function (response) {
-                    if (response.success) {
-                        const user = response.data;
-                        console.log("User details:", user);
-
-                        // Example: Build a user object
-                        const userObj = {
-                            id: user.Id,
-                            name: user.Name,
-                            mail: user.Mail,
-                            password: user.Password,
-                            age: user.Age,
-                            isAdmin: user.IsAdmin
-                        };
-
-                        console.log("User Object:", userObj);
-                    } else {
-                        alert(response.message || "Failed to retrieve user details.");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching user details:", error);
-                }
-            });
+            document.getElementById("openLoginButton").style.display = "none";
+            document.getElementById("logoutButton").style.display = "block";
+            document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, User ${userId}!</p>`);
         } else {
-            console.log("User is not logged in or the cookie is missing.");
+            document.getElementById("openLoginButton").style.display = "block";
+            document.getElementById("logoutButton").style.display = "none";
         }
     </script>
+
 
 
 
