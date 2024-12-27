@@ -17,6 +17,7 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
+        
         //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
         public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
@@ -340,54 +341,46 @@ namespace Ebook_Library_Project
 
 
         }
-                        ////Is admin
-                        [HttpPost]  
-                        public static bool IsUser_admin(int UserID)
+        ////Is admin
+        [HttpPost]
+        public static bool IsUser_admin(int UserID)
+        {
+            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
+            bool isAdmin = false;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", UserID);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
+                        if (isAdmin)
                         {
-                            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
-                            bool isAdmin = false;
-
-                            using (SqlConnection connection = new SqlConnection(connectionString))
-                            {
-                                SqlCommand command = new SqlCommand(query, connection);
-                                command.Parameters.AddWithValue("@UserID", UserID);
-
-                                connection.Open();
-                                using (SqlDataReader reader = command.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
-                                        if (isAdmin)
-                                        {
-                                            return true; //user is an admin
-
-                                        }
-                                        else
-                                        {
-                                            return false;  //User is not an admin
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return false;//server problems
-                                    }
-
-                                }
-                            }
-
+                            return true; //user is an admin
 
                         }
-                
-            
+                        else
+                        {
+                            return false;  //User is not an admin
+                        }
+                    }
+                    else
+                    {
+                        return false;//server problems
+                    }
 
-            
-         
-        
+                }
+            }
 
 
+        }
 
-
+       
 
         // Check if a user exists in the WaitingList for a book
         public static bool CheckIfExistsInWaitingList(int userId, int bookId)
@@ -653,7 +646,48 @@ namespace Ebook_Library_Project
             }
             return age;
         }
+        //statictics. 
+        public static int Amount_of_users()
+        {
+            string query = "SELECT COUNT(*) FROM Users";
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+
+
+            }
+
+        }
+        public static int Amount_of_books()
+        {
+            string query = "SELECT COUNT(*) FROM Books";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+            }
+
+        }
+        public static int Amount_of_books_inborrow_status()
+        {
+            string query = "SELECT COUNT(*) FROM b";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+            }
+
+        }
 
 
     }
