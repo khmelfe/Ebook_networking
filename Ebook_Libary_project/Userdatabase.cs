@@ -4,17 +4,21 @@ using EbookLibraryProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Web;
+using System.Web.Mvc;
+
+
 
 namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
         public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-       // private static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -326,8 +330,6 @@ namespace Ebook_Library_Project
                 {
                     if (reader.Read()) // If a user is found
                     {
-
-
                         currentId = reader.GetInt32(0);
                         Debug.WriteLine(" id" + currentId);
 
@@ -339,7 +341,57 @@ namespace Ebook_Library_Project
 
         }
 
+
+
+                        ////Is admin
         
+        [HttpPost]  
+                        public static bool IsUser_admin(int UserID)
+                        {
+                            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
+                            bool isAdmin = false;
+
+                            using (SqlConnection connection = new SqlConnection(connectionString))
+                            {
+                                SqlCommand command = new SqlCommand(query, connection);
+                                command.Parameters.AddWithValue("@UserID", UserID);
+
+                                connection.Open();
+                                using (SqlDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
+                                        if (isAdmin)
+                                        {
+                                            return true; //user is an admin
+
+                                        }
+                                        else
+                                        {
+                                            return false;  //User is not an admin
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return false;//server problems
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                
+            
+
+            
+         
+        
+
+
+
+
 
         // Check if a user exists in the WaitingList for a book
         public static bool CheckIfExistsInWaitingList(int userId, int bookId)
@@ -392,7 +444,7 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static Book GetBookById(int bookId)
+        public static BookModel GetBookById(int bookId)
         {
             string query = "SELECT Id, Sale, ImagePath, Name, Author, BuyingPrice, BorrowPrice, AvailableCopies FROM Books WHERE Id = @BookID";
 
@@ -406,7 +458,7 @@ namespace Ebook_Library_Project
                 {
                     if (reader.Read())
                     {
-                        return new Book
+                        return new BookModel
                         {
                             Id = (int)reader["Id"],
                             Sale = (int)reader["Sale"],
@@ -613,14 +665,15 @@ namespace Ebook_Library_Project
         }
 
 
-        public static void AddReview(int id, string review)
+        public static void AddReview(int bookid, int userid, string review)
         {
-            string query = "INSERT INTO Reviews (id, review) VALUES (@Id, @Review)";
+            string query = "INSERT INTO Reviews (userid, bookid, review) VALUES (@UserId, @BookId, @Review)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@UserId", userid);
+                command.Parameters.AddWithValue("@BookId", bookid);
                 command.Parameters.AddWithValue("@Review", review);
 
                 connection.Open();
@@ -628,21 +681,61 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static bool ReviewExists(int id)
+
+
+        public static bool ReviewExists(int userid, int bookid)
         {
-            string query = "SELECT COUNT(*) FROM Reviews WHERE id = @Id";
+            string query = "SELECT COUNT(*) FROM Reviews WHERE userid = @UserId AND bookid = @BookId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@UserId", userid);
+                command.Parameters.AddWithValue("@BookId", bookid);
 
                 connection.Open();
-
-                int count = (int)command.ExecuteScalar();
-                return count > 0; // Returns true if the ID exists, false otherwise
+                return (int)command.ExecuteScalar() > 0;
             }
         }
+
+        public static List<Review> GetReviewsById(int? userid = null, int? bookid = null)
+        {
+            string query = "SELECT userid, bookid, review FROM Reviews WHERE 1=1";
+
+            // Add conditions based on parameters
+            if (userid.HasValue)
+                query += " AND userid = @UserId";
+            if (bookid.HasValue)
+                query += " AND bookid = @BookId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                // Add parameters if applicable
+                if (userid.HasValue)
+                    command.Parameters.AddWithValue("@UserId", userid.Value);
+                if (bookid.HasValue)
+                    command.Parameters.AddWithValue("@BookId", bookid.Value);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var reviews = new List<Review>();
+                    while (reader.Read())
+                    {
+                        reviews.Add(new Review
+                        {
+                            UserId = reader.GetInt32(0),
+                            BookId = reader.GetInt32(1),
+                            ReviewText = reader.GetString(2)
+                        });
+                    }
+                    return reviews;
+                }
+            }
+        }
+
 
 
 
