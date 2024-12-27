@@ -1,4 +1,5 @@
-﻿using Ebook_Libary_project.Models;
+﻿using Ebook_Libary_project;
+using Ebook_Libary_project.Models;
 using EbookLibraryProject.Models;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
-using System.Web.Helpers;
+using System.Web;
 using System.Web.Mvc;
 
 
@@ -288,7 +289,7 @@ namespace Ebook_Library_Project
         public static bool userexist(string name, string password)
         {
             string query = "SELECT COUNT(*) FROM Users WHERE name = @Name AND password = @Password";
-            
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
@@ -298,16 +299,25 @@ namespace Ebook_Library_Project
                 connection.Open();
 
                 int count = (int)command.ExecuteScalar();
-                //if (count > 0){
-                      
-                //}
-                return count > 0; // Returns true if user exists, false otherwise
+
+                if (count > 0)
+                {
+                    // Get the user ID
+                    int userId = GetUser_details(name, password);
+                    Debug.WriteLine(" id" + userId);
+                    // Set the userId in a cookie
+                    HttpContext.Current.Response.Cookies["userId"].Value = userId.ToString();
+                    HttpContext.Current.Response.Cookies["userId"].Path = "/";
+                }
+
+                return count > 0;
             }
         }
 
-        public static void GetUser_details(string name, string password){
 
-            string query = "SELECT id, name, mail, password, age, admin FROM Users WHERE name = @Name AND password = @Password";
+        public static int GetUser_details(string name, string password){
+            int currentId = 0;
+            string query = "SELECT id FROM Users WHERE name = @Name AND password = @Password";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
@@ -318,65 +328,62 @@ namespace Ebook_Library_Project
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    //if (reader.Read()) // If a user is found
-                    //{
-                    //    // Map the user details to the Usermodel
-                    //       Usermodel.Initialize(
+                    if (reader.Read()) // If a user is found
+                    {
+                        currentId = reader.GetInt32(0);
+                        Debug.WriteLine(" id" + currentId);
 
-                    //        reader.GetInt32(0), // Assuming 'id' is the first column
-                    //        reader.GetString(1), // 'name'
-                    //        reader.GetString(2), // 'mail
-                    //        reader.GetString(3), // 'password'
-                    //        reader.GetInt32(4), // 'age'
-                    //        reader.GetBoolean(5) // 'admin'
-                    //    );
-
-                       
-                    //}
+                    }
                 }
+                return currentId;
             }
 
 
         }
-        ////Is admin
-        [HttpPost]
-        public static bool IsUser_admin(int UserID)
-        {
-            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
-            bool isAdmin = false;
+                        ////Is admin
+                        [HttpPost]  
+                        public static bool IsUser_admin(int UserID)
+                        {
+                            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
+                            bool isAdmin = false;
+
+                            using (SqlConnection connection = new SqlConnection(connectionString))
+                            {
+                                SqlCommand command = new SqlCommand(query, connection);
+                                command.Parameters.AddWithValue("@UserID", UserID);
+
+                                connection.Open();
+                                using (SqlDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
+                                        if (isAdmin)
+                                        {
+                                            return true; //user is an admin
+
+                                        }
+                                        else
+                                        {
+                                            return false;  //User is not an admin
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return false;//server problems
+                                    }
+
+                                }
+                            }
+
+
+                        }
+                
             
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@UserID", UserID);
-
-                    connection.Open();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
-                            if (isAdmin)
-                            {
-                                 return true; //user is an admin
-
-                            }
-                            else
-                            {
-                                return false;  //User is not an admin
-                            }
-                        }
-                        else
-                        {
-                            return false;//server problems
-                        }
-
-                    }
-                }
 
             
          
-        }
+        
 
 
 
@@ -573,6 +580,78 @@ namespace Ebook_Library_Project
             }
 
             return message;
+        }
+
+        // Method to get email by user ID
+        public static string GetUserEmailById(int userId)
+        {
+            string email = string.Empty;
+            string query = "SELECT mail FROM Users WHERE id = @UserId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) // If a user is found
+                    {
+                        email = reader.GetString(0); // Assuming 'mail' is the first column in the result
+                    }
+                }
+            }
+            return email;
+        }
+
+        // Method to get name by user ID
+        public static string GetUserNameById(int userId)
+        {
+            string name = string.Empty;
+            string query = "SELECT name FROM Users WHERE id = @UserId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) // If a user is found
+                    {
+                        name = reader.GetString(0); // Assuming 'name' is the first column in the result
+                    }
+                }
+            }
+            return name;
+        }
+
+        // Method to get age by user ID
+        public static int GetUserAgeById(int userId)
+        {
+            int age = 0;
+            string query = "SELECT age FROM Users WHERE id = @UserId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) // If a user is found
+                    {
+                        age = reader.GetInt32(0); // Assuming 'age' is the first column in the result
+                    }
+                }
+            }
+            return age;
         }
 
 

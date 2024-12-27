@@ -3,55 +3,54 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-
 using System.Net.Mail;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using Ebook_Libary_project.Models;
 using Ebook_Library_Project;
-
 using EbookLibraryProject.Models;
-using Microsoft.Ajax.Utilities;
 
 namespace Ebook_Libary_project.Controllers
 {
     public class LoginController : Controller
     {
-        public static int currentuser;
-        public static Cookie CurrentCookie;
+
         public ActionResult Login()
         {
             return View(); // Returns the login view to show the form
         }
 
         [HttpPost]
-        public JsonResult Submit(string username, string password,Cookie cookie=null )
+        public JsonResult Submit(string username, string password)
         {
-           
-            // Simple validation for username and password (you can extend it)
-            if (Ebook_Library_Project.Userdatabase.userexist(username, password))
+            try
             {
-                Ebook_Library_Project.Userdatabase.IsUser_admin(6);
-                //CurrentCookie = cookie;
-                //Userdatabase.GetUser_details(username, password);
+                if (Ebook_Library_Project.Userdatabase.userexist(username, password))
+                {
+                    int userId = Userdatabase.GetUser_details(username, password);
+                    Debug.WriteLine("Logged in successfully with user ID: " + userId);
 
-                //var emailService = new EmailService();
-                //string subject = "Welcome to Your App!";
-                //string body = $"Hi {Usermodel.Name},<br><br>Thank you for registering at Your App!";
-                //emailService.SendEmail(Usermodel.Mail, subject, body);
-                //currentuser = Usermodel.Id;//gets the current id.
-                return Json(new { success = true, isadmin = true });
+                    // Optional: Send a welcome email (if needed)
+                    var emailService = new EmailService();
+                    string subject = "Welcome to Your App!";
+                    string email = Userdatabase.GetUserEmailById(userId);
+                    string body = $"Hi {Userdatabase.GetUserNameById(userId)},<br><br>Thank you for registering at Your App!";
+                    emailService.SendEmail(email, subject, body);
+
+                    return Json(new { success = true, userId });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Invalid username or password." });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Json(new { success = false, isadmin = false });
+                Debug.WriteLine("Error during login: " + ex.Message);
+                return Json(new { success = false, message = "An error occurred during login. Please try again." });
             }
         }
 
@@ -61,7 +60,7 @@ namespace Ebook_Libary_project.Controllers
             Debug.WriteLine("Getout");
             try
             {
-
+                
                 bool Valid = RegistrationModel.ValitdateUser(name, password, con_pass, mail, age, isadmin);
                 int age_dig = int.Parse(age);
                 if (Valid)
@@ -71,15 +70,13 @@ namespace Ebook_Libary_project.Controllers
                 }
                 return Json(new { success = false });
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
 
-        }
-     
-       
+        } 
     }
+
 }
 
 

@@ -16,7 +16,9 @@ namespace Ebook_Libary_project.Controllers.user
 
 
 
+
         // Static example user
+
         
 
         Book book;
@@ -58,16 +60,16 @@ namespace Ebook_Libary_project.Controllers.user
                 }
 
                 // Check if the book exists in borrowed, bought, or waiting list
-                if (Userdatabase.CheckIfExistsInBorrowedBooks(Usermodel.Id, bookId) ||
-                    Userdatabase.CheckIfExistsInBoughtBooks(Usermodel.Id, bookId) ||
-                    Userdatabase.CheckIfExistsInWaitingList(Usermodel.Id, bookId))
+                if (Userdatabase.CheckIfExistsInBorrowedBooks(UserSession.GetCurrentUserId(), bookId) ||
+                    Userdatabase.CheckIfExistsInBoughtBooks(UserSession.GetCurrentUserId(), bookId) ||
+                    Userdatabase.CheckIfExistsInWaitingList(UserSession.GetCurrentUserId(), bookId))
                 {
                     Debug.WriteLine("4");
                     return Json(new { success = false, message = "Book already exists in library!" });
                 }
 
                 // Check if the user has reached the borrow limit
-                if (action == "borrow" && Userdatabase.numborrowed(Usermodel.Id) >= 3)
+                if (action == "borrow" && Userdatabase.numborrowed(UserSession.GetCurrentUserId()) >= 3)
                 {
                     Debug.WriteLine("5");
                     return Json(new { success = false, message = "Already borrowed three books!" });

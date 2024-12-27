@@ -31,16 +31,16 @@ namespace Ebook_Libary_project.Controllers
                 if (action == "borrow")
                 {
                     Debug.WriteLine("Book borrowed successfully.");
-                    Userdatabase.BorrowBook(Usermodel.Id, bookId);
+                    Userdatabase.BorrowBook(UserSession.GetCurrentUserId(), bookId);
                 }
                 else if (action == "buy")
                 {
                     Debug.WriteLine("Book purchased successfully.");
-                    Userdatabase.BuyBook(bookId, Usermodel.Id);
+                    Userdatabase.BuyBook(bookId, UserSession.GetCurrentUserId());
                 }
                 else
                 {
-                    Userdatabase.AddToWaitingList(Usermodel.Id, bookId);
+                    Userdatabase.AddToWaitingList(UserSession.GetCurrentUserId(), bookId);
                 }
             }
            
