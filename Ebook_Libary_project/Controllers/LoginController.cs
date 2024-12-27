@@ -33,12 +33,7 @@ namespace Ebook_Libary_project.Controllers
                     int userId = Userdatabase.GetUser_details(username, password);
                     Debug.WriteLine("Logged in successfully with user ID: " + userId);
 
-                    // Optional: Send a welcome email (if needed)
-                    var emailService = new EmailService();
-                    string subject = "Welcome to Your App!";
-                    string email = Userdatabase.GetUserEmailById(userId);
-                    string body = $"Hi {Userdatabase.GetUserNameById(userId)},<br><br>Thank you for registering at Your App!";
-                    emailService.SendEmail(email, subject, body);
+                   
 
                     return Json(new { success = true, userId });
                 }
@@ -66,6 +61,12 @@ namespace Ebook_Libary_project.Controllers
                 if (Valid)
                 {
                     Ebook_Library_Project.Userdatabase.AddUser(name, mail, password, age_dig, isadmin);
+                    // Optional: Send a welcome email (if needed)
+                    var emailService = new EmailService();
+                    string subject = "Welcome to Your App!";
+                    string email = mail;
+                    string body = $"Hi {(name)},<br><br>Thank you for registering at Your App!";
+                    emailService.SendEmail(email, subject, body);
                     return Json(new { success = true, message = "User was Created." });
                 }
                 return Json(new { success = false });
