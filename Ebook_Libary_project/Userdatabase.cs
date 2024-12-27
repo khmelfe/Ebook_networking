@@ -503,6 +503,12 @@ namespace Ebook_Library_Project
 
                             // Assign the book to the next user in line
                             BorrowBook(nextUserId, bookId);
+                            var emailService = new EmailService();
+                            string subject = "book was returned!";
+                            string email =GetUserEmailById(nextUserId);
+                            string body = $"Hi {GetUserNameById(nextUserId)},<br><br>the book youve been waiting for is yours!!!";
+                            emailService.SendEmail(email, subject, body);
+
 
                             message = $"Book returned and borrowed by the next user in line (UserID: {nextUserId}).";
                         }
@@ -607,8 +613,38 @@ namespace Ebook_Library_Project
         }
 
 
+        public static void AddReview(int id, string review)
+        {
+            string query = "INSERT INTO Reviews (id, review) VALUES (@Id, @Review)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Review", review);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public static bool ReviewExists(int id)
+        {
+            string query = "SELECT COUNT(*) FROM Reviews WHERE id = @Id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", id);
+
+                connection.Open();
+
+                int count = (int)command.ExecuteScalar();
+                return count > 0; // Returns true if the ID exists, false otherwise
+            }
+        }
+
+
 
     }
-
-
 }
