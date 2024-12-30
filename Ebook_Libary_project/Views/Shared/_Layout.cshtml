@@ -30,7 +30,8 @@
                         </li>
                         @*Only admins*@
                         <li class="nav-item" id="Dashboard" style="display:none">
-                            <a class="nav-link" href="/User/Dashboard">Dashboard</a>
+                            
+                            <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <!-- Login Button -->
@@ -255,8 +256,12 @@
 
         // Check Login State
         const userId = getCookie("userId");
+        var storedUserData = JSON.parse(localStorage.getItem("userData"));
         if (userId) {
-            document.getElementById("Dashboard").style.display = "none";
+            if (storedUserData && storedUserData.isAdmin) {
+                document.getElementById("Dashboard").style.display = "block";
+            }
+
             document.getElementById("openLoginButton").style.display = "none";
             document.getElementById("logoutButton").style.display = "block";
             document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, User ${userId}!</p>`);

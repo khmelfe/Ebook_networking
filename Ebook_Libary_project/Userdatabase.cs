@@ -17,8 +17,8 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -102,7 +102,48 @@ namespace Ebook_Library_Project
             }
         }
 
-       
+        //statictics. 
+        public static int Amount_of_users()
+        {
+            string query = "SELECT COUNT(*) FROM Users";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+
+
+            }
+
+        }
+        public static int Amount_of_books()
+        {
+            string query = "SELECT COUNT(*) FROM Books";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+            }
+
+        }
+        public static int Amount_of_books_inborrow_status()
+        {
+            string query = "SELECT COUNT(*) FROM b";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+            }
+
+        }
 
         // Method to borrow a book
         public static void BorrowBook(int userId, int bookId)
@@ -219,6 +260,44 @@ namespace Ebook_Library_Project
             }
         }
 
+        public static List<dynamic> GetBooksBySearchTerm(string searchTerm)
+        {
+            string query = @"
+        SELECT 
+            Id, 
+            Title, 
+            Author, 
+            Price, 
+            ImageUrl 
+        FROM Books 
+        WHERE Title LIKE @SearchTerm OR Author LIKE @SearchTerm";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%"); // Use parameterized query
+                connection.Open();
+
+                List<dynamic> books = new List<dynamic>(); // List of anonymous objects
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Add an anonymous object with the fields you want to return
+                        books.Add(new
+                        {
+                            Id = (int)reader["Id"],
+                            Title = reader["Title"].ToString(),
+                            Author = reader["Author"].ToString(),
+                            Price = (decimal)reader["Price"],
+                            ImageUrl = reader["ImageUrl"] != DBNull.Value ? reader["ImageUrl"].ToString() : null
+                        });
+                    }
+                }
+
+                return books; // Returning list of anonymous objects
+            }
+        }
 
 
 
@@ -285,7 +364,68 @@ namespace Ebook_Library_Project
                 }
             }
         }
+        //Make  An admin
+        public static bool GrantAdminById(int userId)
+        {
+            string query = "UPDATE Users SET Admin = 1 WHERE Id = @UserId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
 
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0; // Returns true if the update was successful
+            }
+        }
+        public static List<dynamic> GetUsersByUsername(string searchTerm)
+        {
+            string query = "SELECT Id, Name, Mail, Admin FROM Users WHERE Name LIKE @SearchTerm";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%"); // Use parameterized query
+                connection.Open();
+
+                List<dynamic> users = new List<dynamic>();  // List of anonymous objects
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Add an anonymous object with the fields you want to return
+                        users.Add(new
+                        {
+                            Id = (int)reader["Id"],
+                            Username = reader["Name"].ToString(),
+                            Email = reader["Mail"].ToString(),
+                            BorrowedBooks = 2,
+                            PurchasedBooks = 2,
+                            IsAdmin = (bool)reader["Admin"]
+                        });
+                    }
+                }
+
+                return users;  // Returning list of anonymous objects
+            }
+        }
+
+        public static bool userexistbyid(int UserId)
+        {
+            string query = "SELECT COUNT(*) FROM Users WHERE Id =@UserID";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", UserId);
+
+                connection.Open();
+
+                int count = (int)command.ExecuteScalar();
+
+                return count > 0;
+            }
+        }
         public static bool userexist(string name, string password)
         {
             string query = "SELECT COUNT(*) FROM Users WHERE name = @Name AND password = @Password";
@@ -313,7 +453,24 @@ namespace Ebook_Library_Project
                 return count > 0;
             }
         }
-
+        public static List<int> getallusersid()
+        {
+            string query = "SELECT Id FROM Users";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var UsersIds = new List<int>();
+                    while (reader.Read())
+                    {
+                        UsersIds.Add((int)reader["Id"]);
+                    }
+                    return UsersIds;
+                }
+            }
+        }
 
         public static int GetUser_details(string name, string password){
             int currentId = 0;
@@ -389,44 +546,7 @@ namespace Ebook_Library_Project
          
         
 
-        public static List<dynamic> GetBooksBySearchTerm(string searchTerm)
-        {
-            string query = @"
-        SELECT 
-            Id, 
-            Title, 
-            Author, 
-            Price, 
-            ImageUrl 
-        FROM Books 
-        WHERE Title LIKE @SearchTerm OR Author LIKE @SearchTerm";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%"); // Use parameterized query
-                connection.Open();
-
-                List<dynamic> books = new List<dynamic>(); // List of anonymous objects
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        // Add an anonymous object with the fields you want to return
-                        books.Add(new
-                        {
-                            Id = (int)reader["Id"],
-                            Title = reader["Title"].ToString(),
-                            Author = reader["Author"].ToString(),
-                            Price = (decimal)reader["Price"],
-                            ImageUrl = reader["ImageUrl"] != DBNull.Value ? reader["ImageUrl"].ToString() : null
-                        });
-                    }
-                }
-
-                return books; // Returning list of anonymous objects
-            }
-        }
+       
 
 
 
