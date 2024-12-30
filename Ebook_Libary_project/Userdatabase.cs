@@ -442,6 +442,44 @@ namespace Ebook_Library_Project
             }
         }
 
+        public static List<dynamic> GetBooksBySearchTerm(string searchTerm)
+        {
+            string query = @"
+        SELECT 
+            Id, 
+            Title, 
+            Author, 
+            Price, 
+            ImageUrl 
+        FROM Books 
+        WHERE Title LIKE @SearchTerm OR Author LIKE @SearchTerm";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%"); // Use parameterized query
+                connection.Open();
+
+                List<dynamic> books = new List<dynamic>(); // List of anonymous objects
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Add an anonymous object with the fields you want to return
+                        books.Add(new
+                        {
+                            Id = (int)reader["Id"],
+                            Title = reader["Title"].ToString(),
+                            Author = reader["Author"].ToString(),
+                            Price = (decimal)reader["Price"],
+                            ImageUrl = reader["ImageUrl"] != DBNull.Value ? reader["ImageUrl"].ToString() : null
+                        });
+                    }
+                }
+
+                return books; // Returning list of anonymous objects
+            }
+        }
 
 
 
@@ -529,6 +567,29 @@ namespace Ebook_Library_Project
                     }
                 }
             }
+        }
+        public static List<string> GetBookNames()
+        {
+            string query = "SELECT Name FROM Books";  // Query to get only book names
+
+            List<string> bookNames = new List<string>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Add each book name to the list
+                        bookNames.Add(reader["Name"].ToString());
+                    }
+                }
+            }
+
+            return bookNames;  // Return the list of book names
         }
 
         public static int numborrowed(int userId)

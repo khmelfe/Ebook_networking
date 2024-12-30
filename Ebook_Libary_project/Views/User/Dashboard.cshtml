@@ -14,6 +14,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="@Url.Content("~/Content/Dashboard.css")" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /* Basic layout styles */
         body {
@@ -125,6 +126,7 @@
                 font-weight: bold;
                 margin: 10px 0 0;
             }
+
         .stats-box-info {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -162,9 +164,8 @@
 
         form {
             display: flex;
-            flex-direction:column;
-            flex-wrap:wrap;
-
+            flex-direction: column;
+            flex-wrap: wrap;
         }
 
         /*label {
@@ -180,14 +181,15 @@
             border: 1px solid #ddd;
         }
 
-   
+
 
         .error {
             color: red;
             font-size: 14px;
         }
+
         .horizontal-form {
-            gap:16px;
+            gap: 16px;
             flex-direction: row; /* Arrange items horizontally */
             align-items: center; /* Align items vertically in the center */
         }
@@ -206,6 +208,7 @@
             }
 
         #suggestionList {
+            display: block;
             list-style-type: none; /* Remove default bullet points */
             margin: 0;
             padding: 0;
@@ -226,6 +229,30 @@
                     background-color: #f0f8ff; /* Light blue highlight on hover */
                     color: #007BFF; /* Optional: Change text color on hover */
                 }
+
+        #suggestionList_user {
+            display: block;
+            list-style-type: none; /* Remove default bullet points */
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc; /* Add a border to make the list stand out */
+            max-height: 200px; /* Limit the height to prevent long scrolling */
+            overflow-y: auto; /* Add vertical scrolling if the content exceeds max-height */
+            background-color: #fff; /* Set a white background for the list */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better visibility */
+        }
+
+        #suggestionList li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee; /* Separate each item with a thin border */
+        }
+
+            #suggestionList li:hover {
+                background-color: #f0f8ff; /* Light blue highlight on hover */
+                color: #007BFF; /* Optional: Change text color on hover */
+            }
+
         #borrowed-lists, #user-details {
             border: 1px solid #ccc;
             padding: 10px;
@@ -242,6 +269,7 @@
             .list-item:hover {
                 background-color: #d9d9d9;
             }
+
         #dynamic-content {
             border: 1px solid #ccc;
             padding: 10px;
@@ -264,8 +292,8 @@
         .info {
             margin-bottom: 10px;
         }
-       
-  
+
+
 
         #userDetails {
             display: none;
@@ -287,7 +315,6 @@
                 margin-bottom: 10px;
                 cursor: pointer;
             }
-
     </style>
 </head>
 <body>
@@ -305,6 +332,7 @@
                 <li>
             </ul>
         </div>
+    
 
         <!-- Main Content -->
         <div class="main-content">
@@ -343,13 +371,13 @@
                 </div>
             </div>
             <br />
-            <h2 id="Usermanagment">Users Managment</h2>   
+            <h2 id="Usermanagment">Users Managment</h2>
             <h2>Search and Manage Users</h2>
-            <div class="well"  id="user_pick">
+            <div class="well" id="user_pick">
                 <!-- Dynamic Search for Users -->
                 <label for="searchUser">Search Users:</label>
                 <input type="text" id="searchUser" name="searchUser" placeholder="Enter username" autocomplete="off">
-                <div id="suggestionList" style="margin-top: 10px;">
+                <div id="suggestionList_user" style="margin-top: 10px;">
                     <ul id="userList" class="user-list"></ul>
                 </div>
             </div>
@@ -358,57 +386,82 @@
             <div class="well" id="userDetails">
                 <h2>User's Details:</h2>
                 <div class="stats-box-info">
-                    <h5>Username: @ViewBag.Username <span id="username"></span></h5>
-                    <h5>Email: @ViewBag.Email <span id="email"></span></h5>
-                    <h5>Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
-                    <h5>Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
-                    <h5>Admin Privileges: <span id="isAdmin"></span></h5>
-                    <button id="grantAdminButton" style="background-color: purple; color: white; display: none;">Grant Admin Privileges</button>
-                    <button id="showBorrowedBooks" style="background-color: orange; color: white;">Show Borrowed Books</button>
-                    <button id="showPurchasedBooks" style="background-color: purple; color: white;">Show Purchased Books</button>
-                    <button id="removeUserButton" style="background-color: red; color: white;">Remove User</button>
-                    <button id="backToUserList" style="background-color: gray; color: white; margin-top: 10px;">Back to User List</button>
+                    <h5 style="display: none;">Username: @ViewBag.Username <span id="username"></span></h5>
+                    <h5 style="display: none;">Email: @ViewBag.Email <span id="email"></span></h5>
+                    <h5 style="display: none;">Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
+                    <h5 style="display: none;">Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
+                    <h5 style="display: none;">Admin Privileges: <span id="isAdmin"></span></h5>
+                    <button id="grantAdminButton" style="display: none;" >Grant Admin Privileges</button>
+                    <button id="showBorrowedBooks" style="display: none;">Show Borrowed Books</button>
+                    <button id="showPurchasedBooks" style="display: none;">Show Purchased Books</button>
+                    <button id="removeUserButton" style="display: none;">Remove User</button>
+                    <button id="backToUserList" sstyle="display: none;">Back to User List</button>
                 </div>
             </div>
-            <h2 >Books Managment</h2>
+            <h2>Books Managment</h2>
             <div class="well">
                 <div class="row">
                     <div class="col" padding: 15px;">
-                        <h2  id="bookManagement">Add a New Book</h2>
-                        <from>
-                            <label for="title">Title:</label>
-                            <input type="text" id="title" name="title" required>
-                            <label for="author">Author:</label>
-                            <input type="text" id="author" name="author" required>
-                            <form class="horizontal-form" id="addBookForm">
+                        <div>
+                            <form id="addBookForm" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                    <!-- First row: Title and Author -->
+                                    <div style="flex: 1;">
+                                        <label for="title" style="min-width: 80px;">Title:</label>
+                                        <input type="text" id="title" name="title" required style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="author" style="min-width: 80px;">Author:</label>
+                                        <input type="text" id="author" name="author" required style="width: 100%;">
+                                    </div>
+                                </div>
 
-                                <label for="buyPrice">Buy Price ($):</label>
-                                <input type="number" id="buyPrice" name="buyPrice" required min="0">
-                                <label for="borrowPrice">Borrow Price ($):</label>
-                                <input type="number" id="borrowPrice" name="borrowPrice" required min="0">
+                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                    <!-- Second row: Buy Price and Borrow Price -->
+                                    <div style="flex: 1;">
+                                        <label for="buyPrice" style="min-width: 80px;">Buy Price ($):</label>
+                                        <input type="number" id="buyPrice" name="buyPrice" required step="0.01" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="borrowPrice" style="min-width: 80px;">Borrow Price ($):</label>
+                                        <input type="number" id="borrowPrice" name="borrowPrice" required step="0.01" style="width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                    <!-- Third row: Copies and Image URL -->
+                                    <div style="flex: 1;">
+                                        <label for="copies" style="min-width: 80px;">In-stock:</label>
+                                        <input type="number" id="copies" name="copies" required min="1" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="image" style="min-width: 80px;">Image URL:</label>
+                                        <input type="text" id="image" name="image" required style="width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
+                                    <!-- Submit button -->
+                                    <div style="flex: 1;">
+                                        <label for="file" style="min-width: 80px;">Book File:</label>
+                                        <input type="file" id="file" name="file" accept=".pdf, .epub, .mobi" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <input type="submit" value="Add Book" style="padding: 5px 10px;  ">
+                                    </div>
+                                </div>
 
                             </form>
-                            <label for="copies">In-stock book</label>
-                            <input type="number" id="copies" name="copies" required min="1">
-                            <label for="image">Image URL:</label>
-                            <input type="url" id="image" name="image" required>
-                            <br>
-                            <label for="file">Book File:</label>
-                            <input type="file" id="file" name="file" required accept=".pdf, .epub, .mobi">
-                            <br>
-                            <input type="submit" value="Add Book">
-                        </from>
+                        </div>
                     </div>
                 </div>
             </div>
-
             <br />
             <h2 id="search_books">Search Books</h2>
             <div class="well">
                 <div class="row">
                     <div class="col" padding: 15px;">
                         <div class="container">
-
                             <div class="well">
                                 <div class="row">
                                     <div class="col" style="padding: 15px;">
@@ -417,7 +470,7 @@
                                             <input type="text" id="search" name="search" placeholder="Enter book title or ID" required autocomplete="off">
                                         </form>
                                         <div>
-                                            <ul id="suggestionList"></ul>
+                                            <ul id="suggestionList"></ul> 
                                         </div>
                                         <div id="searchResults" style="margin-top: 20px; display: none;">
                                             <h3>Search Results:</h3>
@@ -437,21 +490,21 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <h1 id="borrow_list">Active Borrowed Lists</h1>
-            <div class="well">
-                <div class="row">
-                    <div class="col" padding: 15px;">
-                        <!-- Dynamic content container -->
-                        <div id="dynamic-content">
-                            <h2>Borrowed Lists:</h2>
-                            <p>Loading borrowed lists...</p>
+             </div>
+                <br />
+                <h1 id="borrow_list">Active Borrowed Lists</h1>
+                <div class="well">
+                    <div class="row">
+                        <div class="col" padding: 15px;">
+                            <!-- Dynamic content container -->
+                            <div id="dynamic-content">
+                                <h2>Borrowed Lists:</h2>
+                                <p>Loading borrowed lists...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>               
 
 
 
@@ -577,7 +630,7 @@
         // Hide the user list and show user details
         document.getElementById("userList").style.display = "none";
         document.getElementById("user_pick").style.display = "none";
-        document.getElementById("userDetails").style.display = "block";
+       document.getElementById("userDetails").style.display = "block";
         console.log(userId);
 
         // AJAX request to get user details by userId
@@ -605,9 +658,9 @@
 
         // Make AJAX call to get users from the server based on the search term
         $.ajax({
-            url: '/Dashboard/SearchUsers',  // URL to call the SearchUsers action
+            url: '/Dashboard/SearchUsers',  
             type: 'GET',
-            data: { searchTerm: searchTerm },  // Pass the search term to the server
+            data: { searchTerm: searchTerm },  
             success: function (response) {
                 // If the response contains users, display them
                 response.forEach(user => {
@@ -733,80 +786,265 @@
         }
     });
 
-  
-    const books = [
-        { id: 1, title: "Book One", author: "Author A", price: 19.99, image: "https://via.placeholder.com/100x150?text=Book+One" },
-        { id: 2, title: "Book Two", author: "Author B", price: 24.99, image: "https://via.placeholder.com/100x150?text=Book+Two" },
-        { id: 3, title: "Another Book", author: "Author C", price: 14.99, image: "https://via.placeholder.com/100x150?text=Another+Book" },
-    ];
+    //Books managments!!!
+    //add Book
 
-    const searchInput = document.getElementById("search");
-    const suggestionList = document.getElementById("suggestionList");
-    const searchResults = document.getElementById("searchResults");
-    const bookImage = document.getElementById("bookImage");
-    const bookId = document.getElementById("bookId");
-    const bookTitle = document.getElementById("bookTitle");
-    const bookAuthor = document.getElementById("bookAuthor");
-    const deleteButton = document.getElementById("deleteBookButton");
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('addBookForm');
 
-    //search queary.
-    searchInput.addEventListener("input", function () {
-        const query = this.value.toLowerCase();
-        suggestionList.innerHTML = ""; // Clear previous suggestions
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
 
-        if (query) {
-            // Filter books based on title or author name
-            const filteredBooks = books.filter(book =>
-                book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query)
-            );
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const buyPrice = parseFloat(document.getElementById('buyPrice').value);
+            const borrowPrice = parseFloat(document.getElementById('borrowPrice').value);
+            const copies = parseInt(document.getElementById('copies').value);
+            const image = document.getElementById('image').value;
 
-            filteredBooks.forEach(book => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${book.title} by ${book.author}`; // Show both title and author
-                listItem.dataset.bookId = book.id; // Attach book ID for identification
-                suggestionList.appendChild(listItem);
+            $.ajax({
+                url: '/Dashboard/Addingbook',
+                type: 'POST',
+                data: {
+                    title: title,
+                    author: author,
+                    availableCopies: copies,
+                    buyPrice: buyPrice,
+                    borrowPrice: borrowPrice,
+                    image: image
+                }, // Fixed: removed the unnecessary parentheses around the data
+                success: function (response) {
+                    if (response.success) {
+                        alert('Book added successfully!');
+
+                        form.reset(); // Reset the form fields
+                        // Clear file input manually after form reset
+                        document.getElementById('file').value = '';
+                    } else {
+                        alert(response.message || "Failed to grant admin privileges.");
+                    }
+                },
+                error: function (error) {
+                    console.error("Error granting admin privileges:", error);
+                    alert("Failed to grant admin privileges. Please try again.");
+                }
             });
-        }
-    });
 
-    // Handle click on suggestion
-    suggestionList.addEventListener("click", function (event) {
-        if (event.target.tagName === "LI") {
-            const bookId = event.target.dataset.bookId;
-            const book = books.find(b => b.id == bookId);
+            // File upload can be handled separately if needed
+            const file = document.getElementById('file').files[0]; // Added file input handling
+            if (file) {
+                const uploadData = new FormData();
+                uploadData.append('file', file);
 
-            if (book) {
-                // Update search results
-                bookTitle.textContent = book.title;
-                bookAuthor.textContent = book.author;
-                bookImage.src = book.image;
-
-                // Show results and delete button
-                searchResults.style.display = "block";
-                deleteButton.style.display = "inline-block";
-
-                // Clear suggestions
-                suggestionList.innerHTML = "";
-                searchInput.value = ""; // Optional: clear search input
+                fetch('/Books/UploadFile', { // Replace with your file upload endpoint
+                    method: 'POST',
+                    body: uploadData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File uploaded successfully:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error uploading file:', error);
+                    });
             }
-        }
+        });
     });
 
-    // Handle delete button
-    deleteButton.addEventListener("click", function () {
-        const bookTitleToDelete = bookTitle.textContent;
+    //Search book
+    //const books = [
+    //    { id: 1, title: "Book One", author: "Author A", price: 19.99, image: "https://via.placeholder.com/100x150?text=Book+One" },
+    //    { id: 2, title: "Book Two", author: "Author B", price: 24.99, image: "https://via.placeholder.com/100x150?text=Book+Two" },
+    //    { id: 3, title: "Another Book", author: "Author C", price: 14.99, image: "https://via.placeholder.com/100x150?text=Another+Book" },
+    //];
+    //    const searchInput = document.getElementById("search");
+    //    const suggestionList = document.getElementById("suggestionList");
+    //    const searchResults = document.getElementById("searchResults");
+    //    const bookImage = document.getElementById("bookImage");
+    //    const bookId = document.getElementById("bookId");
+    //    const bookTitle = document.getElementById("bookTitle");
+    //    const bookAuthor = document.getElementById("bookAuthor");
+    //    const deleteButton = document.getElementById("deleteBookButton");
 
-        // Confirm delete
-        if (confirm(`Are you sure you want to delete "${bookTitleToDelete}"?`)) {
-            const index = books.findIndex(book => book.title === bookTitleToDelete);
-            if (index > -1) {
-                books.splice(index, 1); // Remove book from array
-                alert(`"${bookTitleToDelete}" has been deleted.`);
-                searchResults.style.display = "none"; // Hide results
-                deleteButton.style.display = "none"; // Hide delete button
+
+    //    //search queary.
+    //    searchInput.addEventListener("input", function () {
+
+    //        const query = this.value.toLowerCase();
+    //        suggestionList.innerHTML = ""; // Clear previous suggestions
+    //        if (query) {
+    //            // Filter books based on title or author name
+
+    //            const filteredBooks = books.filter(book =>
+    //                book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query)
+    //            );
+    //            console.log("Filtered Books:", filteredBooks);
+    //            filteredBooks.forEach(book => {
+    //                const listItem = document.createElement("li");
+    //                listItem.textContent = `${book.title} by ${book.author}`;
+    //                listItem.dataset.bookId = book.id;
+    //                suggestionList.appendChild(listItem);
+    //            });
+    //            console.log("hee");
+    //        }
+    //    });
+    //    // Handle click on suggestion
+    //    suggestionList.addEventListener("click", function (event) {
+    //        if (event.target.tagName === "LI") {
+    //            const bookId = event.target.dataset.bookId;
+    //            const book = books.find(b => b.id == bookId);
+    //            if (book) {
+    //                // Update search results
+    //                bookTitle.textContent = book.title;
+    //                bookAuthor.textContent = book.author;
+    //                bookImage.src = book.image;
+    //                // Show results and delete button
+    //                searchResults.style.display = "block";
+    //                deleteButton.style.display = "inline-block";
+    //                // Clear suggestions
+    //                suggestionList.innerHTML = "";
+    //                searchInput.value = ""; // Optional: clear search input
+    //            }
+    //        }
+    //    });
+    //    // Handle delete button
+    //    deleteButton.addEventListener("click", function () {
+    //        const bookTitleToDelete = bookTitle.textContent;
+    //        // Confirm delete
+    //        if (confirm(`Are you sure you want to delete "${bookTitleToDelete}"?`)) {
+    //            const index = books.findIndex(book => book.title === bookTitleToDelete);
+    //            if (index > -1) {
+    //                books.splice(index, 1); // Remove book from array
+    //                alert(`"${bookTitleToDelete}" has been deleted.`);
+    //                searchResults.style.display = "none"; // Hide results
+    //                deleteButton.style.display = "none"; // Hide delete button
+    //            }
+    //        }
+    //    });
+
+    $(document).ready(function () {
+        const searchInput = $("#search");
+        const suggestionList = $("#suggestionList");
+        const searchResults = $("#searchResults");
+        const bookImage = $("#bookImage");
+        const bookId = $("#bookId");
+        const bookTitle = $("#bookTitle");
+        const bookAuthor = $("#bookAuthor");
+        const bookPrice = $("#bookPrice");
+        const newPriceInput = $("#newPrice");
+        const updatePriceButton = $("#updatePriceButton");
+        const deleteButton = $("#deleteBookButton");
+
+        // Event listener for the search input
+        searchInput.on("input", function () {
+            const query = $(this).val().trim();
+
+            if (query) {
+                $.ajax({
+                    url: "/Dashboard/GetBooksBySearchTerm",
+                    type: "GET",
+                    data: { searchTerm: query },
+                    success: function (data) {
+                        suggestionList.empty(); // Clear previous suggestions
+
+                        if (data.length === 0) {
+                            suggestionList.append("<li>No results found</li>");
+                            return;
+                        }
+
+                        data.forEach(book => {
+                            const listItem = $("<li></li>")
+                                .text(`${book.Title} by ${book.Author}`)
+                                .data("bookId", book.Id)
+                                .data("bookPrice", book.Price)
+                                .data("bookImageUrl", book.ImageUrl)
+                                .on("click", function () {
+                                    // Populate book details
+                                    bookId.text($(this).data("bookId"));
+                                    bookTitle.text(book.Title);
+                                    bookAuthor.text(book.Author);
+                                    bookPrice.text(parseFloat($(this).data("bookPrice")).toFixed(2));
+                                    bookImage.attr("src", $(this).data("bookImageUrl") || "https://via.placeholder.com/100x150?text=No+Image");
+
+                                    // Show search results and delete button
+                                    searchResults.show();
+                                    deleteButton.show();
+
+                                    // Clear suggestions and input
+                                    suggestionList.empty();
+                                    searchInput.val("");
+                                });
+                            suggestionList.append(listItem);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching books:", error);
+                    }
+                });
+            } else {
+                suggestionList.empty(); // Clear suggestions if the query is empty
             }
-        }
+        });
+
+        // Handle update price button
+        updatePriceButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const newPrice = parseFloat(newPriceInput.val());
+
+            if (!isNaN(newPrice) && newPrice > 0) {
+                $.ajax({
+                    url: "/Books/UpdatePrice",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id: bookIdValue, price: newPrice }),
+                    success: function (data) {
+                        if (data.success) {
+                            alert("Price updated successfully!");
+                            bookPrice.text(newPrice.toFixed(2)); // Update the displayed price
+                            newPriceInput.val(""); // Clear input
+                        } else {
+                            alert("Failed to update the price.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error updating price:", error);
+                    }
+                });
+            } else {
+                alert("Please enter a valid price.");
+            }
+        });
+
+        // Handle delete button
+        deleteButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const bookTitleValue = bookTitle.text();
+
+            if (confirm(`Are you sure you want to delete "${bookTitleValue}"?`)) {
+                $.ajax({
+                    url: "/Books/DeleteBook",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id: bookIdValue }),
+                    success: function (data) {
+                        if (data.success) {
+                            alert(`"${bookTitleValue}" has been deleted.`);
+                            searchResults.hide(); // Hide results
+                            deleteButton.hide(); // Hide delete button
+                        } else {
+                            alert("Failed to delete the book.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error deleting book:", error);
+                    }
+                });
+            }
+        });
     });
+
+
+
 
 
 </script>
