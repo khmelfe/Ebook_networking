@@ -1,138 +1,9 @@
-@*@{
-        ViewBag.Title = "Dashboard";
-        Layout = "~/Views/Shared/_Layout.cshtml";
+@using Ebook_Library_Project
+@model Ebook_Libary_project.Models.DashboardViewModel
 
-    }
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <link href="@Url.Content("~/Content/Dashboard.css")" rel="stylesheet" type="text/css" />
-        <style>
-            button {
-                background-color: #04AA6D;
-                color: white;
-                padding: 14px 20px;
-                margin: 8px 0;
-                border: none;
-                cursor: pointer;
-                width: 100%;
-            }
-
-                button:hover {
-                    opacity: 0.8;
-                }
-            .btn-primary {
-                --bs-btn-color: #fff;
-                --bs-btn-bg: #808080;
-                --bs-btn-border-color: #0d6efd;
-                --bs-btn-hover-color: #fff;
-                --bs-btn-hover-bg: #0b5ed7;
-                --bs-btn-hover-border-color: #0a58ca;
-                --bs-btn-focus-shadow-rgb: 49, 132, 253;
-                --bs-btn-active-color: #fff;
-                --bs-btn-active-bg: #0a58ca;
-                --bs-btn-active-border-color: #0a53be;
-                --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-                --bs-btn-disabled-color: #fff;
-                --bs-btn-disabled-bg: #0d6efd;
-                --bs-btn-disabled-border-color: #0d6efd;
-            }
-
-        </style>
-    </head>
-    <body>
-
-            <div class="row content">
-                <div class="col-sm-3 sidenav_dash hidden-xs">
-                    <h2>Logo</h2>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li class="active"><a href="#section1">Dashboard</a></li>
-                        <li><a href="#section2">Age</a></li>
-                        <li><a href="#section3">Gender</a></li>
-                        <li><a href="#section3">Geo</a></li>
-                    </ul><br>
-                </div>
-                <br>
-
-                <div class="col-sm-9">
-                    <div class="well">
-                        <h4>Dashboard</h4>
-                        <p>Some text..</p>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="well">
-                                <h4>Users</h4>
-                                <p>1 Million</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="well">
-                                <h4>Pages</h4>
-                                <p>100 Million</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="well">
-                                <h4>Sessions</h4>
-                                <p>10 Million</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="well">
-                                <h4>Bounce</h4>
-                                <p>30%</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="well">
-                                <p>Text</p>
-                                <p>Text</p>
-                                <p>Text</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="well">
-                                <p>Text</p>
-                                <p>Text</p>
-                                <p>Text</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="well">
-                                <p>Text</p>
-                                <p>Text</p>
-                                <p>Text</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <div class="well">
-                                <p>Text</p>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="well">
-                                <p>Text</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-    </body>
-    </html>*@
 
 @{
+
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -143,6 +14,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="@Url.Content("~/Content/Dashboard.css")" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         /* Basic layout styles */
         body {
@@ -156,22 +28,27 @@
             display: flex;
             flex-wrap: wrap;
             margin: 0 -10px;
+            align-items: stretch;
+            justify-content: space-between;
         }
 
         .col {
             padding: 10px;
             flex: 1;
+            flex-direction: column;
         }
 
         /* Sidebar styles */
         .sidenav_dash {
             width: 25%;
             background-color: white;
-            margin-top:1.6%;
+            margin-top: 1.6%;
             color: white;
             height: 25%;
             padding: 20px;
             box-sizing: border-box;
+            position: sticky; /* Make the sidebar sticky */
+            top: 0; /* Stick to the top of the viewport */
         }
 
             .sidenav_dash h2 {
@@ -233,9 +110,11 @@
         .stats-box {
             background-color: #fff;
             border: 1px solid #ddd;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            flex: 1;
         }
 
             .stats-box h4 {
@@ -247,94 +126,926 @@
                 font-weight: bold;
                 margin: 10px 0 0;
             }
+
+        .stats-box-info {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            flex: 1;
+        }
+
+            .stats-box-info h4 {
+                margin: 0;
+            }
+
+            .stats-box-info p {
+                font-size: 24px;
+                font-weight: bold;
+                margin: 10px 0 0;
+            }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+
+
+
+        form {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+
+        /*label {
+            font-size: 16px;
+            margin: 10px 0 5px;
+        }*/
+
+        input[type="text"], input[type="number"], input[type="file"], input[type="url"] {
+            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .horizontal-form {
+            gap: 16px;
+            flex-direction: row; /* Arrange items horizontally */
+            align-items: center; /* Align items vertically in the center */
+        }
+
+            .horizontal-form label {
+                margin-right: 5px; /* Space between label and input */
+            }
+
+            .horizontal-form input {
+                flex-grow: 1; /* Make inputs take up available space */
+                padding: 5px;
+            }
+
+            .horizontal-form button {
+                padding: 5px 10px;
+            }
+
+        #suggestionList {
+            display: block;
+            list-style-type: none; /* Remove default bullet points */
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc; /* Add a border to make the list stand out */
+            max-height: 200px; /* Limit the height to prevent long scrolling */
+            overflow-y: auto; /* Add vertical scrolling if the content exceeds max-height */
+            background-color: #fff; /* Set a white background for the list */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better visibility */
+        }
+
+            #suggestionList li {
+                padding: 10px;
+                cursor: pointer;
+                border-bottom: 1px solid #eee; /* Separate each item with a thin border */
+            }
+
+                #suggestionList li:hover {
+                    background-color: #f0f8ff; /* Light blue highlight on hover */
+                    color: #007BFF; /* Optional: Change text color on hover */
+                }
+
+        #suggestionList_user {
+            display: block;
+            list-style-type: none; /* Remove default bullet points */
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc; /* Add a border to make the list stand out */
+            max-height: 200px; /* Limit the height to prevent long scrolling */
+            overflow-y: auto; /* Add vertical scrolling if the content exceeds max-height */
+            background-color: #fff; /* Set a white background for the list */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better visibility */
+        }
+
+        #suggestionList li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee; /* Separate each item with a thin border */
+        }
+
+            #suggestionList li:hover {
+                background-color: #f0f8ff; /* Light blue highlight on hover */
+                color: #007BFF; /* Optional: Change text color on hover */
+            }
+
+        #borrowed-lists, #user-details {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .list-item {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+        }
+
+            .list-item:hover {
+                background-color: #d9d9d9;
+            }
+
+        #dynamic-content {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 200px;
+        }
+
+        .user-item {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+            .user-item:hover {
+                background-color: #d9d9d9;
+            }
+
+        .info {
+            margin-bottom: 10px;
+        }
+
+
+
+        #userDetails {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .stats-box-info h5 {
+            margin: 5px 0;
+        }
+
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            .user-list li {
+                padding: 10px;
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+                cursor: pointer;
+            }
     </style>
 </head>
 <body>
     <div class="row">
         <!-- Sidebar -->
         <div class="sidenav_dash">
-            <h2>Logo</h2>
+            <h2>Index</h2>
             <ul>
                 <li><a href="#section1">Dashboard</a></li>
-                <li><a href="#section2">Age</a></li>
-                <li><a href="#section3">Gender</a></li>
-                <li><a href="#section4">Geo</a></li>
+                <li><a href="#Usermanagment">User Managment</a></li>
+                <li><a href="#bookManagement">Add book</a></li>
+                <li><a href="#search_books">Search book</a></li>
+                <li><a href="#borrow_list">Borrow lists</a></li>
+                <li>
+                <li>
             </ul>
         </div>
+    
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="well">
                 <h4>Dashboard</h4>
-                <p>Some text...</p>
+
+                <p>Welcome to the Dashboard,Here you can change fates and hierarchys.</p>
+                <p>Don't Abuse the power in your hands. for only the choosen one may Fix thy broken world of ours.'</p>
             </div>
 
             <!-- Statistics Row -->
-            <div class="row">
+            <div class="row" id="section1">
                 <div class="col">
                     <div class="stats-box">
                         <h4>Users</h4>
-                        <p>1 Million</p>
+                        <@*p> @Model.UserCount</p>*@
                     </div>
                 </div>
                 <div class="col">
                     <div class="stats-box">
-                        <h4>Pages</h4>
-                        <p>100 Million</p>
+                        <h4>Books</h4>
+                        <@*p>@Model.BookAmount</p>*@
                     </div>
                 </div>
                 <div class="col">
                     <div class="stats-box">
-                        <h4>Sessions</h4>
+                        <h4>Amount of Books in status borrowed</h4>
                         <p>10 Million</p>
                     </div>
                 </div>
                 <div class="col">
                     <div class="stats-box">
-                        <h4>Bounce</h4>
+                        <h4>Amount purchased books</h4>
                         <p>30%</p>
                     </div>
                 </div>
             </div>
+            <br />
+            <h2 id="Usermanagment">Users Managment</h2>
+            <h2>Search and Manage Users</h2>
+            <div class="well" id="user_pick">
+                <!-- Dynamic Search for Users -->
+                <label for="searchUser">Search Users:</label>
+                <input type="text" id="searchUser" name="searchUser" placeholder="Enter username" autocomplete="off">
+                <div id="suggestionList_user" style="margin-top: 10px;">
+                    <ul id="userList" class="user-list"></ul>
+                </div>
+            </div>
 
-            <!-- Additional Rows -->
-            <div class="row">
-                <div class="col">
-                    <div class="well">
-                        <p>Text</p>
-                        <p>Text</p>
-                        <p>Text</p>
+            <!-- User's Details -->
+            <div class="well" id="userDetails">
+                <h2>User's Details:</h2>
+                <div class="stats-box-info">
+                    <h5 style="display: none;">Username: @ViewBag.Username <span id="username"></span></h5>
+                    <h5 style="display: none;">Email: @ViewBag.Email <span id="email"></span></h5>
+                    <h5 style="display: none;">Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
+                    <h5 style="display: none;">Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
+                    <h5 style="display: none;">Admin Privileges: <span id="isAdmin"></span></h5>
+                    <button id="grantAdminButton" style="display: none;" >Grant Admin Privileges</button>
+                    <button id="showBorrowedBooks" style="display: none;">Show Borrowed Books</button>
+                    <button id="showPurchasedBooks" style="display: none;">Show Purchased Books</button>
+                    <button id="removeUserButton" style="display: none;">Remove User</button>
+                    <button id="backToUserList" sstyle="display: none;">Back to User List</button>
+                </div>
+            </div>
+            <h2>Books Managment</h2>
+            <div class="well">
+                <div class="row">
+                    <div class="col" padding: 15px;">
+                        <div>
+                            <form id="addBookForm" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                    <!-- First row: Title and Author -->
+                                    <div style="flex: 1;">
+                                        <label for="title" style="min-width: 80px;">Title:</label>
+                                        <input type="text" id="title" name="title" required style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="author" style="min-width: 80px;">Author:</label>
+                                        <input type="text" id="author" name="author" required style="width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                    <!-- Second row: Buy Price and Borrow Price -->
+                                    <div style="flex: 1;">
+                                        <label for="buyPrice" style="min-width: 80px;">Buy Price ($):</label>
+                                        <input type="number" id="buyPrice" name="buyPrice" required step="0.01" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="borrowPrice" style="min-width: 80px;">Borrow Price ($):</label>
+                                        <input type="number" id="borrowPrice" name="borrowPrice" required step="0.01" style="width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                    <!-- Third row: Copies and Image URL -->
+                                    <div style="flex: 1;">
+                                        <label for="copies" style="min-width: 80px;">In-stock:</label>
+                                        <input type="number" id="copies" name="copies" required min="1" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label for="image" style="min-width: 80px;">Image URL:</label>
+                                        <input type="text" id="image" name="image" required style="width: 100%;">
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
+                                    <!-- Submit button -->
+                                    <div style="flex: 1;">
+                                        <label for="file" style="min-width: 80px;">Book File:</label>
+                                        <input type="file" id="file" name="file" accept=".pdf, .epub, .mobi" style="width: 100%;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <input type="submit" value="Add Book" style="padding: 5px 10px;  ">
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="well">
-                        <p>Text</p>
-                        <p>Text</p>
-                        <p>Text</p>
+            </div>
+            <br />
+            <h2 id="search_books">Search Books</h2>
+            <div class="well">
+                <div class="row">
+                    <div class="col" padding: 15px;">
+                        <div class="container">
+                            <div class="well">
+                                <div class="row">
+                                    <div class="col" style="padding: 15px;">
+                                        <form id="searchBookForm" class="horizontal-form">
+                                            <label for="search">Search Book:</label>
+                                            <input type="text" id="search" name="search" placeholder="Enter book title or ID" required autocomplete="off">
+                                        </form>
+                                        <div>
+                                            <ul id="suggestionList"></ul> 
+                                        </div>
+                                        <div id="searchResults" style="margin-top: 20px; display: none;">
+                                            <h3>Search Results:</h3>
+                                            <p><strong>Image:</strong> <img id="bookImage" alt="Book Cover" style="max-width: 100px; max-height: 150px;" onerror="this.src='https://via.placeholder.com/100x150?text=No+Image';"></p>
+                                            <p><strong>Id:</strong> <span id="bookId"></span></p>
+                                            <p><strong>Title:</strong> <span id="bookTitle"></span></p>
+                                            <p><strong>Author:</strong> <span id="bookAuthor"></span></p>
+                                            <p><strong>Price:</strong> $<span id="bookPrice"></span></p>
+                                            <label for="newPrice">Change Price:</label>
+                                            <input type="number" id="newPrice" placeholder="Enter new price" style="margin-bottom: 10px;">
+                                            <button id="updatePriceButton" style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer;">Update Price</button>
+                                        </div>
+                                        <button id="deleteBookButton" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; display: none;">Delete Book</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="well">
-                        <p>Text</p>
-                        <p>Text</p>
-                        <p>Text</p>
+             </div>
+                <br />
+                <h1 id="borrow_list">Active Borrowed Lists</h1>
+                <div class="well">
+                    <div class="row">
+                        <div class="col" padding: 15px;">
+                            <!-- Dynamic content container -->
+                            <div id="dynamic-content">
+                                <h2>Borrowed Lists:</h2>
+                                <p>Loading borrowed lists...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col" style="flex: 2;">
-                    <div class="well">
-                        <p>Text</p>
-                    </div>
-                </div>
-                <div class="col" style="flex: 1;">
-                    <div class="well">
-                        <p>Text</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
 </body>
+
+<script>
+    let wanteduser = null;
+    let nameuser = null;
+    //borrowed lists
+    const borrowedLists = [
+        { id: 1, name: "List A" },
+        { id: 2, name: "List B" },
+        { id: 3, name: "List C" },
+    ];
+
+    const usersInLists = {
+        1: [
+            { name: "User 1", borrowedDays: 7 },
+            { name: "User 2", borrowedDays: 5 },
+        ],
+        2: [
+            { name: "User 3", borrowedDays: 3 },
+            { name: "User 4", borrowedDays: 10 },
+        ],
+        3: [
+            { name: "User 5", borrowedDays: 15 },
+        ],
+    };
+
+    // Current selected user
+    let selectedUser = null;
+
+    // Function to fetch and display borrowed lists
+    function loadBorrowedLists() {
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = '<h2>Borrowed Lists:</h2>'; // Clear previous content
+
+        borrowedLists.forEach(list => {
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+            listItem.textContent = list.name;
+            listItem.onclick = () => loadUsers(list.id); // Attach click event to load users
+            dynamicContent.appendChild(listItem);
+        });
+    }
+
+    // Function to fetch and display users in a specific borrowed list
+    function loadUsers(listId) {
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = '<h2>Users in Selected List:</h2>';
+
+        const users = usersInLists[listId];
+        if (users) {
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+
+                // Display user name and remaining borrowed time side by side
+                userItem.innerHTML = `
+            <span>${user.name}</span>
+            <span>${user.borrowedDays} days left for Borrowed time</span>
+          `;
+                userItem.onclick = () => showUserDetails(user);
+                dynamicContent.appendChild(userItem);
+            });
+
+            // Add a "Back to Lists" button
+            const backButton = document.createElement('button');
+            backButton.textContent = 'Back to Lists';
+            backButton.onclick = loadBorrowedLists;
+            dynamicContent.appendChild(backButton);
+        } else {
+            dynamicContent.innerHTML += '<p>No users found for this list.</p>';
+        }
+    }
+
+
+    // Function to display user details and enable extending borrowed time
+    function showUserDetails(user) {
+        selectedUser = user;
+        const dynamicContent = document.getElementById('dynamic-content');
+
+        dynamicContent.innerHTML = `
+        
+        <p>Name: ${user.name}</p>
+        <p>Current Borrowed Time: ${user.borrowedDays} days</p>
+        <label for="extend-time">Extend Borrowed Time (in days):</label>
+        <input type="number" id="extend-time" value="0" min="0">
+        <p class="info">Total Borrowed Time (after extension): <span id="total-time">${user.borrowedDays}</span> days</p>
+        <button id="save-button">Save</button>
+        <button id="back-to-users">Back to Users</button>
+      `;
+
+        // Update total time dynamically
+        const extendTimeInput = document.getElementById('extend-time');
+        const totalTime = document.getElementById('total-time');
+        extendTimeInput.oninput = () => {
+            const additionalDays = parseInt(extendTimeInput.value || "0", 10);
+            totalTime.textContent = user.borrowedDays + additionalDays;
+        };
+
+        // Save button functionality
+        document.getElementById('save-button').onclick = () => {
+            const additionalDays = parseInt(extendTimeInput.value || "0", 10);
+            user.borrowedDays += additionalDays;
+            alert(`Saved! ${user.name}'s new borrowed time is ${user.borrowedDays} days.`);
+            loadUsers(1); // Reload the users (adjust list ID dynamically if needed)
+        };
+
+        // Back to users button
+        document.getElementById('back-to-users').onclick = () => {
+            loadUsers(1); // Reload users (adjust list ID dynamically if needed)
+        };
+    }
+
+    // Initialize the borrowed lists on page load
+    window.onload = loadBorrowedLists;
+
+    
+  
+    // Function to display user details based on userId Search
+    function showUserDetails(userId) {
+        // Hide the user list and show user details
+        document.getElementById("userList").style.display = "none";
+        document.getElementById("user_pick").style.display = "none";
+       document.getElementById("userDetails").style.display = "block";
+        console.log(userId);
+
+        // AJAX request to get user details by userId
+        $.ajax({
+            url: '/Dashboard/GetUserDetails', 
+            type: 'GET',
+            data: { userId: userId }, // Pass userId to the controller
+            success: function (response) {
+                console.log(response);
+                // Update the user details section with the HTML content returned by the server
+                document.getElementById("userDetails").innerHTML = response;
+            },
+            error: function (error) {
+                console.log("Error fetching user details: ", error);
+            }
+        });
+    }
+    
+
+    function displayUserList(searchTerm) {
+        const userList = document.getElementById("userList");
+
+        // Clear existing list
+        userList.innerHTML = '';
+
+        // Make AJAX call to get users from the server based on the search term
+        $.ajax({
+            url: '/Dashboard/SearchUsers',  
+            type: 'GET',
+            data: { searchTerm: searchTerm },  
+            success: function (response) {
+                // If the response contains users, display them
+                response.forEach(user => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${user.Username} (${user.Id})`;
+                    //console.log(user);
+                    listItem.onclick = () => {
+                        wanteduser = user.Id; // Save the selected user ID
+                        nameuser = user.Username;
+                        console.log(`Selected user ID: ${wanteduser}`);
+                        showUserDetails(user.Id); // Show user details on click
+                    };
+                    userList.appendChild(listItem);
+                });
+
+                // Handle if no users are found
+                if (response.length === 0) {
+                    const noResultsItem = document.createElement("li");
+                    noResultsItem.textContent = "No users found";
+                    userList.appendChild(noResultsItem);
+                }
+            },
+            error: function (error) {
+                console.log("Error fetching users: ", error);
+            }
+        });
+    }
+
+    // Event listener for dynamic search
+    document.getElementById("searchUser").addEventListener("input", (event) => {
+        const searchTerm = event.target.value;  // Get the search term from the input field
+        displayUserList(searchTerm);  // Call the function to display the filtered users
+
+    });
+    document.addEventListener("click", (event) => {
+        if (event.target && event.target.id === "backToUserList") {
+            console.log("Back to User List button clicked");
+
+            // Show the user list container
+            document.getElementById("user_pick").style.display = "block";
+            document.getElementById("userList").style.display = "block";
+
+            // Hide the user details container
+            document.getElementById("userDetails").style.display = "none";
+
+            // Clear the search input field
+            document.getElementById("searchUser").value = "";
+
+            // Reload the user list with no search term
+            displayUserList('');
+        }
+    });
+
+    //Removing User.
+    document.addEventListener("click", (event) => {
+        if (event.target && event.target.id === "removeUserButton") {
+            // Assuming `userId` is available or passed dynamically
+
+            if (wanteduser == null) {
+                console.error("User ID is not provided!");
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to remove this user:${nameuser} ?`)) {
+                return;
+            }
+            console.log(wanteduser)
+            $.ajax({
+                url: `/Dashboard/DeleteUser`,
+                type: 'POST',           
+                data: ({ Id: wanteduser }),
+                success: function (response) {
+                    console.log("User deleted successfully:", response);
+
+                    // Optionally: Display a success message
+                    alert("User has been removed successfully!");
+
+                    // Optionally: Refresh the user list or navigate back
+                    document.getElementById("backToUserList").click(); // Simulate clicking the back button
+                },
+                error: function (error) {
+                    console.error("Error deleting user:", error);
+
+                    // Display an error message
+                    alert("Failed to delete the user. Please try again.");
+                }
+            });
+        }
+    });
+
+    //Making an admin
+    document.addEventListener("click", (event) => {
+        if (event.target && event.target.id === "grantAdminButton") {
+            // Assuming userId is available in a data attribute
+            
+            console.log(wanteduser);
+            if (wanteduser == null) {
+                console.error("User ID is not provided!");
+                return;
+            }
+            if (!confirm("Are you sure you want to grant admin privileges to this user: " + nameuser + "?")) {
+                return;
+            }
+
+            // AJAX POST request
+            $.ajax({
+                url: '/Dashboard/GrantAdmin',
+                type: 'POST',
+                data: ({ userId: wanteduser }),
+                success: function (response) {
+                    if (response.success) {
+                        alert("Admin privileges have been granted successfully!");
+                        document.getElementById("grantAdminButton").disabled = true; // Disable button
+                    } else {
+                        alert(response.message || "Failed to grant admin privileges.");
+                    }
+                },
+                error: function (error) {
+                    console.error("Error granting admin privileges:", error);
+                    alert("Failed to grant admin privileges. Please try again.");
+                }
+            });
+        }
+    });
+
+    //Books managments!!!
+    //add Book
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('addBookForm');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const buyPrice = parseFloat(document.getElementById('buyPrice').value);
+            const borrowPrice = parseFloat(document.getElementById('borrowPrice').value);
+            const copies = parseInt(document.getElementById('copies').value);
+            const image = document.getElementById('image').value;
+
+            $.ajax({
+                url: '/Dashboard/Addingbook',
+                type: 'POST',
+                data: {
+                    title: title,
+                    author: author,
+                    availableCopies: copies,
+                    buyPrice: buyPrice,
+                    borrowPrice: borrowPrice,
+                    image: image
+                }, // Fixed: removed the unnecessary parentheses around the data
+                success: function (response) {
+                    if (response.success) {
+                        alert('Book added successfully!');
+
+                        form.reset(); // Reset the form fields
+                        // Clear file input manually after form reset
+                        document.getElementById('file').value = '';
+                    } else {
+                        alert(response.message || "Failed to grant admin privileges.");
+                    }
+                },
+                error: function (error) {
+                    console.error("Error granting admin privileges:", error);
+                    alert("Failed to grant admin privileges. Please try again.");
+                }
+            });
+
+            // File upload can be handled separately if needed
+            const file = document.getElementById('file').files[0]; // Added file input handling
+            if (file) {
+                const uploadData = new FormData();
+                uploadData.append('file', file);
+
+                fetch('/Books/UploadFile', { // Replace with your file upload endpoint
+                    method: 'POST',
+                    body: uploadData,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File uploaded successfully:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error uploading file:', error);
+                    });
+            }
+        });
+    });
+
+    //Search book
+    //const books = [
+    //    { id: 1, title: "Book One", author: "Author A", price: 19.99, image: "https://via.placeholder.com/100x150?text=Book+One" },
+    //    { id: 2, title: "Book Two", author: "Author B", price: 24.99, image: "https://via.placeholder.com/100x150?text=Book+Two" },
+    //    { id: 3, title: "Another Book", author: "Author C", price: 14.99, image: "https://via.placeholder.com/100x150?text=Another+Book" },
+    //];
+    //    const searchInput = document.getElementById("search");
+    //    const suggestionList = document.getElementById("suggestionList");
+    //    const searchResults = document.getElementById("searchResults");
+    //    const bookImage = document.getElementById("bookImage");
+    //    const bookId = document.getElementById("bookId");
+    //    const bookTitle = document.getElementById("bookTitle");
+    //    const bookAuthor = document.getElementById("bookAuthor");
+    //    const deleteButton = document.getElementById("deleteBookButton");
+
+
+    //    //search queary.
+    //    searchInput.addEventListener("input", function () {
+
+    //        const query = this.value.toLowerCase();
+    //        suggestionList.innerHTML = ""; // Clear previous suggestions
+    //        if (query) {
+    //            // Filter books based on title or author name
+
+    //            const filteredBooks = books.filter(book =>
+    //                book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query)
+    //            );
+    //            console.log("Filtered Books:", filteredBooks);
+    //            filteredBooks.forEach(book => {
+    //                const listItem = document.createElement("li");
+    //                listItem.textContent = `${book.title} by ${book.author}`;
+    //                listItem.dataset.bookId = book.id;
+    //                suggestionList.appendChild(listItem);
+    //            });
+    //            console.log("hee");
+    //        }
+    //    });
+    //    // Handle click on suggestion
+    //    suggestionList.addEventListener("click", function (event) {
+    //        if (event.target.tagName === "LI") {
+    //            const bookId = event.target.dataset.bookId;
+    //            const book = books.find(b => b.id == bookId);
+    //            if (book) {
+    //                // Update search results
+    //                bookTitle.textContent = book.title;
+    //                bookAuthor.textContent = book.author;
+    //                bookImage.src = book.image;
+    //                // Show results and delete button
+    //                searchResults.style.display = "block";
+    //                deleteButton.style.display = "inline-block";
+    //                // Clear suggestions
+    //                suggestionList.innerHTML = "";
+    //                searchInput.value = ""; // Optional: clear search input
+    //            }
+    //        }
+    //    });
+    //    // Handle delete button
+    //    deleteButton.addEventListener("click", function () {
+    //        const bookTitleToDelete = bookTitle.textContent;
+    //        // Confirm delete
+    //        if (confirm(`Are you sure you want to delete "${bookTitleToDelete}"?`)) {
+    //            const index = books.findIndex(book => book.title === bookTitleToDelete);
+    //            if (index > -1) {
+    //                books.splice(index, 1); // Remove book from array
+    //                alert(`"${bookTitleToDelete}" has been deleted.`);
+    //                searchResults.style.display = "none"; // Hide results
+    //                deleteButton.style.display = "none"; // Hide delete button
+    //            }
+    //        }
+    //    });
+
+    $(document).ready(function () {
+        const searchInput = $("#search");
+        const suggestionList = $("#suggestionList");
+        const searchResults = $("#searchResults");
+        const bookImage = $("#bookImage");
+        const bookId = $("#bookId");
+        const bookTitle = $("#bookTitle");
+        const bookAuthor = $("#bookAuthor");
+        const bookPrice = $("#bookPrice");
+        const newPriceInput = $("#newPrice");
+        const updatePriceButton = $("#updatePriceButton");
+        const deleteButton = $("#deleteBookButton");
+
+        // Event listener for the search input
+        searchInput.on("input", function () {
+            const query = $(this).val().trim();
+
+            if (query) {
+                $.ajax({
+                    url: "/Dashboard/GetBooksBySearchTerm",
+                    type: "GET",
+                    data: { searchTerm: query },
+                    success: function (data) {
+                        suggestionList.empty(); // Clear previous suggestions
+
+                        if (data.length === 0) {
+                            suggestionList.append("<li>No results found</li>");
+                            return;
+                        }
+
+                        data.forEach(book => {
+                            const listItem = $("<li></li>")
+                                .text(`${book.Title} by ${book.Author}`)
+                                .data("bookId", book.Id)
+                                .data("bookPrice", book.Price)
+                                .data("bookImageUrl", book.ImageUrl)
+                                .on("click", function () {
+                                    // Populate book details
+                                    bookId.text($(this).data("bookId"));
+                                    bookTitle.text(book.Title);
+                                    bookAuthor.text(book.Author);
+                                    bookPrice.text(parseFloat($(this).data("bookPrice")).toFixed(2));
+                                    bookImage.attr("src", $(this).data("bookImageUrl") || "https://via.placeholder.com/100x150?text=No+Image");
+
+                                    // Show search results and delete button
+                                    searchResults.show();
+                                    deleteButton.show();
+
+                                    // Clear suggestions and input
+                                    suggestionList.empty();
+                                    searchInput.val("");
+                                });
+                            suggestionList.append(listItem);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching books:", error);
+                    }
+                });
+            } else {
+                suggestionList.empty(); // Clear suggestions if the query is empty
+            }
+        });
+
+        // Handle update price button
+        updatePriceButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const newPrice = parseFloat(newPriceInput.val());
+
+            if (!isNaN(newPrice) && newPrice > 0) {
+                $.ajax({
+                    url: "/Books/UpdatePrice",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id: bookIdValue, price: newPrice }),
+                    success: function (data) {
+                        if (data.success) {
+                            alert("Price updated successfully!");
+                            bookPrice.text(newPrice.toFixed(2)); // Update the displayed price
+                            newPriceInput.val(""); // Clear input
+                        } else {
+                            alert("Failed to update the price.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error updating price:", error);
+                    }
+                });
+            } else {
+                alert("Please enter a valid price.");
+            }
+        });
+
+        // Handle delete button
+        deleteButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const bookTitleValue = bookTitle.text();
+
+            if (confirm(`Are you sure you want to delete "${bookTitleValue}"?`)) {
+                $.ajax({
+                    url: "/Books/DeleteBook",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ id: bookIdValue }),
+                    success: function (data) {
+                        if (data.success) {
+                            alert(`"${bookTitleValue}" has been deleted.`);
+                            searchResults.hide(); // Hide results
+                            deleteButton.hide(); // Hide delete button
+                        } else {
+                            alert("Failed to delete the book.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error deleting book:", error);
+                    }
+                });
+            }
+        });
+    });
+
+
+
+
+
+</script>
 </html>

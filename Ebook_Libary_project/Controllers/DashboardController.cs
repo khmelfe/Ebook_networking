@@ -52,7 +52,7 @@ namespace Ebook_Libary_project.Controllers.user
 
         public JsonResult SearchUsers(string searchTerm)
         {
-            // Fetch users matching the search term from the database
+            
             var users = Userdatabase.GetUsersByUsername(searchTerm);
 
             // Return the list of matching users in JSON format
@@ -88,6 +88,36 @@ namespace Ebook_Libary_project.Controllers.user
                 }
             }
             return Json(new { success = false, message = "User not found." });
+        }
+
+        
+        //Books functions
+        
+        [HttpPost]
+        public JsonResult Addingbook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice, string image)
+        {
+            try
+            {
+                Userdatabase.AddBook(title, author, availableCopies, buyPrice, borrowPrice, image);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
+        }
+ 
+        public JsonResult GetAllBooks()
+        {
+            return Json(Userdatabase.GetAllBookIds()); // Return all books in JSON format
+        }
+        public JsonResult SearchBooks(string searchTerm)
+        {
+
+            var users = Userdatabase.GetBooksBySearchTerm(searchTerm);
+
+            // Return the list of matching users in JSON format
+            return Json(users, JsonRequestBehavior.AllowGet);
         }
     }
 }

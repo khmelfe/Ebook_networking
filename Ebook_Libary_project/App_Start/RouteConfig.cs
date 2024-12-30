@@ -42,7 +42,7 @@ namespace Ebook_Libary_project
             routes.MapRoute(
               name: "Dashboard",
               url: "Dashboard",
-              defaults: new { controller = "User", action = "Dashboard", id = UrlParameter.Optional }
+              defaults: new { controller = "Dashboard", action = "index", id = UrlParameter.Optional }
           );
 
         }
