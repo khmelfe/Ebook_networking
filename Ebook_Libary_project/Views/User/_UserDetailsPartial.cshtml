@@ -1,0 +1,27 @@
+@{
+    var username = ViewBag.Username as string;
+    var email = ViewBag.Email as string;
+    var borrowedBooks = ViewBag.BorrowedBooks as List<int>;
+    var purchasedBooks = ViewBag.PurchasedBooks as List<int>;
+    var isAdmin = ViewBag.IsAdmin as bool?;
+}
+
+<div>
+    <h3>User Details</h3>
+    <p><strong>Username:</strong> @username</p>
+    <p><strong>Email:</strong> @email</p>
+    <p><strong>Books Borrowed:</strong> @string.Join(", ", borrowedBooks ?? new List<int>())</p>
+    <p><strong>Books Purchased:</strong> @string.Join(", ", purchasedBooks ?? new List<int>())</p>
+    <p><strong>Is Admin:</strong> @(isAdmin.HasValue && isAdmin.Value ? "Yes" : "No")</p>
+
+    @if (!(isAdmin.HasValue && isAdmin.Value))
+    {
+        <button id="grantAdminButton">Grant Admin</button>
+    }
+
+    <!-- Button to go back to the user list -->
+    <button id="removeUserButton" style="background-color: red; color: white;">Remove User</button>
+    <button id="backToUserList">Back to User List</button>
+
+</div>
+

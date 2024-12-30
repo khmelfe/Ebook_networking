@@ -32,10 +32,10 @@ namespace Ebook_Libary_project.Controllers
                 {
                     int userId = Userdatabase.GetUser_details(username, password);
                     Debug.WriteLine("Logged in successfully with user ID: " + userId);
+                    bool isAdmin = Userdatabase.IsUser_admin(userId);
 
-                   
+                    return Json(new { success = true, userId, isAdmin });
 
-                    return Json(new { success = true, userId });
                 }
                 else
                 {
