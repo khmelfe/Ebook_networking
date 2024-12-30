@@ -17,8 +17,8 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -27,6 +27,7 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserId", userId);
                 connection.Open();
+
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var bookIds = new List<int>();
@@ -39,6 +40,7 @@ namespace Ebook_Library_Project
             }
         }
 
+
         public static List<int> GetBorrowedBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BorrowedBooks WHERE UserID = @UserId";
@@ -47,6 +49,7 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserId", userId);
                 connection.Open();
+
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var bookIds = new List<int>();
@@ -58,6 +61,9 @@ namespace Ebook_Library_Project
                 }
             }
         }
+
+
+
 
         public static List<int> GetAllBookIds()
         {
@@ -299,6 +305,19 @@ namespace Ebook_Library_Project
             }
         }
 
+        public static int GetWaitingListLength(int bookid)
+        {
+            string query = "SELECT COUNT(*) FROM BorrowedBooks WHERE BookID = @bookid";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@bookid", bookid); // Properly bind the parameter
+                connection.Open();
+                int count = (int)command.ExecuteScalar(); // Execute the query and retrieve the count
+                return count;
+            }
+        }
 
 
         public static void AddToWaitingList(int userId, int bookId)
@@ -879,25 +898,14 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static List<Review> GetReviewsById(int? userid = null, int? bookid = null)
+        public static List<Review> GetReviewsById(int bookid)
         {
-            string query = "SELECT userid, bookid, review FROM Reviews WHERE 1=1";
-
-            // Add conditions based on parameters
-            if (userid.HasValue)
-                query += " AND userid = @UserId";
-            if (bookid.HasValue)
-                query += " AND bookid = @BookId";
+            string query = "SELECT userid, bookid, review FROM Reviews WHERE bookid = @BookId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-
-                // Add parameters if applicable
-                if (userid.HasValue)
-                    command.Parameters.AddWithValue("@UserId", userid.Value);
-                if (bookid.HasValue)
-                    command.Parameters.AddWithValue("@BookId", bookid.Value);
+                command.Parameters.AddWithValue("@BookId", bookid);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -916,6 +924,7 @@ namespace Ebook_Library_Project
                 }
             }
         }
+
 
 
 

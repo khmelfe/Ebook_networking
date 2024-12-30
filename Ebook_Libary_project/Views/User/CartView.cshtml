@@ -139,7 +139,10 @@
             <p class="total-price">Total Price: @cart.CalculateTotalPrice().ToString("C")</p>
 
             <div style="text-align: center; margin-top: 20px;">
-                <a class="btn" href="@Url.Action("Paymentvi", "Payment", new { id = 0 })">Proceed to Payment</a>
+                <a class="btn btn-primary" href="/Payment">Proceed to Payment</a>
+
+
+
             </div>
         }
         else

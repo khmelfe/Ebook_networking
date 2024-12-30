@@ -13,7 +13,7 @@ namespace Ebook_Libary_project.Controllers
         public ActionResult Paymentvi()
         {
             var cart = Cart.GetCart();
-
+          
             ViewBag.Cart = cart;
             return View("~/Views/User/PaymentView.cshtml");
         }
@@ -43,7 +43,7 @@ namespace Ebook_Libary_project.Controllers
                     Userdatabase.AddToWaitingList(UserSession.GetCurrentUserId(), bookId);
                 }
             }
-           
+            cart.Items.Clear();
             return RedirectToAction("Ebook_home", "Ebook_libary_Home");
         }
     }

@@ -39,7 +39,7 @@ namespace Ebook_Libary_project.Controllers.user
 
 
         [HttpPost]
-        public ActionResult AddToCart(int bookId, string action, string format)
+        public ActionResult AddToCart(int bookId, string action, string format, bool? joinWaitingList = null)
         {
             Debug.WriteLine("add to cart start.1");
 
@@ -53,14 +53,12 @@ namespace Ebook_Libary_project.Controllers.user
 
                 var cart = Cart.GetCart();
 
-                // Check if the book is already in the cart
                 if (cart.Items.ContainsKey(bookId))
                 {
                     Debug.WriteLine("Book is already in the cart.3");
                     return Json(new { success = false, message = "Book is already in your cart!" });
                 }
 
-                // Check if the book exists in borrowed, bought, or waiting list
                 if (Userdatabase.CheckIfExistsInBorrowedBooks(UserSession.GetCurrentUserId(), bookId) ||
                     Userdatabase.CheckIfExistsInBoughtBooks(UserSession.GetCurrentUserId(), bookId) ||
                     Userdatabase.CheckIfExistsInWaitingList(UserSession.GetCurrentUserId(), bookId))
@@ -69,23 +67,33 @@ namespace Ebook_Libary_project.Controllers.user
                     return Json(new { success = false, message = "Book already exists in library!" });
                 }
 
-                // Check if the user has reached the borrow limit
                 if (action == "borrow" && Userdatabase.numborrowed(UserSession.GetCurrentUserId()) >= 3)
                 {
                     Debug.WriteLine("5");
                     return Json(new { success = false, message = "Already borrowed three books!" });
                 }
 
-                // Handle unavailable books
                 if (action == "borrow" && book.AvailableCopies == 0)
                 {
+                    if (joinWaitingList == null)
+                    {
+                        int waitingListLength = Userdatabase.GetWaitingListLength(bookId);
+                        Debug.WriteLine("whatttt1??");
+                        return Json(new { success = false, message = $"No copies available. The waiting list has {waitingListLength} people. Do you want to join the waiting list?", waitingListLength });
+                    }
+
+                    if (joinWaitingList == false)
+                    {
+                        Debug.WriteLine("whatttt2??");
+                        return Json(new { success = false, message = "You chose not to join the waiting list." });
+                    }
+
                     action = "waitinglist";
                 }
-
+                
                 decimal price = action == "buy"
-                   ? book.BuyingPrice * ((100m - book.Sale) / 100m)
-                   : book.BorrowPrice * ((100m - book.Sale) / 100m);
-
+                    ? book.BuyingPrice * ((100m - book.Sale) / 100m)
+                    : book.BorrowPrice * ((100m - book.Sale) / 100m);
 
                 cart.AddBookToCart(bookId, action, price, format);
                 Debug.WriteLine($"Book added to cart successfully. Action: {action}");
@@ -97,11 +105,42 @@ namespace Ebook_Libary_project.Controllers.user
         }
 
         [HttpPost]
-        public ActionResult Buynow(int bookId, string action, string format)
-        { AddToCart(bookId, action, format);
-            return RedirectToRoute("Payment", new { action = "Paymentvi" });
+        public ActionResult Buynow(int bookId, string action, string format, bool? joinWaitingList = null)
+        {
+            Debug.WriteLine($"Buynow called with action: {action}, format: {format}");
 
+            // Call AddToCart and process its result
+            var addToCartResult = AddToCart(bookId, action, format, joinWaitingList) as JsonResult;
+
+            if (addToCartResult != null)
+            {
+                dynamic resultData = addToCartResult.Data; // Extract the data from the JsonResult
+
+                if (resultData.success == true)
+                {
+                    Debug.WriteLine($"AddToCart succeeded for action: {action}");
+                    // Redirect to Payment route if AddToCart succeeded
+                    return RedirectToRoute("Paymentname");
+                }
+                else if (resultData.waitingListLength != null)
+                {
+                    Debug.WriteLine($"AddToCart returned a waiting list message: {resultData.message}");
+                    // Return JSON response for waiting list
+                    return Json(new { success = false, message = resultData.message, waitingListLength = resultData.waitingListLength });
+                }
+                else
+                {
+                    Debug.WriteLine($"AddToCart failed: {resultData.message}");
+                    // Handle general failure case
+                    return Json(new { success = false, message = resultData.message });
+                }
+            }
+
+            Debug.WriteLine("Unexpected error in Buynow.");
+            // Fallback for unexpected cases
+            return Json(new { success = false, message = "An unexpected error occurred while processing your request." });
         }
+
 
         public ActionResult Dashboard()
         {
@@ -146,6 +185,19 @@ namespace Ebook_Libary_project.Controllers.user
             }
         }
 
+        [HttpGet]
+        public JsonResult GetWaitingListLength(int bookId)
+        {
+            try
+            {
+                int waitingListLength = Userdatabase.GetWaitingListLength(bookId); // Method to get the length of the waiting list
+                return Json(new { success = true, length = waitingListLength }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
 
     }
