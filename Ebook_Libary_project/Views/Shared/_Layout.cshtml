@@ -30,7 +30,7 @@
                         </li>
                         @*Only admins*@
                         <li class="nav-item" id="Dashboard" style="display:none">
-                            <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
+                            <a class="nav-link" href="/User/Dashboard">Dashboard</a>
                         </li>
                         <li class="nav-item">
                             <!-- Login Button -->
@@ -183,7 +183,7 @@
                 document.getElementById('id01').style.display = 'none';
             }
         };
-        var userData = null;
+
         // Login Functionality
         document.getElementById("loginButton").onclick = function (event) {
             event.preventDefault();
@@ -197,12 +197,6 @@
                 data: { username, password },
                 success: function (response) {
                     if (response.success) {
-                        var userData = {
-                            userId: response.userId,
-                            isAdmin: response.isAdmin 
-                        };
-                        localStorage.setItem("userData", JSON.stringify(userData)); //keeping the user's admin status.
-                       
                         document.cookie = `userId=${response.userId}; path=/; max-age=900;`;
                         alert("Login successful!");
                         window.location.reload(); // Reload the page to reflect login state
@@ -261,11 +255,8 @@
 
         // Check Login State
         const userId = getCookie("userId");
-        var storedUserData = JSON.parse(localStorage.getItem("userData"));
         if (userId) {
-          if (storedUserData && storedUserData.isAdmin) {
-            document.getElementById("Dashboard").style.display = "block";}
-          
+            document.getElementById("Dashboard").style.display = "none";
             document.getElementById("openLoginButton").style.display = "none";
             document.getElementById("logoutButton").style.display = "block";
             document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, User ${userId}!</p>`);
@@ -274,6 +265,12 @@
             document.getElementById("logoutButton").style.display = "none";
         }
     </script>
+
+
+
+
+
+
 
 </body>
 </html>

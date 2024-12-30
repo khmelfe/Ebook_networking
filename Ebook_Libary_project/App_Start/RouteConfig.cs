@@ -41,8 +41,8 @@ namespace Ebook_Libary_project
             );
             routes.MapRoute(
               name: "Dashboard",
-              url: "Dashboard/{action}",
-              defaults: new { controller = "Dashboard", action = "Index", id = UrlParameter.Optional }
+              url: "Dashboard",
+              defaults: new { controller = "User", action = "Dashboard", id = UrlParameter.Optional }
           );
 
         }
