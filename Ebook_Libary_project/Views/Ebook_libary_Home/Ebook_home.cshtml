@@ -1,8 +1,8 @@
-﻿@using Ebook_Library_Project
-@using EbookLibraryProject.Models
+﻿@using Ebook_Libary_project.Models
+@using Ebook_Library_Project
 
 @{
-    ViewBag.Title = "Ebook_home";
+    ViewBag.Title = "Ebook Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,13 +10,8 @@
 <html>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -49,7 +44,20 @@
                 padding: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 text-align: center;
+                position: relative;
+                overflow: hidden;
+                word-wrap: break-word; /* Allows long words to wrap */
+                word-break: break-word; /* Prevents overflow for long words */
             }
+
+                .scrollmenu .column h3 {
+                    white-space: normal; /* Prevents text from staying on a single line */
+                    overflow: hidden; /* Ensures text overflow is hidden */
+                    text-overflow: ellipsis; /* Adds ellipsis for overflowing text */
+                    max-height: 3em; /* Limits the height of the title to 2 lines */
+                    line-height: 1.5em; /* Sets the line height for better readability */
+                    margin-bottom: 10px; /* Adds space below the title */
+                }
 
             .scrollmenu::-webkit-scrollbar {
                 height: 8px;
@@ -63,6 +71,18 @@
             .scrollmenu::-webkit-scrollbar-track {
                 background: #333;
             }
+
+        .return-date {
+            color: red;
+            font-weight: bold;
+        }
+
+        .login-message {
+            font-size: 18px;
+            color: darkred;
+            text-align: center;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -77,6 +97,7 @@
 
     <h2>Recommended Books</h2>
     <div class="scrollmenu">
+        @* Recommended books section *@
         @{
             var bookIds = Userdatabase.GetAllBookIds();
             foreach (var bookId in bookIds)
@@ -92,7 +113,6 @@
                             {
                                 decimal saleFactor = book.Sale / 100m;
                                 decimal discountedBuyingPrice = book.BuyingPrice * (1 - saleFactor);
-                                decimal discountedBorrowPrice = book.BorrowPrice * (1 - saleFactor);
 
                                 <p>
                                     <span style="text-decoration: line-through; color: red;">
@@ -101,24 +121,13 @@
                                 </p>
                                 <p>
                                     <span style="color: green;">
-                                        Discounted Buying Price: @discountedBuyingPrice.ToString("C")
-                                    </span>
-                                </p>
-                                <p>
-                                    <span style="text-decoration: line-through; color: red;">
-                                        Borrowing Price: @book.BorrowPrice.ToString("C")
-                                    </span>
-                                </p>
-                                <p>
-                                    <span style="color: green;">
-                                        Discounted Borrowing Price: @discountedBorrowPrice.ToString("C")
+                                        Discounted Price: @discountedBuyingPrice.ToString("C")
                                     </span>
                                 </p>
                             }
                             else
                             {
                                 <p>Buying Price: @book.BuyingPrice.ToString("C")</p>
-                                <p>Borrowing Price: @book.BorrowPrice.ToString("C")</p>
                             }
                         </a>
                     </div>
@@ -126,5 +135,53 @@
             }
         }
     </div>
+
+    @if (ViewBag.Message != null)
+    {
+        <p class="login-message">@ViewBag.Message</p>
+    }
+    else
+    {
+        <h2>Your Bought Books</h2>
+        <div class="scrollmenu">
+            @if (ViewBag.BoughtBooks != null && ((List<BookModel>)ViewBag.BoughtBooks).Any())
+            {
+                foreach (var book in (List<BookModel>)ViewBag.BoughtBooks)
+                {
+                    <div class="column">
+                        <div style="text-decoration: none; color: inherit; cursor: default;">
+                            <h3>@book.Name</h3>
+                            <p>Author: @book.Author</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No bought books to display.</p>
+            }
+        </div>
+
+        <h2>Your Borrowed Books</h2>
+        <div class="scrollmenu">
+            @if (ViewBag.BorrowedBooks != null && ((List<(BookModel Book, DateTime ReturnDate)>)ViewBag.BorrowedBooks).Any())
+            {
+                foreach (var borrowed in (List<(BookModel Book, DateTime ReturnDate)>)ViewBag.BorrowedBooks)
+                {
+                    <div class="column">
+                        <div style="text-decoration: none; color: inherit; cursor: default;">
+                            <h3>@borrowed.Book.Name</h3>
+                            <p>Author: @borrowed.Book.Author</p>
+                            <p class="return-date">Return Date: @borrowed.ReturnDate.ToShortDateString()</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No borrowed books to display.</p>
+            }
+        </div>
+    }
 </body>
 </html>

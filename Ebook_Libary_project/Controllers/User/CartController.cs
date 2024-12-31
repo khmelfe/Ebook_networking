@@ -1,4 +1,5 @@
 ﻿using Ebook_Libary_project.Models;
+using System.Diagnostics;
 using System.Web.Mvc;
 
 namespace Ebook_Libary_project.Controllers.user
@@ -10,6 +11,7 @@ namespace Ebook_Libary_project.Controllers.user
         {
             var cart = Cart.GetCart(); // Access the shared cart
             ViewBag.Cart = cart;
+            
             return View("~/Views/User/CartView.cshtml");
         }
 
