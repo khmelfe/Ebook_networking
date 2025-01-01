@@ -52,7 +52,7 @@ namespace Ebook_Libary_project.Controllers.user
 
         public JsonResult SearchUsers(string searchTerm)
         {
-
+            
             var users = Userdatabase.GetUsersByUsername(searchTerm);
 
             // Return the list of matching users in JSON format
@@ -90,9 +90,9 @@ namespace Ebook_Libary_project.Controllers.user
             return Json(new { success = false, message = "User not found." });
         }
 
-
+        
         //Books functions
-
+        
         [HttpPost]
         public JsonResult Addingbook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice, string image)
         {
@@ -106,7 +106,7 @@ namespace Ebook_Libary_project.Controllers.user
                 return Json(new { success = false, ex });
             }
         }
-
+ 
         public JsonResult GetAllBooks()
         {
             return Json(Userdatabase.GetAllBookIds()); // Return all books in JSON format
@@ -119,82 +119,5 @@ namespace Ebook_Libary_project.Controllers.user
             // Return the list of matching users in JSON format
             return Json(users, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult updateprice(int bookId, decimal newPrice, string action)
-        {
-            try
-            {
-                Userdatabase.UpdateBookPrice(bookId, newPrice, action);
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new
-                {
-                    success = false,
-                    errorMessage = ex.Message,
-                });
-            }
-        }
-        public JsonResult saleprecent(int bookId, int sale)
-        {
-            try
-            {
-                Userdatabase.UpdateBookSale(bookId, sale);
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new
-                {
-                    success = false,
-                    errorMessage = ex.Message,
-                });
-            }
-        }
-        public JsonResult Deletebook(int bookId)
-        {
-            try
-            {
-                Userdatabase.RemoveBook(bookId);
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new
-                {
-                    success = false,
-                    errorMessage = ex.Message,
-                });
-            }
-        }
-        public JsonResult GetUsers_who_borrowed()
-        {
-            var users = Userdatabase.Users_with_borrowed_books();
-            return Json(users, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult get_users_borrowed_books(int userid)
-        {
-            var books = Userdatabase.getusers_borrowed(userid);
-            return Json(books, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult UpdateBorrowedTime(int userID, int bookId,int amount_of_days,string action)
-        {
-            try
-            {
-                Userdatabase.update_borrowed_time(userID, bookId, amount_of_days, action);
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new
-                {
-                    success = false,
-                    errorMessage = ex.Message,
-                });
-            }
-        }
     }
-
- }
-
-
+}

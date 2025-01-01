@@ -175,10 +175,6 @@
     <Compile Include="UserSession.cs" />
   </ItemGroup>
   <ItemGroup>
-<!--<<<<<<< HEAD-->
-    <Content Include="bin\Ebook_Libary_project.dll" />
-    <Content Include="bin\Ebook_Libary_project.pdb" />
-<!--=======-->
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\Ebook_Libary_project.dll" />
@@ -263,7 +259,6 @@
     <Content Include="bin\System.Web.WebPages.Razor.xml" />
     <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="bin\WebGrease.dll" />
-<!-->>>>>>> c841b7dc3507be79563700fd68d18580de87b970-->
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -307,9 +302,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-<!--<<<<<<< HEAD-->
-    <Content Include=".vs\Ebook_Libary_project.csproj.dtbcache.json" />
-<!--=======-->
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="obj\Debug\Ebook_Li.470F2DF5.Up2Date" />
@@ -328,7 +320,6 @@
     <Content Include="bin\roslyn\vbc.exe.config" />
     <Content Include="bin\roslyn\vbc.rsp" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
-<!-->>>>>>> c841b7dc3507be79563700fd68d18580de87b970-->
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
