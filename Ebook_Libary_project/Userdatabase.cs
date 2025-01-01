@@ -1,6 +1,7 @@
 ﻿using Ebook_Libary_project;
 using Ebook_Libary_project.Models;
 using EbookLibraryProject.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -18,7 +19,7 @@ namespace Ebook_Library_Project
     public static class Userdatabase
     {
         public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+       // public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -169,10 +170,47 @@ namespace Ebook_Library_Project
         }
 
         // Function to change the price for buying or borrowing a book
+        //public static void UpdateBookPrice(int bookId, decimal newPrice, string action)
+        //{
+        //    string column = action.ToLower() == "buying" ? "BuyPrice" : "BorrowPrice";
+        //    string query = $"UPDATE Books SET {column} = @NewPrice WHERE Id = @BookID";
+
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        SqlCommand command = new SqlCommand(query, connection);
+        //        command.Parameters.AddWithValue("@NewPrice", newPrice);
+        //        command.Parameters.AddWithValue("@BookID", bookId);
+
+        //        connection.Open();
+        //        command.ExecuteNonQuery();
+        //    }
+        //}
+
         public static void UpdateBookPrice(int bookId, decimal newPrice, string action)
         {
             string column = action.ToLower() == "buying" ? "BuyPrice" : "BorrowPrice";
             string query = $"UPDATE Books SET {column} = @NewPrice WHERE Id = @BookID";
+
+            // Check if action is 'buying' and if newPrice is greater than the borrow price
+            if (action == "BuyPrice")
+            {
+                // Get the current borrow price
+                decimal currentBorrowPrice = GetCurrentBorrowPrice(bookId);
+
+                // Ensure BuyPrice is greater than BorrowPrice
+                if (newPrice < currentBorrowPrice)
+                {
+                    throw new InvalidOperationException("Buying price must be higher than borrowing price.");
+                }
+            }
+            else
+            {
+                decimal currentbuyprice = GetCurrentbuyPrice(bookId);
+                if(newPrice > currentbuyprice)
+                {
+                    throw new InvalidOperationException("Buying price must be higher than borrowing price.");
+                }
+            }
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -183,6 +221,42 @@ namespace Ebook_Library_Project
                 connection.Open();
                 command.ExecuteNonQuery();
             }
+        }
+
+        // Helper method to get the current borrow price for a book
+        private static decimal GetCurrentBorrowPrice(int bookId)
+        {
+            decimal borrowPrice = 0;
+
+            string query = "SELECT BorrowPrice FROM Books WHERE Id = @BookID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BookID", bookId);
+
+                connection.Open();
+                borrowPrice = (decimal)command.ExecuteScalar();
+            }
+
+            return borrowPrice;
+        }
+        private static decimal GetCurrentbuyPrice(int bookId)
+        {
+            decimal buyingPrice = 0;
+
+            string query = "SELECT BuyingPrice FROM Books WHERE Id = @BookID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BookID", bookId);
+
+                connection.Open();
+                buyingPrice = (decimal)command.ExecuteScalar();
+            }
+
+            return buyingPrice;
         }
 
         // Function to change the return date for a borrowed book
@@ -265,18 +339,60 @@ namespace Ebook_Library_Project
                 command.ExecuteNonQuery();
             }
         }
+        public static void RemoveBook(int bookId)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Step 1: Delete the book from BorrowedBooks if it exists
+                    string deleteBorrowedBooksQuery = "DELETE FROM BorrowedBooks WHERE BookID = @BookID";
+                    using (SqlCommand command = new SqlCommand(deleteBorrowedBooksQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@BookID", bookId);
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Step 2: Delete the book from WaitingList if it exists
+                    string deleteWaitingListQuery = "DELETE FROM WaitingList WHERE BookID = @BookID";
+                    using (SqlCommand command = new SqlCommand(deleteWaitingListQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@BookID", bookId);
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Step 3: Delete the book from the Books table
+                    string deleteBookQuery = "DELETE FROM Books WHERE Id = @BookID";
+                    using (SqlCommand command = new SqlCommand(deleteBookQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@BookID", bookId);
+                        command.ExecuteNonQuery();
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if necessary
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        }
 
         public static List<dynamic> GetBooksBySearchTerm(string searchTerm)
         {
             string query = @"
         SELECT 
             Id, 
-            Title, 
+            Name, 
             Author, 
-            Price, 
-            ImageUrl 
+            BuyingPrice,
+            BorrowPrice,
+            Sale,
+            ImagePath
         FROM Books 
-        WHERE Title LIKE @SearchTerm OR Author LIKE @SearchTerm";
+        WHERE Name LIKE @SearchTerm OR Author LIKE @SearchTerm";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -293,10 +409,13 @@ namespace Ebook_Library_Project
                         books.Add(new
                         {
                             Id = (int)reader["Id"],
-                            Title = reader["Title"].ToString(),
+                            Title = reader["Name"].ToString(),
                             Author = reader["Author"].ToString(),
-                            Price = (decimal)reader["Price"],
-                            ImageUrl = reader["ImageUrl"] != DBNull.Value ? reader["ImageUrl"].ToString() : null
+                            Buyingprice = reader["BuyingPrice"],
+                            BorrowPrice = reader["BorrowPrice"],
+                            Sale = reader["Sale"],
+                            ImagePath = reader["ImagePath"]
+
                         });
                     }
                 }
@@ -517,8 +636,6 @@ namespace Ebook_Library_Project
 
         }
 
-
-
                         ////Is admin
         
         [HttpPost]  
@@ -559,17 +676,6 @@ namespace Ebook_Library_Project
 
                         }
                 
-            
-
-            
-         
-        
-
-       
-
-
-
-
         // Check if a user exists in the WaitingList for a book
         public static bool CheckIfExistsInWaitingList(int userId, int bookId)
         {
@@ -620,6 +726,38 @@ namespace Ebook_Library_Project
                 return count > 0;
             }
         }
+        public static void UpdateBookSale(int bookId, int salePercentage)
+        {
+            // Validate input
+            if (salePercentage < 0 || salePercentage > 100)
+            {
+                throw new ArgumentException("Sale percentage must be between 0 and 100.");
+            }
+
+            
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Update the Sale column in the database
+                string updateQuery = "UPDATE Books SET Sale = @SalePercentage WHERE Id = @BookID";
+
+                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@SalePercentage", salePercentage);
+                    updateCommand.Parameters.AddWithValue("@BookID", bookId);
+
+                    int rowsAffected = updateCommand.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                    {
+                        throw new Exception("Failed to update the sale percentage or book not found.");
+                    }
+                }
+            }
+        }
+
 
         public static BookModel GetBookById(int bookId)
         {
@@ -677,6 +815,232 @@ namespace Ebook_Library_Project
 
             return bookNames;  // Return the list of book names
         }
+        //get Users with borrowedbooks
+        public static List<dynamic> Users_with_borrowed_books()
+        {
+            string query = @"
+        SELECT UserID, Min(ReturnDate) AS ReturnDate
+        FROM BorrowedBooks
+        GROUP BY UserID"; // Group by UserID to get one entry per user, with the latest return date
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var usersWithBorrowedTime = new List<dynamic>();
+
+                    while (reader.Read())
+                    {
+                        // Get the return date from the database
+                        DateTime returnDate = (DateTime)reader["ReturnDate"];
+
+                        // Calculate days left until the return date
+                        int daysLeft = (returnDate - DateTime.Now).Days;
+
+                        if (daysLeft < 0) daysLeft = 0;
+
+                        var username = GetUserNameById((int)reader["UserID"]); // Get the username.
+
+                        var user = new
+                        {
+                            UserID = (int)reader["UserID"],
+                            Name = username,
+                            DaysLeft = daysLeft
+                        };
+
+                        usersWithBorrowedTime.Add(user);
+                    }
+
+                    return usersWithBorrowedTime;
+                }
+            }
+        }
+
+        //Get user's borrowed books
+        static int daysLeft = 0;
+        public static List<dynamic> getusers_borrowed(int userId)
+        {
+            string query = "SELECT BookId, ReturnDate FROM BorrowedBooks WHERE UserId = @UserId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId); // Use the provided userId as a parameter
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var borrowedBooks = new List<dynamic>();
+                    while (reader.Read())
+                    {
+                        DateTime returnDate = (DateTime)reader["ReturnDate"];
+
+                        // Calculate days left until the return date
+                         daysLeft = (returnDate - DateTime.Now).Days;
+
+                        var booktitle = getbooknamebyid((int)reader["BookId"]);
+                        var bookInfo = new
+                        {
+                            BookId = (int)reader["BookId"], // Retrieve the BookId
+                            Title = booktitle,
+                            ReturnDate = daysLeft // Retrieve the ReturnDate
+                        };
+                        borrowedBooks.Add(bookInfo);
+                    }
+                    return borrowedBooks;
+                }
+            }
+        }
+     
+        public static string getbooknamebyid(int bookid)
+        {
+            string name = string.Empty;
+            string query = "SELECT name FROM Books WHERE id = @BookId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BookId", bookid);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) // If a user is found
+                    {
+                        name = reader.GetString(0); // Assuming 'name' is the first column in the result
+                    }
+                }
+            }
+            return name;
+        }
+
+
+        //Add more time
+        static DateTime newReturnDate;
+        public static void update_borrowed_time(int userId, int bookId, int amountDays, string action)
+        {
+            string query = "SELECT ReturnDate FROM BorrowedBooks WHERE UserId = @UserId AND BookId = @BookId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@BookId", bookId);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+
+                        DateTime currentReturnDate = (DateTime)reader["ReturnDate"];
+                        DateTime currentdate = DateTime.Now.Date; // Today's date
+                        int daysLeft = (currentReturnDate - DateTime.Now).Days;
+                        // Determine the new return date based on action
+                        if (action == "extend")
+                        {
+                            if (amountDays > 30)
+                            {
+                                int days_Left = (currentReturnDate - currentdate).Days;
+                                int fixAmount = 30 - days_Left;
+                                newReturnDate = currentReturnDate.AddDays(fixAmount);
+                            }
+                            else
+                            {
+                                newReturnDate = currentReturnDate.AddDays(amountDays-daysLeft);
+                            }
+                        }
+                        else // "decrease" action
+                        {
+                           int  decrese = -amountDays + daysLeft;
+                            newReturnDate = currentReturnDate.AddDays(-decrese);
+
+                            // If the new return date is before today, set it to today's date
+                            if (newReturnDate <= currentdate)
+                            {
+                                newReturnDate = currentdate;
+                            }
+                        }
+
+                        
+                    }
+
+                    
+                }
+
+                // Update the ReturnDate in the database
+                string updateQuery = "UPDATE BorrowedBooks SET ReturnDate = @NewReturnDate WHERE UserId = @UserId AND BookId = @BookId";
+                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@NewReturnDate", newReturnDate);
+                    updateCommand.Parameters.AddWithValue("@UserId", userId);
+                    updateCommand.Parameters.AddWithValue("@BookId", bookId);
+                    updateCommand.ExecuteNonQuery(); // Execute the update
+                }
+            }
+        }
+        ////Decrease_borrowed_time.
+        //public static void Decrease_borrowed_time(int userId, int bookId, int decreaseDays)
+        //{
+        //    string query = "SELECT BorrowedDate, ReturnDate FROM BorrowedBooks WHERE UserId = @UserId AND BookId = @BookId";
+
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        SqlCommand command = new SqlCommand(query, connection);
+        //        command.Parameters.AddWithValue("@UserId", userId);
+        //        command.Parameters.AddWithValue("@BookId", bookId);
+
+        //        connection.Open();
+        //        using (SqlDataReader reader = command.ExecuteReader())
+        //        {
+        //            if (reader.Read())
+        //            {
+        //                // Get the BorrowedDate and ReturnDate
+        //                DateTime borrowedDate = (DateTime)reader["BorrowedDate"];
+        //                DateTime returnDate = (DateTime)reader["ReturnDate"];
+
+        //                // Calculate remaining days
+        //                TimeSpan remainingTimeSpan = returnDate - DateTime.Now;
+        //                int remainingDays = remainingTimeSpan.Days;
+
+        //                // Subtract decreaseDays from the remaining time
+        //                remainingDays -= decreaseDays;
+
+        //                // If remaining days are <= 0, delete the record from the BorrowedBooks table
+        //                if (remainingDays <= 0)
+        //                {
+        //                    // Delete the book from the BorrowedBooks table
+        //                    string deleteQuery = "DELETE FROM BorrowedBooks WHERE UserId = @UserId AND BookId = @BookId";
+        //                    SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
+        //                    deleteCommand.Parameters.AddWithValue("@UserId", userId);
+        //                    deleteCommand.Parameters.AddWithValue("@BookId", bookId);
+        //                    deleteCommand.ExecuteNonQuery();
+        //                    Console.WriteLine("The borrowed book record has been removed because the borrowed time has expired.");
+        //                }
+        //                else
+        //                {
+        //                    // Update the ReturnDate based on the new remaining time
+        //                    DateTime newReturnDate = DateTime.Now.AddDays(remainingDays);
+        //                    string updateQuery = "UPDATE BorrowedBooks SET ReturnDate = @NewReturnDate WHERE UserId = @UserId AND BookId = @BookId";
+        //                    SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+        //                    updateCommand.Parameters.AddWithValue("@NewReturnDate", newReturnDate);
+        //                    updateCommand.Parameters.AddWithValue("@UserId", userId);
+        //                    updateCommand.Parameters.AddWithValue("@BookId", bookId);
+        //                    updateCommand.ExecuteNonQuery();
+        //                    Console.WriteLine($"Updated the borrowed time. New return date is: {newReturnDate.ToShortDateString()}");
+        //                }
+        //            }
+        //            else
+        //            {
+        //                Console.WriteLine("No record found for the given UserId and BookId.");
+        //            }
+        //        }
+        //    }
+        //}
+
 
         public static int numborrowed(int userId)
         {
@@ -699,10 +1063,10 @@ namespace Ebook_Library_Project
             return totalBooks;
         }
 
-
         public static string ReturnBook(int userId, int bookId)
         {
             string message = string.Empty;
+            Debug.WriteLine("1");
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -715,36 +1079,43 @@ namespace Ebook_Library_Project
                 {
                     waitingListCommand.Parameters.AddWithValue("@BookID", bookId);
 
-                    // Explicitly close any lingering readers before executing
                     SqlDataReader reader = null;
                     try
                     {
                         reader = waitingListCommand.ExecuteReader();
-                        if (reader.Read())
+                        bool waitingListExists = reader.Read();
+
+                        int nextUserId = 0;
+                        int numberInQueue = 0;
+
+                        if (waitingListExists)
                         {
-                            int nextUserId = (int)reader["UserID"];
-                            int numberInQueue = (int)reader["NumberInQueue"];
+                            nextUserId = (int)reader["UserID"];
+                            numberInQueue = (int)reader["NumberInQueue"];
+                        }
 
-                            // Close the reader before executing the next command
-                            reader.Close();
+                        reader.Close();
 
-                            // Remove the current entry from BorrowedBooks
-                            string deleteBorrowedQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID AND BookID = @BookID";
+                        // Remove the current entry from BorrowedBooks
+                        string deleteBorrowedQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID AND BookID = @BookID";
+                        Debug.WriteLine("2");
 
-                            using (SqlCommand deleteBorrowedCommand = new SqlCommand(deleteBorrowedQuery, connection))
-                            {
-                                deleteBorrowedCommand.Parameters.AddWithValue("@UserID", userId);
-                                deleteBorrowedCommand.Parameters.AddWithValue("@BookID", bookId);
-                                deleteBorrowedCommand.ExecuteNonQuery();
-                            }
+                        using (SqlCommand deleteBorrowedCommand = new SqlCommand(deleteBorrowedQuery, connection))
+                        {
+                            deleteBorrowedCommand.Parameters.AddWithValue("@UserID", userId);
+                            deleteBorrowedCommand.Parameters.AddWithValue("@BookID", bookId);
+                            deleteBorrowedCommand.ExecuteNonQuery();
+                        }
 
+                        if (waitingListExists)
+                        {
                             // Update queue numbers only if more than one user is in the queue
                             if (numberInQueue > 1)
                             {
                                 string updateQueueQuery = @"
-                        UPDATE WaitingList
-                        SET NumberInQueue = NumberInQueue - 1
-                        WHERE BookID = @BookID AND NumberInQueue > 1";
+                            UPDATE WaitingList
+                            SET NumberInQueue = NumberInQueue - 1
+                            WHERE BookID = @BookID AND NumberInQueue > 1";
 
                                 using (SqlCommand updateQueueCommand = new SqlCommand(updateQueueQuery, connection))
                                 {
@@ -756,19 +1127,16 @@ namespace Ebook_Library_Project
                             // Assign the book to the next user in line
                             BorrowBook(nextUserId, bookId);
                             var emailService = new EmailService();
-                            string subject = "book was returned!";
-                            string email =GetUserEmailById(nextUserId);
-                            string body = $"Hi {GetUserNameById(nextUserId)},<br><br>the book youve been waiting for is yours!!!";
+                            string subject = "Book was returned!";
+                            string email = GetUserEmailById(nextUserId);
+                            string body = $"Hi {GetUserNameById(nextUserId)},<br><br>The book you've been waiting for is now available for you!";
                             emailService.SendEmail(email, subject, body);
 
-
+                            Debug.WriteLine("3");
                             message = $"Book returned and borrowed by the next user in line (UserID: {nextUserId}).";
                         }
                         else
                         {
-                            // Close the reader before executing the next command
-                            reader.Close();
-
                             // No one in the waiting list, increase available copies
                             string updateCopiesQuery = "UPDATE Books SET AvailableCopies = AvailableCopies + 1 WHERE Id = @BookID";
 
@@ -778,6 +1146,7 @@ namespace Ebook_Library_Project
                                 updateCopiesCommand.ExecuteNonQuery();
                             }
 
+                            Debug.WriteLine("4");
                             message = "Book returned successfully. Available copies increased.";
                         }
                     }
@@ -789,8 +1158,10 @@ namespace Ebook_Library_Project
                 }
             }
 
+            Debug.WriteLine("5");
             return message;
         }
+
 
         // Method to get email by user ID
         public static string GetUserEmailById(int userId)
@@ -923,8 +1294,28 @@ namespace Ebook_Library_Project
                     return reviews;
                 }
             }
+
         }
 
+        public static void RemoveBoughtBook(int userId, int bookId)
+        {
+            string query = "DELETE FROM BoughtBooks WHERE UserID = @UserId AND BookID = @BookId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@BookId", bookId);
+
+                connection.Open();
+
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    throw new Exception("Failed to remove the book. It might not exist in the user's bought books.");
+                }
+            }
+        }
 
 
 

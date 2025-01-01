@@ -7,7 +7,7 @@ namespace Ebook_Libary_project.Models
     {
         // Book properties
         public int Id { get; set; } // Unique identifier
-
+        public int minage { get; set; } // Unique identifier
         public int Sale { get; set; } // Unique identifier
         public string ImagePath { get; set; } // Path to the book's image
         public string Name { get; set; } // Book title
@@ -20,7 +20,7 @@ namespace Ebook_Libary_project.Models
         // Constructor
         public BookModel()
         {
-            
+            minage = 0;
             Sale = 0;
         }
         public string GetName()
