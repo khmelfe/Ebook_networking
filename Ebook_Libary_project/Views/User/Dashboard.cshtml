@@ -275,6 +275,11 @@
             padding: 10px;
             min-height: 200px;
         }
+        #dynamic-content_waitinglist {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 200px;
+        }
 
         .user-item {
             cursor: pointer;
@@ -333,7 +338,7 @@
                 <li>
             </ul>
         </div>
-    
+
 
         <!-- Main Content -->
         <div class="main-content">
@@ -392,7 +397,7 @@
                     <h5 style="display: none;">Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
                     <h5 style="display: none;">Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
                     <h5 style="display: none;">Admin Privileges: <span id="isAdmin"></span></h5>
-                    <button id="grantAdminButton" style="display: none;" >Grant Admin Privileges</button>
+                    <button id="grantAdminButton" style="display: none;">Grant Admin Privileges</button>
                     <button id="showBorrowedBooks" style="display: none;">Show Borrowed Books</button>
                     <button id="showPurchasedBooks" style="display: none;">Show Purchased Books</button>
                     <button id="removeUserButton" style="display: none;">Remove User</button>
@@ -514,21 +519,33 @@
                         </div>
                     </div>
                 </div>
-             </div>
-                <br />
-                <h1 id="borrow_list">Active Borrowed Lists</h1>
-                <div class="well">
-                    <div class="row">
-                        <div class="col" padding: 15px;">
-                            <!-- Dynamic content container -->
-                            <div id="dynamic-content">
-                                <h2>Users in borrowed lists:</h2>
-                                <p>Loading borrowed lists...</p>
-                            </div>
+            </div>
+            <br />
+            <h1 id="borrow_list">Active Borrowed Lists</h1>
+            <div class="well">
+                <div class="row">
+                    <div class="col" padding: 15px;">
+                        <!-- Dynamic content container -->
+                        <div id="dynamic-content">
+                            <h2>Users in borrowed lists:</h2>
+                            <p>Loading borrowed lists...</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <h1 id="waiting_list">Active Watiting Lists</h1>
+            <div class="well">
+                <div class="row">
+                    <div class="col" padding: 15px;">
+                        <!-- Dynamic content container -->
+                        <div id="dynamic-content_waitinglist">
+                            <h2>Books with Waiting lists:</h2>
+                            <p>Loading Waiting lists...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -538,15 +555,127 @@
 
     let wanteduser = null;
     let nameuser = null;
-    //borrowed lists
-    
-    // Sample data for users and their borrowed books (Example)
-    const usersWithBorrowedTime = [
-        { id: 101, name: 'John Doe', borrowedDays: 5, borrowedBooks: [{ title: 'Book A', borrowedDaysLeft: 3 }, { title: 'Book B', borrowedDaysLeft: 5 }] },
-        { id: 102, name: 'Jane Smith', borrowedDays: 7, borrowedBooks: [{ title: 'Book C', borrowedDaysLeft: 6 }] },
-        { id: 103, name: 'Alice Brown', borrowedDays: 10, borrowedBooks: [{ title: 'Book D', borrowedDaysLeft: 9 }] }
-    ];
 
+    //Waiting List
+    // Function to display all users with borrowed time
+    function loadBooksWithWaiting() {
+        const dynamicContent = document.getElementById('dynamic-content_waitinglist');
+        dynamicContent.innerHTML = '<h2>Books with Waiting Lists: </h2>';
+
+        // Make the AJAX request to fetch the users
+        fetch('/Dashboard/GetbooksforWaiting')
+            .then(response => response.json()) // 
+            .then(BooksWithWaiting => {
+                // Iterate over the fetched data and create elements
+                BooksWithWaiting.forEach(book => {
+                    const bookitem = document.createElement('div');
+                    bookitem.className = 'book-item';
+                    bookitem.innerHTML = `
+                <span>${book.Name}</span>
+                <span>List length is: ${book.length} </span>
+            `;
+                    bookitem.onclick = () => showUserBooks_waiting(book);
+                    dynamicContent.appendChild(bookitem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching Books with Waiting Lists:', error);
+                dynamicContent.innerHTML = '<p>Failed to load Books with Waiting Lists.</p>';
+            });
+
+    }
+
+    function showUserBooks_waiting(book) {
+        const dynamicContent = document.getElementById('dynamic-content_waitinglist');
+        dynamicContent.innerHTML = `<h2>User in ${book.name} Waiting List:</h2>`;
+
+        // Make an AJAX POST request to fetch books borrowed by the user
+        $.ajax({
+            url: '/Dashboard/getusersofwaitinglist',
+            type: 'POST',
+            data: { bookid: book.BookID },
+            success: function (response) {
+                console.log(response.length);
+
+                if (response.length > 0) {
+                    response.forEach(user => {
+                        const bookItem = document.createElement('div');
+                        bookItem.className = 'book-item';
+                        bookItem.innerHTML = `
+                <span>${user.Name}</span>
+                <span>Number in queue: ${user.queue}</span>
+            `;
+                        bookItem.onclick = () => Showuser_in_listdetails(book, user); // When a book is clicked, show its details
+                        dynamicContent.appendChild(bookItem);
+                    });
+
+                    // Add a "Back to Books" button
+                    const backButton = document.createElement('button');
+                    backButton.textContent = 'Back to Books';
+                    backButton.onclick = loadBooksWithWaiting;
+                    dynamicContent.appendChild(backButton);
+                } else {
+                    dynamicContent.innerHTML += '<p>No borrowed books found for this user.</p>';
+                }
+            },
+            error: function (error) { // Use 'error' callback to handle errors
+                console.error('Error fetching Waitinglists books:', error);
+                dynamicContent.innerHTML += '<p>There was an error fetching the Lists books.</p>';
+            }
+        });
+    }
+
+
+
+
+    function Showuser_in_listdetails(book, user) {
+        const dynamicContent = document.getElementById('dynamic-content_waitinglist');
+        dynamicContent.innerHTML = `
+        <p>Book: ${book.Name}</p>
+        <p>User: ${user.Name} </p>
+        
+
+        <div>
+            <p>Number in Queue: ${user.queue}</p>
+        </div>
+        <button id="Removefromlist-button" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; display: block;">Remove from list</button>
+        <button id="back-to-Users">Back to Users</button>
+    `;
+
+        // Now, attach the event handler for 'Remove from list' button
+        document.getElementById('Removefromlist-button').onclick = () => {
+            $.ajax({
+                url: '/Dashboard/RemoveFromWaitingListAndUpdateQueue',
+                type: 'POST',
+                data: {
+                    bookId: book.BookID ,    // The user ID
+                    userId: user.UserID,    // The book ID 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('User was Removed from list.');
+                        loadBooksWithWaiting();
+                        
+                    } else {
+                        alert('Failed to Remove User.');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error updating List:', error);
+                    alert('There was an error updating the List.');
+                }
+            });
+        };
+
+        // Back to books button
+        document.getElementById('back-to-Users').onclick = () => {
+            showUserBooks_waiting(book); // Reload books for the user
+        };
+    }
+
+
+
+    //borrowed lists
     // Function to display all users with borrowed time
     function loadUsersWithBorrowedTime() {
         const dynamicContent = document.getElementById('dynamic-content');
@@ -564,7 +693,7 @@
                     <span>${user.Name}</span>
                     <span>${user.DaysLeft} days left for Borrowed time</span>
                 `;
-                    userItem.onclick = () => showUserBooks(user); 
+                    userItem.onclick = () => showUserBooks(user);
                     dynamicContent.appendChild(userItem);
                 });
             })
@@ -583,11 +712,11 @@
         $.ajax({
             url: '/Dashboard/get_users_borrowed_books',
             type: 'POST',
-            data: { userid: user.UserID }, 
+            data: { userid: user.UserID },
             success: function (response) {
                 console.log(response.length);
 
-                if (response.length > 0) { 
+                if (response.length > 0) {
                     response.forEach(book => {
                         const bookItem = document.createElement('div');
                         bookItem.className = 'book-item';
@@ -683,14 +812,14 @@
         function updateTotalTime() {
             const extendTime = parseInt(extendTimeInput.value || "0", 10); // Default to 0 if empty
             const decreaseTime = parseInt(decreaseTimeInput.value || "0", 10); // Default to 0 if empty
-            console.log("Extend",extendTime);
-            console.log("dec",decreaseTime);
+            console.log("Extend", extendTime);
+            console.log("dec", decreaseTime);
             console.log(book.ReturnDate)
             // Calculate new total time
             const newTotalTime = book.ReturnDate + extendTime - decreaseTime;
-           
+
             // Update the displayed total time (ensure it doesn't go below 0)
-            
+
             totalTime.textContent = newTotalTime < 0 ? 0 : newTotalTime;
         }
 
@@ -713,7 +842,7 @@
                 newBorrowedTime = 0; // If it goes negative, set it to 0
             }
 
-          
+
 
             // Send the updated borrowed time to the backend via AJAX POST request
             $.ajax({
@@ -748,27 +877,28 @@
             showUserBooks(user); // Reload books for the user
         };
     }
-    
 
 
-      
-    
 
-    // Initialize the users with borrowed time on page load
-    window.onload = loadUsersWithBorrowedTime;
 
-  
+
+
+    window.onload = () => {
+        loadUsersWithBorrowedTime();
+        loadBooksWithWaiting();
+    };
+
     // Function to display user details based on userId Search
     function showUserDetails(userId) {
         // Hide the user list and show user details
         document.getElementById("userList").style.display = "none";
         document.getElementById("user_pick").style.display = "none";
-       document.getElementById("userDetails").style.display = "block";
+        document.getElementById("userDetails").style.display = "block";
         console.log(userId);
 
         // AJAX request to get user details by userId
         $.ajax({
-            url: '/Dashboard/GetUserDetails', 
+            url: '/Dashboard/GetUserDetails',
             type: 'GET',
             data: { userId: userId }, // Pass userId to the controller
             success: function (response) {
@@ -781,7 +911,7 @@
             }
         });
     }
-    
+
 
     function displayUserList(searchTerm) {
         const userList = document.getElementById("userList");
@@ -791,9 +921,9 @@
 
         // Make AJAX call to get users from the server based on the search term
         $.ajax({
-            url: '/Dashboard/SearchUsers',  
+            url: '/Dashboard/SearchUsers',
             type: 'GET',
-            data: { searchTerm: searchTerm },  
+            data: { searchTerm: searchTerm },
             success: function (response) {
                 // If the response contains users, display them
                 response.forEach(user => {
@@ -863,7 +993,7 @@
             console.log(wanteduser)
             $.ajax({
                 url: `/Dashboard/DeleteUser`,
-                type: 'POST',           
+                type: 'POST',
                 data: ({ Id: wanteduser }),
                 success: function (response) {
                     console.log("User deleted successfully:", response);
@@ -888,7 +1018,7 @@
     document.addEventListener("click", (event) => {
         if (event.target && event.target.id === "grantAdminButton") {
             // Assuming userId is available in a data attribute
-            
+
             console.log(wanteduser);
             if (wanteduser == null) {
                 console.error("User ID is not provided!");
@@ -984,7 +1114,7 @@
         });
     });
 
-    
+
 
     $(document).ready(function () {
         //style
@@ -1048,7 +1178,7 @@
                                     if (book.Sale > 0) {
                                         salePercentageElement.style.display = "inline";
                                         saleSection.style.display = "block";
-                                        
+
                                         saleprec.text(parseInt(book.Sale));
                                     }
                                     bookImage.attr(
@@ -1078,7 +1208,7 @@
 
 
 
-        // Handle update buying 
+        // Handle update buying
         updateBuyPriceButton.on("click", function () {
             const bookIdValue = bookId.text();
             const newBuyPrice = parseFloat(newBuyPriceInput.val());
@@ -1148,7 +1278,7 @@
         updateSalePriceButton.on("click", function () {
             const bookIdValue = bookId.text();
             const newSalePrice = parseFloat(newSalePriceInput.val());
-            
+
             if (!isNaN(newSalePrice) && newSalePrice > 0) {
                 $.ajax({
                     url: "/Dashboard/saleprecent",
@@ -1157,7 +1287,7 @@
                     success: function (data) {
                         if (data.success) {
                             alert("Sale price updated successfully!");
-                            
+
                             newSalePriceInput.val(""); // Clear input
                         } else {
                             alert(`Failed to update sale price: ${data.errorMessage || "Unknown error occurred"}`)

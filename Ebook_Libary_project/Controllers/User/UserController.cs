@@ -20,7 +20,7 @@ namespace Ebook_Libary_project.Controllers.user
 
         // Static example user
 
-        
+
 
         BookModel book;
 
@@ -48,8 +48,8 @@ namespace Ebook_Libary_project.Controllers.user
 
 
                 // Check if user is logged in
-                if (UserSession.GetCurrentUserId()== 0)
-                     {
+                if (UserSession.GetCurrentUserId() == 0)
+                {
                     Debug.WriteLine("User is not logged in.");
                     return Json(new { success = false, message = "You need to log in to perform this action.", action = "login" });
                 }
@@ -119,8 +119,8 @@ namespace Ebook_Libary_project.Controllers.user
 
                         // Add to waiting list
                         action = "waitinglist";
-      
-                       // return Json(new { success = true, message = "You have been added to the waiting list!", action = "waitinglist" });
+
+                        // return Json(new { success = true, message = "You have been added to the waiting list!", action = "waitinglist" });
                     }
 
                     // Calculate price

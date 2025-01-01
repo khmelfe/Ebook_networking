@@ -167,6 +167,7 @@ namespace Ebook_Libary_project.Controllers.user
                 });
             }
         }
+        //BorrowList!
         public JsonResult GetUsers_who_borrowed()
         {
             var users = Userdatabase.Users_with_borrowed_books();
@@ -177,7 +178,7 @@ namespace Ebook_Libary_project.Controllers.user
             var books = Userdatabase.getusers_borrowed(userid);
             return Json(books, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult UpdateBorrowedTime(int userID, int bookId,int amount_of_days,string action)
+        public JsonResult UpdateBorrowedTime(int userID, int bookId, int amount_of_days, string action)
         {
             try
             {
@@ -193,8 +194,35 @@ namespace Ebook_Libary_project.Controllers.user
                 });
             }
         }
+        //WaitingList!
+        public JsonResult GetbooksforWaiting()
+        {
+            var books = Userdatabase.GetBooksInWaitingList();
+            return Json(books, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult getusersofwaitinglist(int bookid)
+        {
+            var books = Userdatabase.GetUsersInWaitingList(bookid);
+            return Json(books, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult RemoveFromWaitingListAndUpdateQueue(int bookId, int userId)
+        {
+            try
+            {
+                Userdatabase.RemoveFromWaitingListAndUpdateQueue(bookId, userId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    errorMessage = ex.Message,
+                });
+            }
+        }
     }
 
- }
+}
 
 

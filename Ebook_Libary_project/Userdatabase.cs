@@ -28,7 +28,6 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserId", userId);
                 connection.Open();
-
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var bookIds = new List<int>();
@@ -40,7 +39,6 @@ namespace Ebook_Library_Project
                 }
             }
         }
-
 
         public static List<int> GetBorrowedBookIdsByUser(int userId)
         {
@@ -50,7 +48,6 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserId", userId);
                 connection.Open();
-
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     var bookIds = new List<int>();
@@ -62,9 +59,6 @@ namespace Ebook_Library_Project
                 }
             }
         }
-
-
-
 
         public static List<int> GetAllBookIds()
         {
@@ -206,7 +200,7 @@ namespace Ebook_Library_Project
             else
             {
                 decimal currentbuyprice = GetCurrentbuyPrice(bookId);
-                if(newPrice > currentbuyprice)
+                if (newPrice > currentbuyprice)
                 {
                     throw new InvalidOperationException("Buying price must be higher than borrowing price.");
                 }
@@ -222,6 +216,35 @@ namespace Ebook_Library_Project
                 command.ExecuteNonQuery();
             }
         }
+
+        // Helper method to get the current borrow price for a book
+        private static decimal GetCurrentBorrowPrice(int bookId)
+        {
+            decimal borrowPrice = 0;
+
+            string query = "SELECT BorrowPrice FROM Books WHERE Id = @BookID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BookID", bookId);
+
+                connection.Open();
+                borrowPrice = (decimal)command.ExecuteScalar();
+            }
+
+            return borrowPrice;
+        }
+        private static decimal GetCurrentbuyPrice(int bookId)
+        {
+            decimal buyingPrice = 0;
+
+            string query = "SELECT BuyingPrice FROM Books WHERE Id = @BookID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BookID", bookId);
 
         // Helper method to get the current borrow price for a book
         private static decimal GetCurrentBorrowPrice(int bookId)
@@ -424,19 +447,6 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static int GetWaitingListLength(int bookid)
-        {
-            string query = "SELECT COUNT(*) FROM BorrowedBooks WHERE BookID = @bookid";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@bookid", bookid); // Properly bind the parameter
-                connection.Open();
-                int count = (int)command.ExecuteScalar(); // Execute the query and retrieve the count
-                return count;
-            }
-        }
 
 
         public static void AddToWaitingList(int userId, int bookId)
@@ -472,7 +482,7 @@ namespace Ebook_Library_Project
         }
 
 
-        public static void AddUser(string name,string mail,  string password, int age, Boolean admin)
+        public static void AddUser(string name, string mail, string password, int age, Boolean admin)
         {
             string queryCheck = "SELECT COUNT(*) FROM Users WHERE name = @Name";
             string query = "INSERT INTO Users (name, mail, admin, age, password) VALUES (@Name, @Mail, @Admin, @Age, @Password)";
@@ -480,7 +490,7 @@ namespace Ebook_Library_Project
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using(SqlCommand checkCommand = new SqlCommand(queryCheck, connection))
+                using (SqlCommand checkCommand = new SqlCommand(queryCheck, connection))
                 {
                     checkCommand.Parameters.AddWithValue("@Name", name);
                     int count = (int)checkCommand.ExecuteScalar();
@@ -610,7 +620,8 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static int GetUser_details(string name, string password){
+        public static int GetUser_details(string name, string password)
+        {
             int currentId = 0;
             string query = "SELECT id FROM Users WHERE name = @Name AND password = @Password";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -636,46 +647,46 @@ namespace Ebook_Library_Project
 
         }
 
-                        ////Is admin
-        
-        [HttpPost]  
-                        public static bool IsUser_admin(int UserID)
+        ////Is admin
+
+        [HttpPost]
+        public static bool IsUser_admin(int UserID)
+        {
+            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
+            bool isAdmin = false;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", UserID);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
+                        if (isAdmin)
                         {
-                            string query = "SELECT Admin FROM Users WHERE Id = @UserID ";
-                            bool isAdmin = false;
-
-                            using (SqlConnection connection = new SqlConnection(connectionString))
-                            {
-                                SqlCommand command = new SqlCommand(query, connection);
-                                command.Parameters.AddWithValue("@UserID", UserID);
-
-                                connection.Open();
-                                using (SqlDataReader reader = command.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        isAdmin = reader["Admin"] != DBNull.Value && Convert.ToBoolean(reader["Admin"]);
-                                        if (isAdmin)
-                                        {
-                                            return true; //user is an admin
-
-                                        }
-                                        else
-                                        {
-                                            return false;  //User is not an admin
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return false;//server problems
-                                    }
-
-                                }
-                            }
-
+                            return true; //user is an admin
 
                         }
-                
+                        else
+                        {
+                            return false;  //User is not an admin
+                        }
+                    }
+                    else
+                    {
+                        return false;//server problems
+                    }
+
+                }
+            }
+
+
+        }
+
         // Check if a user exists in the WaitingList for a book
         public static bool CheckIfExistsInWaitingList(int userId, int bookId)
         {
@@ -734,7 +745,7 @@ namespace Ebook_Library_Project
                 throw new ArgumentException("Sale percentage must be between 0 and 100.");
             }
 
-            
+
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -815,6 +826,29 @@ namespace Ebook_Library_Project
 
             return bookNames;  // Return the list of book names
         }
+        public static string GetBookNamebyid(int bookid)
+        {
+            string name = string.Empty;
+            string query = "SELECT name FROM Books WHERE id = @bookId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@bookId", bookid);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read()) 
+                    {
+                        name = reader.GetString(0); 
+                    }
+                }
+            }
+            return name;
+        }
+
         //get Users with borrowedbooks
         public static List<dynamic> Users_with_borrowed_books()
         {
@@ -822,6 +856,37 @@ namespace Ebook_Library_Project
         SELECT UserID, Min(ReturnDate) AS ReturnDate
         FROM BorrowedBooks
         GROUP BY UserID"; // Group by UserID to get one entry per user, with the latest return date
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var usersWithBorrowedTime = new List<dynamic>();
+
+                    while (reader.Read())
+                    {
+                        // Get the return date from the database
+                        DateTime returnDate = (DateTime)reader["ReturnDate"];
+
+                        // Calculate days left until the return date
+                        int daysLeft = (returnDate - DateTime.Now).Days;
+
+                        if (daysLeft < 0) daysLeft = 0;
+
+                        var username = GetUserNameById((int)reader["UserID"]); // Get the username.
+
+                        var user = new
+                        {
+                            UserID = (int)reader["UserID"],
+                            Name = username,
+                            DaysLeft = daysLeft
+                        };
+
+                        usersWithBorrowedTime.Add(user);
+                    }
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -1268,15 +1333,157 @@ namespace Ebook_Library_Project
                 return (int)command.ExecuteScalar() > 0;
             }
         }
-
-        public static List<Review> GetReviewsById(int bookid)
+        public static int GetWaitingListLength(int bookid)
         {
-            string query = "SELECT userid, bookid, review FROM Reviews WHERE bookid = @BookId";
+            string query = "SELECT COUNT(*) FROM BorrowedBooks WHERE BookID = @bookid";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@BookId", bookid);
+                command.Parameters.AddWithValue("@bookid", bookid); // Properly bind the parameter
+                connection.Open();
+                int count = (int)command.ExecuteScalar(); // Execute the query and retrieve the count
+                return count;
+            }
+        }
+      
+        public static List<dynamic> GetBooksInWaitingList()
+        {
+            string query = @"
+        SELECT DISTINCT  BookID
+        FROM WaitingList"; // Query to get all BookIDs from the WaitingList table
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var booksInWaitingList = new List<dynamic>();
+
+                    while (reader.Read())
+                    {
+                        // Get the BookID from the database
+                        int bookId = (int)reader["BookID"];
+                        int length_list = GetWaitingListLength(bookId);
+
+
+                        string bookName = GetBookNamebyid(bookId);
+
+
+                        // Create an object with the BookID and BookName
+                        var book = new
+                        {
+                            BookID = bookId,
+                            Name = bookName,
+                            length = length_list
+
+                        };
+
+                        booksInWaitingList.Add(book);
+                    }
+
+                    return booksInWaitingList;
+                }
+            }
+        }
+        public static List<dynamic> GetUsersInWaitingList(int waitingListId)
+        {
+            string query = @"
+    SELECT UserID, BookID, NumberInQueue
+    FROM WaitingList WHERE BookID =@waitingListId";
+   
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@WaitingListID", waitingListId);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    var usersInWaitingList = new List<dynamic>();
+
+                    while (reader.Read())
+                    {
+                        // Get the UserID and Name from the database
+                        int userId = (int)reader["UserID"];
+                        string userName = GetUserNameById(userId);
+                        int numberinqueue = (int)reader["NumberinQueue"];
+
+                        // Create an object with the UserID and Name
+                        var user = new
+                        {
+                            UserID = userId,
+                            Name = userName,
+                            queue = numberinqueue
+                        };
+
+                        usersInWaitingList.Add(user);
+                    }
+
+                    return usersInWaitingList;
+                }
+            }
+        }
+        public static void RemoveFromWaitingListAndUpdateQueue(int bookId, int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Step 1: Remove the specified user from the waiting list
+                string removeFromWaitingListQuery = "DELETE FROM WaitingList WHERE BookID = @BookID AND UserID = @UserID";
+
+                using (SqlCommand removeCommand = new SqlCommand(removeFromWaitingListQuery, connection))
+                {
+                    removeCommand.Parameters.AddWithValue("@BookID", bookId);
+                    removeCommand.Parameters.AddWithValue("@UserID", userId);
+                    removeCommand.ExecuteNonQuery();
+                }
+
+                // Step 2: Update the queue numbers for the remaining users
+                string updateQueueQuery = @"
+            WITH CTE AS (
+                SELECT 
+                    UserID, 
+                    ROW_NUMBER() OVER (ORDER BY NumberInQueue) AS NewQueueNumber
+                FROM WaitingList
+                WHERE BookID = @BookID
+            )
+            UPDATE WaitingList
+            SET NumberInQueue = CTE.NewQueueNumber
+            FROM WaitingList
+            INNER JOIN CTE ON WaitingList.UserID = CTE.UserID AND WaitingList.BookID = @BookID";
+
+                using (SqlCommand updateCommand = new SqlCommand(updateQueueQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@BookID", bookId);
+                    updateCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        public static List<Review> GetReviewsById(int? userid = null, int? bookid = null)
+        {
+            string query = "SELECT userid, bookid, review FROM Reviews WHERE 1=1";
+
+            // Add conditions based on parameters
+            if (userid.HasValue)
+                query += " AND userid = @UserId";
+            if (bookid.HasValue)
+                query += " AND bookid = @BookId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                // Add parameters if applicable
+                if (userid.HasValue)
+                    command.Parameters.AddWithValue("@UserId", userid.Value);
+                if (bookid.HasValue)
+                    command.Parameters.AddWithValue("@BookId", bookid.Value);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -1316,7 +1523,6 @@ namespace Ebook_Library_Project
                 }
             }
         }
-
 
 
 
