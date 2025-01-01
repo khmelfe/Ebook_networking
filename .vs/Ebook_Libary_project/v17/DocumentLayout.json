@@ -112,7 +112,7 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DashboardController.cs",
+              "Title": "Controllers\\DashboardController.cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\DashboardController.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\DashboardController.cs",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\DashboardController.cs",
