@@ -275,6 +275,11 @@
             padding: 10px;
             min-height: 200px;
         }
+        #dynamic-content_waitinglist {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 200px;
+        }
 
         .user-item {
             cursor: pointer;
@@ -328,11 +333,12 @@
                 <li><a href="#bookManagement">Add book</a></li>
                 <li><a href="#search_books">Search book</a></li>
                 <li><a href="#borrow_list">Borrow lists</a></li>
+                <li><a href="#Waiting_list">Borrow lists</a></li>
                 <li>
                 <li>
             </ul>
         </div>
-    
+
 
         <!-- Main Content -->
         <div class="main-content">
@@ -391,7 +397,7 @@
                     <h5 style="display: none;">Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
                     <h5 style="display: none;">Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
                     <h5 style="display: none;">Admin Privileges: <span id="isAdmin"></span></h5>
-                    <button id="grantAdminButton" style="display: none;" >Grant Admin Privileges</button>
+                    <button id="grantAdminButton" style="display: none;">Grant Admin Privileges</button>
                     <button id="showBorrowedBooks" style="display: none;">Show Borrowed Books</button>
                     <button id="showPurchasedBooks" style="display: none;">Show Purchased Books</button>
                     <button id="removeUserButton" style="display: none;">Remove User</button>
@@ -432,7 +438,7 @@
                                     <!-- Third row: Copies and Image URL -->
                                     <div style="flex: 1;">
                                         <label for="copies" style="min-width: 80px;">In-stock:</label>
-                                        <input type="number" id="copies" name="copies" required min="1" style="width: 100%;">
+                                        <input type="number" id="copies" name="copies" required min="0" style="width: 100%;">
                                     </div>
                                     <div style="flex: 1;">
                                         <label for="image" style="min-width: 80px;">Image URL:</label>
@@ -450,7 +456,6 @@
                                         <input type="submit" value="Add Book" style="padding: 5px 10px;  ">
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -470,7 +475,7 @@
                                             <input type="text" id="search" name="search" placeholder="Enter book title or ID" required autocomplete="off">
                                         </form>
                                         <div>
-                                            <ul id="suggestionList"></ul> 
+                                            <ul id="suggestionList"></ul>
                                         </div>
                                         <div id="searchResults" style="margin-top: 20px; display: none;">
                                             <h3>Search Results:</h3>
@@ -478,11 +483,35 @@
                                             <p><strong>Id:</strong> <span id="bookId"></span></p>
                                             <p><strong>Title:</strong> <span id="bookTitle"></span></p>
                                             <p><strong>Author:</strong> <span id="bookAuthor"></span></p>
-                                            <p><strong>Price:</strong> $<span id="bookPrice"></span></p>
-                                            <label for="newPrice">Change Price:</label>
-                                            <input type="number" id="newPrice" placeholder="Enter new price" style="margin-bottom: 10px;">
-                                            <button id="updatePriceButton" style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer;">Update Price</button>
+                                            <p><strong>Buying Price:</strong> $<span id="buying_bookPrice"></span></p>
+                                            <p><strong>Borrow Price:</strong> $<span id="borrow_bookPrice"></span></p>
+                                            <p id="saleSection" style="display: none;">
+                                                <strong>Sale:</strong> <span id="sale_percentage"></span>%
+                                            </p>
+
+
+                                            <hr>
+
+                                            <!-- Update Buy Price -->
+                                            <label for="newBuyPrice">Change Buy Price:</label>
+                                            <input type="number" id="newBuyPrice" placeholder="Enter new buying price" style="margin-bottom: 10px;">
+                                            <button id="updateBuyPriceButton" style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer;">Update Buy Price</button>
+
+                                            <br><br>
+
+                                            <!-- Update Borrow Price -->
+                                            <label for="newBorrowPrice">Change Borrow Price:</label>
+                                            <input type="number" id="newBorrowPrice" placeholder="Enter new borrow price" style="margin-bottom: 10px;">
+                                            <button id="updateBorrowPriceButton" style="background-color: blue; color: white; padding: 10px; border: none; cursor: pointer;">Update Borrow Price</button>
+
+                                            <br><br>
+
+                                            <!-- Update Sale Price -->
+                                            <label for="newSalePrice">Change Sale Price:</label>
+                                            <input type="number" id="newSalePrice" placeholder="Enter new sale price" style="margin-bottom: 10px;">
+                                            <button id="updateSalePriceButton" style="background-color: orange; color: white; padding: 10px; border: none; cursor: pointer;">Update Sale Price</button>
                                         </div>
+                                        <!-- Delete Book Button -->
                                         <button id="deleteBookButton" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; display: none;">Delete Book</button>
                                     </div>
                                 </div>
@@ -490,152 +519,386 @@
                         </div>
                     </div>
                 </div>
-             </div>
-                <br />
-                <h1 id="borrow_list">Active Borrowed Lists</h1>
-                <div class="well">
-                    <div class="row">
-                        <div class="col" padding: 15px;">
-                            <!-- Dynamic content container -->
-                            <div id="dynamic-content">
-                                <h2>Borrowed Lists:</h2>
-                                <p>Loading borrowed lists...</p>
-                            </div>
+            </div>
+            <br />
+            <h1 id="borrow_list">Active Borrowed Lists</h1>
+            <div class="well">
+                <div class="row">
+                    <div class="col" padding: 15px;">
+                        <!-- Dynamic content container -->
+                        <div id="dynamic-content">
+                            <h2>Users in borrowed lists:</h2>
+                            <p>Loading borrowed lists...</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <h1 id="waiting_list">Active Watiting Lists</h1>
+            <div class="well">
+                <div class="row">
+                    <div class="col" padding: 15px;">
+                        <!-- Dynamic content container -->
+                        <div id="dynamic-content_waitinglist">
+                            <h2>Books with Waiting lists:</h2>
+                            <p>Loading Waiting lists...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
 </body>
 
 <script>
+
     let wanteduser = null;
     let nameuser = null;
-    //borrowed lists
-    const borrowedLists = [
-        { id: 1, name: "List A" },
-        { id: 2, name: "List B" },
-        { id: 3, name: "List C" },
-    ];
 
-    const usersInLists = {
-        1: [
-            { name: "User 1", borrowedDays: 7 },
-            { name: "User 2", borrowedDays: 5 },
-        ],
-        2: [
-            { name: "User 3", borrowedDays: 3 },
-            { name: "User 4", borrowedDays: 10 },
-        ],
-        3: [
-            { name: "User 5", borrowedDays: 15 },
-        ],
-    };
+    //Waiting List
+    // Function to display all users with borrowed time
+    function loadBooksWithWaiting() {
+        const dynamicContent = document.getElementById('dynamic-content_waitinglist');
+        dynamicContent.innerHTML = '<h2>Books with Waiting Lists: </h2>';
 
-    // Current selected user
-    let selectedUser = null;
+        // Make the AJAX request to fetch the users
+        fetch('/Dashboard/GetbooksforWaiting')
+            .then(response => response.json()) // 
+            .then(BooksWithWaiting => {
+                // Iterate over the fetched data and create elements
+                BooksWithWaiting.forEach(book => {
+                    const bookitem = document.createElement('div');
+                    bookitem.className = 'book-item';
+                    bookitem.innerHTML = `
+                <span>${book.Name}</span>
+                <span>List length is: ${book.length} </span>
+            `;
+                    bookitem.onclick = () => showUserBooks_waiting(book);
+                    dynamicContent.appendChild(bookitem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching Books with Waiting Lists:', error);
+                dynamicContent.innerHTML = '<p>Failed to load Books with Waiting Lists.</p>';
+            });
 
-    // Function to fetch and display borrowed lists
-    function loadBorrowedLists() {
-        const dynamicContent = document.getElementById('dynamic-content');
-        dynamicContent.innerHTML = '<h2>Borrowed Lists:</h2>'; // Clear previous content
+    }
 
-        borrowedLists.forEach(list => {
-            const listItem = document.createElement('div');
-            listItem.className = 'list-item';
-            listItem.textContent = list.name;
-            listItem.onclick = () => loadUsers(list.id); // Attach click event to load users
-            dynamicContent.appendChild(listItem);
+    function showUserBooks_waiting(book) {
+        const dynamicContent = document.getElementById('dynamic-content_waitinglist');
+        dynamicContent.innerHTML = `<h2>User in ${book.name} Waiting List:</h2>`;
+
+        // Make an AJAX POST request to fetch books borrowed by the user
+        $.ajax({
+            url: '/Dashboard/getusersofwaitinglist',
+            type: 'POST',
+            data: { bookid: book.BookID },
+            success: function (response) {
+                console.log(response.length);
+
+                if (response.length > 0) {
+                    response.forEach(user => {
+                        const bookItem = document.createElement('div');
+                        bookItem.className = 'book-item';
+                        bookItem.innerHTML = `
+                <span>${user.Name}</span>
+                <span>Number in queue: ${user.queue}</span>
+            `;
+                        bookItem.onclick = () => Showuser_in_listdetails(book, user); // When a book is clicked, show its details
+                        dynamicContent.appendChild(bookItem);
+                    });
+
+                    // Add a "Back to Books" button
+                    const backButton = document.createElement('button');
+                    backButton.textContent = 'Back to Books';
+                    backButton.onclick = loadBooksWithWaiting;
+                    dynamicContent.appendChild(backButton);
+                } else {
+                    dynamicContent.innerHTML += '<p>No borrowed books found for this user.</p>';
+                }
+            },
+            error: function (error) { // Use 'error' callback to handle errors
+                console.error('Error fetching Waitinglists books:', error);
+                dynamicContent.innerHTML += '<p>There was an error fetching the Lists books.</p>';
+            }
         });
     }
 
-    // Function to fetch and display users in a specific borrowed list
-    function loadUsers(listId) {
-        const dynamicContent = document.getElementById('dynamic-content');
-        dynamicContent.innerHTML = '<h2>Users in Selected List:</h2>';
-
-        const users = usersInLists[listId];
-        if (users) {
-            users.forEach(user => {
-                const userItem = document.createElement('div');
-                userItem.className = 'user-item';
-
-                // Display user name and remaining borrowed time side by side
-                userItem.innerHTML = `
-            <span>${user.name}</span>
-            <span>${user.borrowedDays} days left for Borrowed time</span>
-          `;
-                userItem.onclick = () => showUserDetails(user);
-                dynamicContent.appendChild(userItem);
-            });
-
-            // Add a "Back to Lists" button
-            const backButton = document.createElement('button');
-            backButton.textContent = 'Back to Lists';
-            backButton.onclick = loadBorrowedLists;
-            dynamicContent.appendChild(backButton);
-        } else {
-            dynamicContent.innerHTML += '<p>No users found for this list.</p>';
-        }
-    }
 
 
-    // Function to display user details and enable extending borrowed time
-    function showUserDetails(user) {
-        selectedUser = user;
-        const dynamicContent = document.getElementById('dynamic-content');
 
+    function Showuser_in_listdetails(book, user) {
+        const dynamicContent = document.getElementById('dynamic-content_waitinglist');
         dynamicContent.innerHTML = `
+        <p>Book: ${book.Name}</p>
+        <p>User: ${user.Name} </p>
         
-        <p>Name: ${user.name}</p>
-        <p>Current Borrowed Time: ${user.borrowedDays} days</p>
-        <label for="extend-time">Extend Borrowed Time (in days):</label>
-        <input type="number" id="extend-time" value="0" min="0">
-        <p class="info">Total Borrowed Time (after extension): <span id="total-time">${user.borrowedDays}</span> days</p>
-        <button id="save-button">Save</button>
-        <button id="back-to-users">Back to Users</button>
-      `;
 
-        // Update total time dynamically
-        const extendTimeInput = document.getElementById('extend-time');
-        const totalTime = document.getElementById('total-time');
-        extendTimeInput.oninput = () => {
-            const additionalDays = parseInt(extendTimeInput.value || "0", 10);
-            totalTime.textContent = user.borrowedDays + additionalDays;
+        <div>
+            <p>Number in Queue: ${user.queue}</p>
+        </div>
+        <button id="Removefromlist-button" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; display: block;">Remove from list</button>
+        <button id="back-to-Users">Back to Users</button>
+    `;
+
+        // Now, attach the event handler for 'Remove from list' button
+        document.getElementById('Removefromlist-button').onclick = () => {
+            $.ajax({
+                url: '/Dashboard/RemoveFromWaitingListAndUpdateQueue',
+                type: 'POST',
+                data: {
+                    bookId: book.BookID ,    // The user ID
+                    userId: user.UserID,    // The book ID 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('User was Removed from list.');
+                        loadBooksWithWaiting();
+                        
+                    } else {
+                        alert('Failed to Remove User.');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error updating List:', error);
+                    alert('There was an error updating the List.');
+                }
+            });
         };
 
-        // Save button functionality
-        document.getElementById('save-button').onclick = () => {
-            const additionalDays = parseInt(extendTimeInput.value || "0", 10);
-            user.borrowedDays += additionalDays;
-            alert(`Saved! ${user.name}'s new borrowed time is ${user.borrowedDays} days.`);
-            loadUsers(1); // Reload the users (adjust list ID dynamically if needed)
-        };
-
-        // Back to users button
-        document.getElementById('back-to-users').onclick = () => {
-            loadUsers(1); // Reload users (adjust list ID dynamically if needed)
+        // Back to books button
+        document.getElementById('back-to-Users').onclick = () => {
+            showUserBooks_waiting(book); // Reload books for the user
         };
     }
 
-    // Initialize the borrowed lists on page load
-    window.onload = loadBorrowedLists;
 
-    
-  
+
+    //borrowed lists
+    // Function to display all users with borrowed time
+    function loadUsersWithBorrowedTime() {
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = '<h2>Users with Borrowed Books:</h2>';
+
+        // Make the AJAX request to fetch the users
+        fetch('/Dashboard/GetUsers_who_borrowed') // Replace with your API URL
+            .then(response => response.json()) // Parse the JSON response
+            .then(usersWithBorrowedTime => {
+                // Iterate over the fetched data and create elements
+                usersWithBorrowedTime.forEach(user => {
+                    const userItem = document.createElement('div');
+                    userItem.className = 'user-item';
+                    userItem.innerHTML = `
+                    <span>${user.Name}</span>
+                    <span>${user.DaysLeft} days left for Borrowed time</span>
+                `;
+                    userItem.onclick = () => showUserBooks(user);
+                    dynamicContent.appendChild(userItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching users with borrowed time:', error);
+                dynamicContent.innerHTML = '<p>Failed to load users with borrowed books.</p>';
+            });
+    }
+
+
+    function showUserBooks(user) {
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = `<h2>Books Borrowed by ${user.UserID}:</h2>`;
+
+        // Make an AJAX POST request to fetch books borrowed by the user
+        $.ajax({
+            url: '/Dashboard/get_users_borrowed_books',
+            type: 'POST',
+            data: { userid: user.UserID },
+            success: function (response) {
+                console.log(response.length);
+
+                if (response.length > 0) {
+                    response.forEach(book => {
+                        const bookItem = document.createElement('div');
+                        bookItem.className = 'book-item';
+                        bookItem.innerHTML = `
+                    <span>${book.Title}</span>
+                    <span>${book.ReturnDate} days left</span>
+                `;
+                        bookItem.onclick = () => showBookDetails(book, user); // When a book is clicked, show its details
+                        dynamicContent.appendChild(bookItem);
+                    });
+
+                    // Add a "Back to Users" button
+                    const backButton = document.createElement('button');
+                    backButton.textContent = 'Back to Users';
+                    backButton.onclick = loadUsersWithBorrowedTime;
+                    dynamicContent.appendChild(backButton);
+                } else {
+                    dynamicContent.innerHTML += '<p>No borrowed books found for this user.</p>';
+                }
+            },
+            error: function (error) { // Use 'error' callback to handle errors
+                console.error('Error fetching borrowed books:', error);
+                dynamicContent.innerHTML += '<p>There was an error fetching the borrowed books.</p>';
+            }
+        });
+    }
+
+
+
+
+    function showBookDetails(book, user) {
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = `
+        <p>Book: ${book.Title}</p>
+        <p>Days Left: ${book.ReturnDate} days</p>
+
+        <div>
+            <label>
+                <input type="radio" name="action" value="extend" id="action-extend">
+                Extend Borrowed Time
+            </label>
+            <label>
+                <input type="radio" name="action" value="decrease" id="action-decrease">
+                Decrease Borrowed Time
+            </label>
+        </div>
+
+        <div id="extend-box" style="display: none;">
+            <label for="extend-time">Extend Borrowed Time (in days):</label>
+            <input type="number" id="extend-time" value="0" min="0">
+        </div>
+
+        <div id="decrease-box" style="display: none;">
+            <label for="decrease-time">Decrease Borrowed Time (in days):</label>
+            <input type="number" id="decrease-time" value="0" min="0">
+        </div>
+
+        <p class="info">Total Borrowed Time (after changes): <span id="total-time">${book.ReturnDate}</span> days</p>
+
+        <button id="save-button">Save</button>
+        <button id="back-to-books">Back to Books</button>
+    `;
+
+        // Add event listeners for the radio buttons
+        const actionExtend = document.getElementById('action-extend');
+        const actionDecrease = document.getElementById('action-decrease');
+        const extendBox = document.getElementById('extend-box');
+        const decreaseBox = document.getElementById('decrease-box');
+        const extendTimeInput = document.getElementById('extend-time');
+        const decreaseTimeInput = document.getElementById('decrease-time');
+        const totalTime = document.getElementById('total-time');
+
+
+        actionExtend.addEventListener('change', () => {
+            if (actionExtend.checked) {
+                extendBox.style.display = 'block';
+                decreaseBox.style.display = 'none';
+            }
+        });
+
+        actionDecrease.addEventListener('change', () => {
+            if (actionDecrease.checked) {
+                decreaseBox.style.display = 'block';
+                extendBox.style.display = 'none';
+            }
+        });
+
+
+
+
+        // Update the total borrowed time when either extension or decrease value changes
+        // Function to update the total borrowed time when inputs change
+        function updateTotalTime() {
+            const extendTime = parseInt(extendTimeInput.value || "0", 10); // Default to 0 if empty
+            const decreaseTime = parseInt(decreaseTimeInput.value || "0", 10); // Default to 0 if empty
+            console.log("Extend", extendTime);
+            console.log("dec", decreaseTime);
+            console.log(book.ReturnDate)
+            // Calculate new total time
+            const newTotalTime = book.ReturnDate + extendTime - decreaseTime;
+
+            // Update the displayed total time (ensure it doesn't go below 0)
+
+            totalTime.textContent = newTotalTime < 0 ? 0 : newTotalTime;
+        }
+
+        // Attach the event listeners for inputs
+        extendTimeInput.addEventListener('input', updateTotalTime);
+        decreaseTimeInput.addEventListener('input', updateTotalTime);
+
+
+        document.getElementById('save-button').onclick = () => {
+            const extendDays = parseInt(extendTimeInput.value || "0", 10);
+            const decreaseDays = parseInt(decreaseTimeInput.value || "0", 10);
+            let newBorrowedTime = book.ReturnDate + extendDays - decreaseDays;
+            let action = "decrease";
+            if (extendDays > 0) {
+                action = "extend";
+            }
+
+            if (newBorrowedTime < 0) {
+                alert("The borrowed time cannot be negative.");
+                newBorrowedTime = 0; // If it goes negative, set it to 0
+            }
+
+
+
+            // Send the updated borrowed time to the backend via AJAX POST request
+            $.ajax({
+                url: '/Dashboard/UpdateBorrowedTime', // Backend endpoint
+                type: 'POST',
+                data: {
+                    userId: user.UserID,    // The user ID
+                    bookId: book.BookId,    // The book ID
+                    amount_of_days: newBorrowedTime, // The new borrowed time
+                    action: action
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('Borrowed time updated successfully.');
+                        extendTimeInput.value = "";
+                        decreaseTimeInput.value = "";
+                        book.ReturnDate = newBorrowedTime;
+                        location.reload()// Update the book's borrowedDaysLeft
+                    } else {
+                        alert('Failed to update borrowed time.');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error updating borrowed time:', error);
+                    alert('There was an error updating the borrowed time.');
+                }
+            });
+        };
+
+        // Back to books button
+        document.getElementById('back-to-books').onclick = () => {
+            showUserBooks(user); // Reload books for the user
+        };
+    }
+
+
+
+
+
+
+    window.onload = () => {
+        loadUsersWithBorrowedTime();
+        loadBooksWithWaiting();
+    };
+
     // Function to display user details based on userId Search
     function showUserDetails(userId) {
         // Hide the user list and show user details
         document.getElementById("userList").style.display = "none";
         document.getElementById("user_pick").style.display = "none";
-       document.getElementById("userDetails").style.display = "block";
+        document.getElementById("userDetails").style.display = "block";
         console.log(userId);
 
         // AJAX request to get user details by userId
         $.ajax({
-            url: '/Dashboard/GetUserDetails', 
+            url: '/Dashboard/GetUserDetails',
             type: 'GET',
             data: { userId: userId }, // Pass userId to the controller
             success: function (response) {
@@ -648,7 +911,7 @@
             }
         });
     }
-    
+
 
     function displayUserList(searchTerm) {
         const userList = document.getElementById("userList");
@@ -658,9 +921,9 @@
 
         // Make AJAX call to get users from the server based on the search term
         $.ajax({
-            url: '/Dashboard/SearchUsers',  
+            url: '/Dashboard/SearchUsers',
             type: 'GET',
-            data: { searchTerm: searchTerm },  
+            data: { searchTerm: searchTerm },
             success: function (response) {
                 // If the response contains users, display them
                 response.forEach(user => {
@@ -730,7 +993,7 @@
             console.log(wanteduser)
             $.ajax({
                 url: `/Dashboard/DeleteUser`,
-                type: 'POST',           
+                type: 'POST',
                 data: ({ Id: wanteduser }),
                 success: function (response) {
                     console.log("User deleted successfully:", response);
@@ -755,7 +1018,7 @@
     document.addEventListener("click", (event) => {
         if (event.target && event.target.id === "grantAdminButton") {
             // Assuming userId is available in a data attribute
-            
+
             console.log(wanteduser);
             if (wanteduser == null) {
                 console.error("User ID is not provided!");
@@ -851,78 +1114,15 @@
         });
     });
 
-    //Search book
-    //const books = [
-    //    { id: 1, title: "Book One", author: "Author A", price: 19.99, image: "https://via.placeholder.com/100x150?text=Book+One" },
-    //    { id: 2, title: "Book Two", author: "Author B", price: 24.99, image: "https://via.placeholder.com/100x150?text=Book+Two" },
-    //    { id: 3, title: "Another Book", author: "Author C", price: 14.99, image: "https://via.placeholder.com/100x150?text=Another+Book" },
-    //];
-    //    const searchInput = document.getElementById("search");
-    //    const suggestionList = document.getElementById("suggestionList");
-    //    const searchResults = document.getElementById("searchResults");
-    //    const bookImage = document.getElementById("bookImage");
-    //    const bookId = document.getElementById("bookId");
-    //    const bookTitle = document.getElementById("bookTitle");
-    //    const bookAuthor = document.getElementById("bookAuthor");
-    //    const deleteButton = document.getElementById("deleteBookButton");
 
-
-    //    //search queary.
-    //    searchInput.addEventListener("input", function () {
-
-    //        const query = this.value.toLowerCase();
-    //        suggestionList.innerHTML = ""; // Clear previous suggestions
-    //        if (query) {
-    //            // Filter books based on title or author name
-
-    //            const filteredBooks = books.filter(book =>
-    //                book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query)
-    //            );
-    //            console.log("Filtered Books:", filteredBooks);
-    //            filteredBooks.forEach(book => {
-    //                const listItem = document.createElement("li");
-    //                listItem.textContent = `${book.title} by ${book.author}`;
-    //                listItem.dataset.bookId = book.id;
-    //                suggestionList.appendChild(listItem);
-    //            });
-    //            console.log("hee");
-    //        }
-    //    });
-    //    // Handle click on suggestion
-    //    suggestionList.addEventListener("click", function (event) {
-    //        if (event.target.tagName === "LI") {
-    //            const bookId = event.target.dataset.bookId;
-    //            const book = books.find(b => b.id == bookId);
-    //            if (book) {
-    //                // Update search results
-    //                bookTitle.textContent = book.title;
-    //                bookAuthor.textContent = book.author;
-    //                bookImage.src = book.image;
-    //                // Show results and delete button
-    //                searchResults.style.display = "block";
-    //                deleteButton.style.display = "inline-block";
-    //                // Clear suggestions
-    //                suggestionList.innerHTML = "";
-    //                searchInput.value = ""; // Optional: clear search input
-    //            }
-    //        }
-    //    });
-    //    // Handle delete button
-    //    deleteButton.addEventListener("click", function () {
-    //        const bookTitleToDelete = bookTitle.textContent;
-    //        // Confirm delete
-    //        if (confirm(`Are you sure you want to delete "${bookTitleToDelete}"?`)) {
-    //            const index = books.findIndex(book => book.title === bookTitleToDelete);
-    //            if (index > -1) {
-    //                books.splice(index, 1); // Remove book from array
-    //                alert(`"${bookTitleToDelete}" has been deleted.`);
-    //                searchResults.style.display = "none"; // Hide results
-    //                deleteButton.style.display = "none"; // Hide delete button
-    //            }
-    //        }
-    //    });
 
     $(document).ready(function () {
+        //style
+        const saleSection = document.getElementById("saleSection");
+        const saleBookPriceElement = document.getElementById("sale_bookPrice");
+        const salePercentageElement = document.getElementById("sale_percentage");
+
+        //values
         const searchInput = $("#search");
         const suggestionList = $("#suggestionList");
         const searchResults = $("#searchResults");
@@ -930,9 +1130,17 @@
         const bookId = $("#bookId");
         const bookTitle = $("#bookTitle");
         const bookAuthor = $("#bookAuthor");
-        const bookPrice = $("#bookPrice");
+        const buyingBookPrice = $("#buying_bookPrice");
+        const borrowBookPrice = $("#borrow_bookPrice");
+        const saleprec = $("#sale_percentage");
         const newPriceInput = $("#newPrice");
+        const newBuyPriceInput = $("#newBuyPrice");
+        const newBorrowPriceInput = $("#newBorrowPrice");
+        const newSalePriceInput = $("#newSalePrice");
         const updatePriceButton = $("#updatePriceButton");
+        const updateBuyPriceButton = $("#updateBuyPriceButton");
+        const updateBorrowPriceButton = $("#updateBorrowPriceButton");
+        const updateSalePriceButton = $("#updateSalePriceButton");
         const deleteButton = $("#deleteBookButton");
 
         // Event listener for the search input
@@ -941,7 +1149,7 @@
 
             if (query) {
                 $.ajax({
-                    url: "/Dashboard/GetBooksBySearchTerm",
+                    url: "/Dashboard/SearchBooks",
                     type: "GET",
                     data: { searchTerm: query },
                     success: function (data) {
@@ -956,15 +1164,27 @@
                             const listItem = $("<li></li>")
                                 .text(`${book.Title} by ${book.Author}`)
                                 .data("bookId", book.Id)
-                                .data("bookPrice", book.Price)
+                                .data("buyingPrice", book.Buyingprice)
+                                .data("borrowPrice", book.BorrowPrice)
+                                .data("salePrice", book.Sale)
                                 .data("bookImageUrl", book.ImageUrl)
                                 .on("click", function () {
                                     // Populate book details
-                                    bookId.text($(this).data("bookId"));
+                                    bookId.text(book.Id);
                                     bookTitle.text(book.Title);
                                     bookAuthor.text(book.Author);
-                                    bookPrice.text(parseFloat($(this).data("bookPrice")).toFixed(2));
-                                    bookImage.attr("src", $(this).data("bookImageUrl") || "https://via.placeholder.com/100x150?text=No+Image");
+                                    buyingBookPrice.text(parseFloat(book.Buyingprice).toFixed(2));
+                                    borrowBookPrice.text(parseFloat(book.BorrowPrice).toFixed(2));
+                                    if (book.Sale > 0) {
+                                        salePercentageElement.style.display = "inline";
+                                        saleSection.style.display = "block";
+
+                                        saleprec.text(parseInt(book.Sale));
+                                    }
+                                    bookImage.attr(
+                                        "src",
+                                        book.ImagePath || "https://via.placeholder.com/100x150?text=No+Image"
+                                    );
 
                                     // Show search results and delete button
                                     searchResults.show();
@@ -986,53 +1206,120 @@
             }
         });
 
-        // Handle update price button
-        updatePriceButton.on("click", function () {
-            const bookIdValue = bookId.text();
-            const newPrice = parseFloat(newPriceInput.val());
 
-            if (!isNaN(newPrice) && newPrice > 0) {
+
+        // Handle update buying
+        updateBuyPriceButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const newBuyPrice = parseFloat(newBuyPriceInput.val());
+            if (!isNaN(newBuyPrice) && newBuyPrice > 0.0) {
                 $.ajax({
-                    url: "/Books/UpdatePrice",
+                    url: "/Dashboard/updateprice",
                     type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ id: bookIdValue, price: newPrice }),
+                    data: {
+                        bookId: bookIdValue, newPrice: newBuyPrice, action: "BuyPrice"
+                    },
                     success: function (data) {
                         if (data.success) {
                             alert("Price updated successfully!");
-                            bookPrice.text(newPrice.toFixed(2)); // Update the displayed price
-                            newPriceInput.val(""); // Clear input
+                            buyingBookPrice.text(newBuyPrice.toFixed(2)); // Update displayed buying price
+                            newBuyPriceInput.val("");
+                            newBorrowPriceInput.val("");// Clear input
                         } else {
-                            alert("Failed to update the price.");
+                            alert(`Failed to update buying price: ${data.errorMessage || "Unknown error occurred"}`)
                         }
                     },
                     error: function (xhr, status, error) {
-                        console.error("Error updating price:", error);
+                        console.error("Error updating buying price:", error);
                     }
                 });
-            } else {
-                alert("Please enter a valid price.");
+            }
+            else {
+                alert("Please enter a valid  price.");
             }
         });
 
-        // Handle delete button
+        // handle borrowing price button
+        updateBorrowPriceButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const newborrowPrice = parseFloat(newBorrowPriceInput.val());
+            console.log(newborrowPrice);
+
+            if (!isNaN(newborrowPrice) && newborrowPrice > 0.0) {
+                console.log("WLL");
+                $.ajax({
+                    url: "/Dashboard/updateprice",
+                    type: "POST",
+                    data: {
+                        bookId: bookIdValue, newPrice: newborrowPrice, action: "BorrowPrice"
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            alert("Price updated successfully!");
+                            borrowBookPrice.text(newborrowPrice.toFixed(2)); // Update displayed buying price
+                            newBorrowPriceInput.val("");// Clear input
+                        } else {
+                            alert(`Failed to update buying price: ${data.errorMessage || "Unknown error occurred"}`)
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error updating buying price:", error);
+                    }
+                });
+            }
+            else {
+                alert("Please enter a valid  price.");
+            }
+        });
+
+
+
+        // Handle update sale price button
+        updateSalePriceButton.on("click", function () {
+            const bookIdValue = bookId.text();
+            const newSalePrice = parseFloat(newSalePriceInput.val());
+
+            if (!isNaN(newSalePrice) && newSalePrice > 0) {
+                $.ajax({
+                    url: "/Dashboard/saleprecent",
+                    type: "POST",
+                    data: { bookId: bookIdValue, sale: newSalePrice },
+                    success: function (data) {
+                        if (data.success) {
+                            alert("Sale price updated successfully!");
+
+                            newSalePriceInput.val(""); // Clear input
+                        } else {
+                            alert(`Failed to update sale price: ${data.errorMessage || "Unknown error occurred"}`)
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error updating sale price:", error);
+                    }
+                });
+            } else {
+                alert("Please enter a valid sale price.");
+            }
+        });
+
+
+        //Handle delete button
         deleteButton.on("click", function () {
             const bookIdValue = bookId.text();
             const bookTitleValue = bookTitle.text();
 
             if (confirm(`Are you sure you want to delete "${bookTitleValue}"?`)) {
                 $.ajax({
-                    url: "/Books/DeleteBook",
+                    url: "/Dashboard/Deletebook",
                     type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ id: bookIdValue }),
+                    data: { bookId: bookIdValue },
                     success: function (data) {
                         if (data.success) {
                             alert(`"${bookTitleValue}" has been deleted.`);
                             searchResults.hide(); // Hide results
                             deleteButton.hide(); // Hide delete button
                         } else {
-                            alert("Failed to delete the book.");
+                            alert(`Failed to Remove: ${data.errorMessage || "Unknown error occurred"}`)
                         }
                     },
                     error: function (xhr, status, error) {
@@ -1040,9 +1327,10 @@
                     }
                 });
             }
-        });
-    });
 
+        });
+
+    })
 
 
 
