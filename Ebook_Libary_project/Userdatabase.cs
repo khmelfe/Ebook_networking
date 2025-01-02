@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 
@@ -134,7 +135,33 @@ namespace Ebook_Library_Project
         }
         public static int Amount_of_books_inborrow_status()
         {
-            string query = "SELECT COUNT(*) FROM b";
+            string query = "SELECT COUNT(*) FROM BorrowedBooks";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+            }
+
+        }
+        public static int Amount_of_books_purchased()
+        {
+            string query = "SELECT COUNT(*) FROM BoughtBooks";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                int count = (int)command.ExecuteScalar();
+                return count;
+            }
+
+        }
+        public static int Amount_of_Waitinglists()
+        {
+            string query = "SELECT COUNT(*) FROM WaitingList";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -182,8 +209,17 @@ namespace Ebook_Library_Project
 
         public static void UpdateBookPrice(int bookId, decimal newPrice, string action)
         {
-            string column = action.ToLower() == "buying" ? "BuyPrice" : "BorrowPrice";
-            string query = $"UPDATE Books SET {column} = @NewPrice WHERE Id = @BookID";
+            string column = action.ToLower() == "buyprice" ? "BuyPrice" : "BorrowPrice";
+            string query = "";
+            if (column == "BuyPrice")
+            {
+                 query = $"UPDATE Books SET BuyingPrice = @NewPrice WHERE Id = @BookID";
+            }
+            else
+            {
+                 query = $"UPDATE Books SET BorrowPrice = @NewPrice WHERE Id = @BookID";
+            }
+            
 
             // Check if action is 'buying' and if newPrice is greater than the borrow price
             if (action == "BuyPrice")
@@ -305,34 +341,87 @@ namespace Ebook_Library_Project
         }
 
         // Function to add a book to the Books table
-        public static void AddBook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice, string image)
+        public static void AddBook(
+     string title,
+     string author,
+     int availableCopies,
+     decimal buyPrice,
+     decimal borrowPrice, int age = 0,
+     HttpPostedFileBase imageFile = null,
+     HttpPostedFileBase bookFile = null // Accept PDF, EPUB, or MOBI
+ )
         {
-            string query = "INSERT INTO Books (ImagePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Sale) VALUES (@ImagePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, 0)";
+            // Define directories
+            string imageDirectory = HttpContext.Current.Server.MapPath("~/Content/Images/");
+            string bookDirectory = HttpContext.Current.Server.MapPath("~/Content/Books/");
+            string imagePath = null;
+            string bookFilePath = null;
+            
+
+            // Handle the image upload
+            if (imageFile != null && imageFile.ContentLength > 0)
+            {
+                if (!Directory.Exists(imageDirectory))
+                {
+                    Directory.CreateDirectory(imageDirectory);
+                }
+
+                string imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                string fullImagePath = Path.Combine(imageDirectory, imageFileName);
+
+                imageFile.SaveAs(fullImagePath);
+                imagePath = "/Content/Images/" + imageFileName; // Relative path for database
+            }
+
+            // Handle the book file upload
+            if (bookFile != null && bookFile.ContentLength > 0)
+            {
+                string fileExtension = Path.GetExtension(bookFile.FileName).ToLower();
+                if (fileExtension == ".pdf" || fileExtension == ".epub" || fileExtension == ".mobi")
+                {
+                    if (!Directory.Exists(bookDirectory))
+                    {
+                        Directory.CreateDirectory(bookDirectory);
+                    }
+
+                    string bookFileName = Guid.NewGuid().ToString() + fileExtension;
+                    string fullBookPath = Path.Combine(bookDirectory, bookFileName);
+
+                    bookFile.SaveAs(fullBookPath);
+                    bookFilePath = "/Content/Books/" + bookFileName; // Relative path for database
+                }
+                else
+                {
+                    throw new Exception("Invalid file type. Only .pdf, .epub, and .mobi files are allowed.");
+                }
+            }
+
+            // Define the SQL query
+            string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Age,Sale) " +
+                 "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @Age,0)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
 
-                // If the image path is null or empty, set the parameter value to DBNull
-                if (string.IsNullOrEmpty(image))
-                {
-                    command.Parameters.AddWithValue("@ImagePath", DBNull.Value);
-                }
-                else
-                {
-                    command.Parameters.AddWithValue("@ImagePath", image);
-                }
+                // Add image path parameter
+                command.Parameters.AddWithValue("@ImagePath", string.IsNullOrEmpty(imagePath) ? DBNull.Value : (object)imagePath);
+
+                // Add book file path parameter
+                command.Parameters.AddWithValue("@BookFilePath", string.IsNullOrEmpty(bookFilePath) ? DBNull.Value : (object)bookFilePath);
 
                 command.Parameters.AddWithValue("@Name", title);
                 command.Parameters.AddWithValue("@Author", author);
                 command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
                 command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
                 command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
-
+                command.Parameters.AddWithValue("@Age", age); // Ensure age value is passed correctly
                 connection.Open();
                 command.ExecuteNonQuery();
             }
         }
+
+
         public static void RemoveBook(int bookId)
         {
             try
@@ -764,7 +853,10 @@ namespace Ebook_Library_Project
                             Author = reader["Author"].ToString(),
                             BuyingPrice = (decimal)reader["BuyingPrice"],
                             BorrowPrice = (decimal)reader["BorrowPrice"],
-                            AvailableCopies = (int)reader["AvailableCopies"]
+                            AvailableCopies = (int)reader["AvailableCopies"],
+                            //Age = (int)reader["Age"],
+                            //File = reader["File"] != DBNull.Value ? (byte[])reader["File"] : null // Handle nullable File (varbinary)
+
                         };
                     }
                     else
@@ -1280,7 +1372,19 @@ namespace Ebook_Library_Project
                 return count;
             }
         }
-      
+        public static int GetWaitingListLengthsize(int bookid)
+        {
+            string query = "SELECT COUNT(*) FROM WaitingList WHERE BookID = @bookid";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@bookid", bookid); // Properly bind the parameter
+                connection.Open();
+                int count = (int)command.ExecuteScalar(); // Execute the query and retrieve the count
+                return count;
+            }
+        }
         public static List<dynamic> GetBooksInWaitingList()
         {
             string query = @"
@@ -1300,7 +1404,7 @@ namespace Ebook_Library_Project
                     {
                         // Get the BookID from the database
                         int bookId = (int)reader["BookID"];
-                        int length_list = GetWaitingListLength(bookId);
+                        int length_list = GetWaitingListLengthsize(bookId);
 
 
                         string bookName = GetBookNamebyid(bookId);

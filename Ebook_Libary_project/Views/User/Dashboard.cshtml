@@ -37,13 +37,38 @@
             flex: 1;
             flex-direction: column;
         }
+        .sidenav_dash {
+            width: 200px;
+            float: left;
+            padding: 10px;
+        }
+
+            .sidenav_dash ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            .sidenav_dash li {
+                padding: 8px;
+                cursor: pointer;
+            }
+
+                .sidenav_dash li:hover {
+                    background-color: #f0f0f0;
+                }
+
+        .forms {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
 
         /* Sidebar styles */
         .sidenav_dash {
             width: 25%;
             background-color: white;
             margin-top: 1.6%;
-            color: white;
+            color: black;
             height: 25%;
             padding: 20px;
             box-sizing: border-box;
@@ -328,230 +353,283 @@
         <div class="sidenav_dash">
             <h2>Index</h2>
             <ul>
-                <li><a href="#section1">Dashboard</a></li>
-                <li><a href="#Usermanagment">User Managment</a></li>
-                <li><a href="#bookManagement">Add book</a></li>
-                <li><a href="#search_books">Search book</a></li>
-                <li><a href="#borrow_list">Borrow lists</a></li>
-                <li><a href="#Waiting_list">Borrow lists</a></li>
-                <li>
-                <li>
+                @*<li data-target="DashboardForm">Dashboard</li>*@
+                <li data-target="Statisticsform">Statistics</li>
+                <li data-target="UserManagementForm">User Management</li>
+                <li data-target="addBookForm">Add Book</li>
+                <li data-target="SearchBookForm">Search Book</li>
+                <li data-target="BorrowListForm">Borrow Lists</li>
+                <li data-target="WaitingListForm">Waiting Lists</li>
             </ul>
-        </div>
 
+        </div>
 
         <!-- Main Content -->
         <div class="main-content">
             <div class="well">
-                <h4>Dashboard</h4>
-
-                <p>Welcome to the Dashboard,Here you can change fates and hierarchys.</p>
-                <p>Don't Abuse the power in your hands. for only the choosen one may Fix thy broken world of ours.'</p>
+                <form id="DashboardForm">
+                    <h4>Dashboard</h4>
+                    <p>Welcome to the Dashboard,Here you can change fates and hierarchys.</p>
+                    <p>Please Choose wanted option from the Index.</p>
+                    <p>Don't Abuse the power in your hands. for only the choosen one may Fix thy broken world of ours.'</p>
+                </form>
             </div>
-
-            <!-- Statistics Row -->
-            <div class="row" id="section1">
-                <div class="col">
-                    <div class="stats-box">
-                        <h4>Users</h4>
-                        <@*p> @Model.UserCount</p>*@
+            <form id="Statisticsform">
+                <!-- Statistics Row -->
+                <div class="row" id="section1">
+                    <div class="col">
+                        <div class="stats-box">
+                            <h4>Amount of Users:</h4>
+                            <h4 id="amountusers">Users: Loading...</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="stats-box">
-                        <h4>Books</h4>
-                        <@*p>@Model.BookAmount</p>*@
+                    <div class="col">
+                        <div class="stats-box">
+                            <h4>Amount of Books:</h4>
+                            <h4 id="booksCount">Books: Loading...</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="stats-box">
-                        <h4>Amount of Books in status borrowed</h4>
-                        <p>10 Million</p>
+                    <div class="col">
+                        <div class="stats-box">
+                            <h4>Amount purchased books: </h4>
+                            <h4 id="PurchasedCount">Books: Loading...</h4>
+                        </div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="stats-box">
-                        <h4>Amount purchased books</h4>
-                        <p>30%</p>
+                    <div class="col">
+                        <div class="stats-box">
+                            <h4>Amount of Borrowed Books: </h4>
+                            <h4 id="BorrowedCount">Books: Loading...</h4>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <br />
-            <h2 id="Usermanagment">Users Managment</h2>
-            <h2>Search and Manage Users</h2>
-            <div class="well" id="user_pick">
-                <!-- Dynamic Search for Users -->
-                <label for="searchUser">Search Users:</label>
-                <input type="text" id="searchUser" name="searchUser" placeholder="Enter username" autocomplete="off">
-                <div id="suggestionList_user" style="margin-top: 10px;">
-                    <ul id="userList" class="user-list"></ul>
-                </div>
-            </div>
-
-            <!-- User's Details -->
-            <div class="well" id="userDetails">
-                <h2>User's Details:</h2>
-                <div class="stats-box-info">
-                    <h5 style="display: none;">Username: @ViewBag.Username <span id="username"></span></h5>
-                    <h5 style="display: none;">Email: @ViewBag.Email <span id="email"></span></h5>
-                    <h5 style="display: none;">Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
-                    <h5 style="display: none;">Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
-                    <h5 style="display: none;">Admin Privileges: <span id="isAdmin"></span></h5>
-                    <button id="grantAdminButton" style="display: none;">Grant Admin Privileges</button>
-                    <button id="showBorrowedBooks" style="display: none;">Show Borrowed Books</button>
-                    <button id="showPurchasedBooks" style="display: none;">Show Purchased Books</button>
-                    <button id="removeUserButton" style="display: none;">Remove User</button>
-                    <button id="backToUserList" sstyle="display: none;">Back to User List</button>
-                </div>
-            </div>
-            <h2>Books Managment</h2>
-            <div class="well">
-                <div class="row">
-                    <div class="col" padding: 15px;">
-                        <div>
-                            <form id="addBookForm" style="display: flex; flex-wrap: wrap; gap: 10px;">
-                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                                    <!-- First row: Title and Author -->
-                                    <div style="flex: 1;">
-                                        <label for="title" style="min-width: 80px;">Title:</label>
-                                        <input type="text" id="title" name="title" required style="width: 100%;">
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <label for="author" style="min-width: 80px;">Author:</label>
-                                        <input type="text" id="author" name="author" required style="width: 100%;">
-                                    </div>
-                                </div>
-
-                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                                    <!-- Second row: Buy Price and Borrow Price -->
-                                    <div style="flex: 1;">
-                                        <label for="buyPrice" style="min-width: 80px;">Buy Price ($):</label>
-                                        <input type="number" id="buyPrice" name="buyPrice" required step="0.01" style="width: 100%;">
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <label for="borrowPrice" style="min-width: 80px;">Borrow Price ($):</label>
-                                        <input type="number" id="borrowPrice" name="borrowPrice" required step="0.01" style="width: 100%;">
-                                    </div>
-                                </div>
-
-                                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                                    <!-- Third row: Copies and Image URL -->
-                                    <div style="flex: 1;">
-                                        <label for="copies" style="min-width: 80px;">In-stock:</label>
-                                        <input type="number" id="copies" name="copies" required min="0" style="width: 100%;">
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <label for="image" style="min-width: 80px;">Image URL:</label>
-                                        <input type="text" id="image" name="image" required style="width: 100%;">
-                                    </div>
-                                </div>
-
-                                <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
-                                    <!-- Submit button -->
-                                    <div style="flex: 1;">
-                                        <label for="file" style="min-width: 80px;">Book File:</label>
-                                        <input type="file" id="file" name="file" accept=".pdf, .epub, .mobi" style="width: 100%;">
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <input type="submit" value="Add Book" style="padding: 5px 10px;  ">
-                                    </div>
-                                </div>
-                            </form>
+                    <div class="col">
+                        <div class="stats-box">
+                            <h4>Amount of Waiting Lists:</h4>
+                            <h4 id="WaitingCount">Books: Loading...</h4>
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <h2 id="search_books">Search Books</h2>
-            <div class="well">
-                <div class="row">
-                    <div class="col" padding: 15px;">
-                        <div class="container">
-                            <div class="well">
-                                <div class="row">
-                                    <div class="col" style="padding: 15px;">
-                                        <form id="searchBookForm" class="horizontal-form">
-                                            <label for="search">Search Book:</label>
-                                            <input type="text" id="search" name="search" placeholder="Enter book title or ID" required autocomplete="off">
-                                        </form>
-                                        <div>
-                                            <ul id="suggestionList"></ul>
+            </form>
+           
+            <form id="UserManagementForm" style="display: none;">
+                <h2 id="Usermanagment">Users Managment</h2>
+                <h2>Search and Manage Users</h2>
+                <div class="well" id="user_pick">
+                    <!-- Dynamic Search for Users -->
+                    <label for="searchUser">Search Users:</label>
+                    <input type="text" id="searchUser" name="searchUser" placeholder="Enter username" autocomplete="off">
+                    <div id="suggestionList_user" style="margin-top: 10px;">
+                        <ul id="userList" class="user-list"></ul>
+                    </div>
+                </div>
+
+                <!-- User's Details -->
+                <div class="well" id="userDetails">
+                    <h2>User's Details:</h2>
+                    <div class="stats-box-info">
+                        <h5 style="display: none;">Username: @ViewBag.Username <span id="username"></span></h5>
+                        <h5 style="display: none;">Email: @ViewBag.Email <span id="email"></span></h5>
+                        <h5 style="display: none;">Amount of Books Borrowed: @ViewBag.BorrowedBooks <span id="booksBorrowed"></span></h5>
+                        <h5 style="display: none;">Amount of Books Purchased: @ViewBag.PurchasedBooks <span id="booksPurchased"></span></h5>
+                        <h5 style="display: none;">Admin Privileges: <span id="isAdmin"></span></h5>
+                        <button id="grantAdminButton" style="display: none;">Grant Admin Privileges</button>
+                        <button id="showBorrowedBooks" style="display: none;">Show Borrowed Books</button>
+                        <button id="showPurchasedBooks" style="display: none;">Show Purchased Books</button>
+                        <button id="removeUserButton" style="display: none;">Remove User</button>
+                        <button id="backToUserList" sstyle="display: none;">Back to User List</button>
+                    </div>
+                </div>
+            </form>
+            <form id="addBookForm" style="display: flex; flex-wrap: wrap; gap: 10px;" enctype="multipart/form-data">
+                <div class="well">
+                    <div class="row">
+                        <div class="col" style="padding: 15px;">
+
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <!-- First row: Title and Author -->
+                                <div style="flex: 1;">
+                                    <label for="title" style="min-width: 80px;">Title:</label>
+                                    <input type="text" id="title" name="title" required style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="author" style="min-width: 80px;">Author:</label>
+                                    <input type="text" id="author" name="author" required style="width: 100%;">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <!-- Second row: Buy Price, Borrow Price, and Age -->
+                                <div style="flex: 1;">
+                                    <label for="bookage" style="min-width: 80px;">Age:</label>
+                                    <input type="number" id="bookage" name="bookage" required style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="buyPrice" style="min-width: 80px;">Buy Price ($):</label>
+                                    <input type="number" id="buyPrice" name="buyPrice" required step="0.01" style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="borrowPrice" style="min-width: 80px;">Borrow Price ($):</label>
+                                    <input type="number" id="borrowPrice" name="borrowPrice" required step="0.01" style="width: 100%;">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                                <!-- Third row: Copies and Image File -->
+                                <div style="flex: 1;">
+                                    <label for="copies" style="min-width: 80px;">In-stock:</label>
+                                    <input type="number" id="copies" name="copies" required min="0" style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="image" style="min-width: 80px;">Image File:</label>
+                                    <input type="file" id="image" name="image" accept="image/*" required />
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
+                                <!-- Submit button and Book File -->
+                                <div style="flex: 1;">
+                                    <label for="file" style="min-width: 80px;">Book File:</label>
+                                    <input type="file" id="file" name="file" accept=".pdf, .epub, .mobi" style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <input type="submit" value="Add Book" style="padding: 5px 10px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form> 
+            <form id="SearchBookForm" style="display: none;">
+                <h2 id="search_books">Search Books</h2>
+                <div class="well">
+                    <div class="row">
+                        <div class="col" padding: 15px;">
+                            <div class="container">
+                                <div class="well">
+                                    <div class="row">
+                                        <div class="col" style="padding: 15px;">
+                                            <form id="searchBookForm" class="horizontal-form">
+                                                <label for="search">Search Book:</label>
+                                                <input type="text" id="search" name="search" placeholder="Enter book title or ID" required autocomplete="off">
+                                            </form>
+                                            <div>
+                                                <ul id="suggestionList"></ul>
+                                            </div>
+                                            <div id="searchResults" style="margin-top: 20px; display: none;">
+                                                <h3>Search Results:</h3>
+                                                <p><strong>Image:</strong> <img id="bookImage" alt="Book Cover" style="max-width: 100px; max-height: 150px;" onerror="this.src='https://via.placeholder.com/100x150?text=No+Image';"></p>
+                                                <p><strong>Id:</strong> <span id="bookId"></span></p>
+                                                <p><strong>Title:</strong> <span id="bookTitle"></span></p>
+                                                <p><strong>Author:</strong> <span id="bookAuthor"></span></p>
+                                                <p><strong>Buying Price:</strong> $<span id="buying_bookPrice"></span></p>
+                                                <p><strong>Borrow Price:</strong> $<span id="borrow_bookPrice"></span></p>
+                                                <p id="saleSection" style="display: none;">
+                                                    <strong>Sale:</strong> <span id="sale_percentage"></span>%
+                                                </p>
+
+
+                                                <hr>
+
+                                                <!-- Update Buy Price -->
+                                                <label for="newBuyPrice">Change Buy Price:</label>
+                                                <input type="number" id="newBuyPrice" placeholder="Enter new buying price" style="margin-bottom: 10px;">
+                                                <button id="updateBuyPriceButton" style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer;">Update Buy Price</button>
+
+                                                <br><br>
+
+                                                <!-- Update Borrow Price -->
+                                                <label for="newBorrowPrice">Change Borrow Price:</label>
+                                                <input type="number" id="newBorrowPrice" placeholder="Enter new borrow price" style="margin-bottom: 10px;">
+                                                <button id="updateBorrowPriceButton" style="background-color: blue; color: white; padding: 10px; border: none; cursor: pointer;">Update Borrow Price</button>
+
+                                                <br><br>
+
+                                                <!-- Update Sale Price -->
+                                                <label for="newSalePrice">Change Sale Price:</label>
+                                                <input type="number" id="newSalePrice" placeholder="Enter new sale price" style="margin-bottom: 10px;">
+                                                <button id="updateSalePriceButton" style="background-color: orange; color: white; padding: 10px; border: none; cursor: pointer;">Update Sale Price</button>
+                                            </div>
+                                            <!-- Delete Book Button -->
+                                            <button id="deleteBookButton" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; display: none;">Delete Book</button>
                                         </div>
-                                        <div id="searchResults" style="margin-top: 20px; display: none;">
-                                            <h3>Search Results:</h3>
-                                            <p><strong>Image:</strong> <img id="bookImage" alt="Book Cover" style="max-width: 100px; max-height: 150px;" onerror="this.src='https://via.placeholder.com/100x150?text=No+Image';"></p>
-                                            <p><strong>Id:</strong> <span id="bookId"></span></p>
-                                            <p><strong>Title:</strong> <span id="bookTitle"></span></p>
-                                            <p><strong>Author:</strong> <span id="bookAuthor"></span></p>
-                                            <p><strong>Buying Price:</strong> $<span id="buying_bookPrice"></span></p>
-                                            <p><strong>Borrow Price:</strong> $<span id="borrow_bookPrice"></span></p>
-                                            <p id="saleSection" style="display: none;">
-                                                <strong>Sale:</strong> <span id="sale_percentage"></span>%
-                                            </p>
-
-
-                                            <hr>
-
-                                            <!-- Update Buy Price -->
-                                            <label for="newBuyPrice">Change Buy Price:</label>
-                                            <input type="number" id="newBuyPrice" placeholder="Enter new buying price" style="margin-bottom: 10px;">
-                                            <button id="updateBuyPriceButton" style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer;">Update Buy Price</button>
-
-                                            <br><br>
-
-                                            <!-- Update Borrow Price -->
-                                            <label for="newBorrowPrice">Change Borrow Price:</label>
-                                            <input type="number" id="newBorrowPrice" placeholder="Enter new borrow price" style="margin-bottom: 10px;">
-                                            <button id="updateBorrowPriceButton" style="background-color: blue; color: white; padding: 10px; border: none; cursor: pointer;">Update Borrow Price</button>
-
-                                            <br><br>
-
-                                            <!-- Update Sale Price -->
-                                            <label for="newSalePrice">Change Sale Price:</label>
-                                            <input type="number" id="newSalePrice" placeholder="Enter new sale price" style="margin-bottom: 10px;">
-                                            <button id="updateSalePriceButton" style="background-color: orange; color: white; padding: 10px; border: none; cursor: pointer;">Update Sale Price</button>
-                                        </div>
-                                        <!-- Delete Book Button -->
-                                        <button id="deleteBookButton" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer; display: none;">Delete Book</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            <h1 id="borrow_list">Active Borrowed Lists</h1>
-            <div class="well">
-                <div class="row">
-                    <div class="col" padding: 15px;">
-                        <!-- Dynamic content container -->
-                        <div id="dynamic-content">
-                            <h2>Users in borrowed lists:</h2>
-                            <p>Loading borrowed lists...</p>
+            </form>
+            
+            <form id="BorrowListForm" style="display: none;">
+                <h1 id="borrow_list">Active Borrowed Lists</h1>
+                <div class="well">
+                    <div class="row">
+                        <div class="col" padding: 15px;">
+                            <!-- Dynamic content container -->
+                            <div id="dynamic-content">
+                                <h2>Users in borrowed lists:</h2>
+                                <p>Loading borrowed lists...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <h1 id="waiting_list">Active Watiting Lists</h1>
-            <div class="well">
-                <div class="row">
-                    <div class="col" padding: 15px;">
-                        <!-- Dynamic content container -->
-                        <div id="dynamic-content_waitinglist">
-                            <h2>Books with Waiting lists:</h2>
-                            <p>Loading Waiting lists...</p>
+            </form>
+            <form id="WaitingListForm" style="display: none;">
+                <h1 id="waiting_list">Active Watiting Lists</h1>
+                <div class="well">
+                    <div class="row">
+                        <div class="col" padding: 15px;">
+                            <!-- Dynamic content container -->
+                            <div id="dynamic-content_waitinglist">
+                                <h2>Books with Waiting lists:</h2>
+                                <p>Loading Waiting lists...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
 
-
+    </div>
 
 </body>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all the li elements and forms
+        const listItems = document.querySelectorAll('.sidenav_dash li');
+        const forms = document.querySelectorAll('.main-content form');
+            const dashboardForm = document.getElementById('DashboardForm');
+
+        // Check if the listItems exists
+        if (listItems.length > 0) {
+            listItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Get the target form ID from the clicked li item
+                    const targetId = this.getAttribute('data-target');
+                    const targetForm = document.getElementById(targetId);
+
+                    // Hide all forms
+                    forms.forEach(form => {
+                        if (form !== dashboardForm)
+                            form.style.display = 'none';
+                    });
+
+                    // Show the target form
+                    if (targetForm) {
+                        targetForm.style.display = 'block';
+                    }
+                });
+            });
+        } else {
+            console.error("No list items found.");
+        }
+
+        // Check if forms exist
+        if (forms.length === 0) {
+            console.error("No forms found.");
+        }
+    });
+
 
     let wanteduser = null;
     let nameuser = null;
@@ -1057,62 +1135,62 @@
 
         form.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent form submission
+            const formData = new FormData();
 
             const title = document.getElementById('title').value;
             const author = document.getElementById('author').value;
             const buyPrice = parseFloat(document.getElementById('buyPrice').value);
             const borrowPrice = parseFloat(document.getElementById('borrowPrice').value);
             const copies = parseInt(document.getElementById('copies').value);
-            const image = document.getElementById('image').value;
+            const age = parseInt(document.getElementById('bookage').value);
+            const imageFile = document.getElementById('image').files[0]; // Get the image file
+            const bookFile = document.getElementById('file').files[0]; // Get the book file
 
+            if (imageFile) {
+                formData.append('imageFile', imageFile);
+            }
+            if (bookFile) {
+                formData.append('bookFile', bookFile);
+            }
+            
+            // Append form data
+            formData.append('title', title);
+            formData.append('author', author);
+            formData.append('buyPrice', buyPrice);
+            formData.append('borrowPrice', borrowPrice);
+            formData.append('availableCopies', copies);
+            formData.append('age', age);
+
+            if (imageFile) {
+                formData.append('imageFile', imageFile);
+            }
+            if (bookFile) {
+                formData.append('bookFile', bookFile);
+            }
+           
             $.ajax({
                 url: '/Dashboard/Addingbook',
                 type: 'POST',
-                data: {
-                    title: title,
-                    author: author,
-                    availableCopies: copies,
-                    buyPrice: buyPrice,
-                    borrowPrice: borrowPrice,
-                    image: image
-                }, // Fixed: removed the unnecessary parentheses around the data
+                data: formData,
+                contentType: false, // Set contentType to false to allow the FormData to set its own headers
+                processData: false, // Prevent jQuery from automatically processing the data
                 success: function (response) {
                     if (response.success) {
                         alert('Book added successfully!');
-
                         form.reset(); // Reset the form fields
-                        // Clear file input manually after form reset
-                        document.getElementById('file').value = '';
+                        location.reload();
                     } else {
-                        alert(response.message || "Failed to grant admin privileges.");
+                        alert(response.message || "Failed to add book.");
                     }
                 },
                 error: function (error) {
-                    console.error("Error granting admin privileges:", error);
-                    alert("Failed to grant admin privileges. Please try again.");
+                    console.error("Error adding book:", error);
+                    alert("Failed to add book. Please try again.");
                 }
             });
-
-            // File upload can be handled separately if needed
-            const file = document.getElementById('file').files[0]; // Added file input handling
-            if (file) {
-                const uploadData = new FormData();
-                uploadData.append('file', file);
-
-                fetch('/Books/UploadFile', { // Replace with your file upload endpoint
-                    method: 'POST',
-                    body: uploadData,
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('File uploaded successfully:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error uploading file:', error);
-                    });
-            }
         });
     });
+
 
 
 
@@ -1224,7 +1302,8 @@
                             alert("Price updated successfully!");
                             buyingBookPrice.text(newBuyPrice.toFixed(2)); // Update displayed buying price
                             newBuyPriceInput.val("");
-                            newBorrowPriceInput.val("");// Clear input
+                            newBorrowPriceInput.val("");// Clear input.
+                            location.reload();
                         } else {
                             alert(`Failed to update buying price: ${data.errorMessage || "Unknown error occurred"}`)
                         }
@@ -1258,6 +1337,7 @@
                             alert("Price updated successfully!");
                             borrowBookPrice.text(newborrowPrice.toFixed(2)); // Update displayed buying price
                             newBorrowPriceInput.val("");// Clear input
+                            location.reload();
                         } else {
                             alert(`Failed to update buying price: ${data.errorMessage || "Unknown error occurred"}`)
                         }
@@ -1289,6 +1369,8 @@
                             alert("Sale price updated successfully!");
 
                             newSalePriceInput.val(""); // Clear input
+                            location.reload();
+
                         } else {
                             alert(`Failed to update sale price: ${data.errorMessage || "Unknown error occurred"}`)
                         }
@@ -1318,6 +1400,8 @@
                             alert(`"${bookTitleValue}" has been deleted.`);
                             searchResults.hide(); // Hide results
                             deleteButton.hide(); // Hide delete button
+                            location.reload();
+
                         } else {
                             alert(`Failed to Remove: ${data.errorMessage || "Unknown error occurred"}`)
                         }
@@ -1331,8 +1415,97 @@
         });
 
     })
+    //statics
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch the books count when the page is loaded
+        fetch('/Dashboard/amountof_books')  // Replace with your API endpoint
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the h4 tag to display the number of books
+                    document.getElementById('booksCount').innerText = 'Amount of Books: ' + data.count;
+                } else {
+                    document.getElementById('booksCount').innerText = 'Books: Error loading data';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching book count:", error);
+                document.getElementById('booksCount').innerText = 'Books: Error loading data';
+            });
+    });
 
-
+    //amount of users
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch the books count when the page is loaded
+        fetch('/Dashboard/amountof_users')  
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the h4 tag to display the number of books
+                    document.getElementById('amountusers').innerText = 'Amount of Users: ' + data.count;
+                } else {
+                    document.getElementById('amountusers').innerText = 'Users: Error loading data';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching Users count:", error);
+                document.getElementById('amountusers').innerText = 'Users: Error loading data';
+            });
+    });
+    //amount of purchased.
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch the books count when the page is loaded
+        fetch('/Dashboard/Purchasedamount')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the h4 tag to display the number of books
+                    document.getElementById('PurchasedCount').innerText = '' + data.count;
+                } else {
+                    document.getElementById('PurchasedCount').innerText = 'PurchasedCount: Error loading data';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching PurchasedCount :", error);
+                document.getElementById('PurchasedCount').innerText = 'PurchasedCount: Error loading data';
+            });
+    });
+    //BorrowCount
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch the books count when the page is loaded
+        fetch('/Dashboard/borrowedamount')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the h4 tag to display the number of books
+                    document.getElementById('BorrowedCount').innerText = '' + data.count;
+                } else {
+                    document.getElementById('BorrowedCount').innerText = 'BorrowedCount: Error loading data';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching BorrowCount :", error);
+                document.getElementById('BorrowCount').innerText = 'BorrowCount: Error loading data';
+            });
+    });
+    //WaitingCount
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch the books count when the page is loaded
+        fetch('/Dashboard/waitingamount')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the h4 tag to display the number of books
+                    document.getElementById('WaitingCount').innerText = ' ' + data.count;
+                } else {
+                    document.getElementById('WaitingCount').innerText = 'WaitingCount: Error loading data';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching WaitingCount :", error);
+                document.getElementById('WaitingCount').innerText = 'WaitingCount: Error loading data';
+            });
+    });
 
 
 </script>
