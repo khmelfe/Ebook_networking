@@ -65,7 +65,10 @@ namespace Ebook_Libary_project.Controllers.user
                     {
                         return Json(new { success = false, message = "Book not found.", action = "" });
                     }
-
+                    if (book.minage > Userdatabase.GetUserAgeById(UserSession.GetCurrentUserId()))
+                    {
+                        return Json(new { success = false, message = "youre too young to buy this book", action = "" });
+                    }
                     var cart = Cart.GetCart();
 
                     // Check if the book is already in the cart
@@ -127,7 +130,7 @@ namespace Ebook_Libary_project.Controllers.user
 
                     // Add the book to the cart
                     cart.AddBookToCart(bookId, action, price, format);
-                    Debug.WriteLine($"Book added to cart successfully. Action: {action}");
+                    Debug.WriteLine($"Book added to cart successfully.!! Action: {action}");
 
                     return Json(new { success = true, message = "Book added to cart successfully!", action });
                 }
@@ -143,39 +146,43 @@ namespace Ebook_Libary_project.Controllers.user
         }
 
 
-
         [HttpPost]
         public ActionResult Buynow(int bookId, string action, string format, bool? joinWaitingList = null)
         {
             Debug.WriteLine($"Buynow called with action: {action}, format: {format}");
 
-            // Attempt to add the item to the cart
-            var addToCartResult = AddToCart(bookId, action, format, joinWaitingList) as JsonResult;
             // Check if user is logged in
             if (UserSession.GetCurrentUserId() == 0)
             {
                 Debug.WriteLine("User is not logged in.");
                 return Json(new { success = false, message = "You need to log in to perform this action.", action = "login" });
             }
+
+            // Attempt to add the item to the cart
+            var addToCartResult = AddToCart(bookId, action, format, joinWaitingList) as JsonResult;
+
             if (addToCartResult != null)
             {
+                // Extract data from the JsonResult
                 dynamic resultData = addToCartResult.Data;
 
                 if (resultData.success == true)
                 {
                     if (resultData.action == "waitinglist")
                     {
-                        Debug.WriteLine($"Book added to waiting list: {resultData.message}");
-                        return Json(new { success = true, message = resultData.message });
+                        Debug.WriteLine($"User added to waiting list: {resultData.message}");
+                        // Redirect to payment page even for waiting list success
+                        return Json(new { success = true, message = "Redirecting to payment.", action = "payment" });
                     }
 
-                    Debug.WriteLine($"AddToCart succeeded for action: {action}");
-                    return RedirectToRoute("Paymentname"); // Redirect to payment on success
+                    Debug.WriteLine($"AddToCart succeeded for action: {action}. Redirecting to payment.");
+                    // Redirect to payment page for direct success
+                    return Json(new { success = true, message = "Redirecting to payment.", action = "payment" });
                 }
-                else if (resultData.waitingListLength != null)
+                else if (resultData.action == "promptWaitingList" && resultData.waitingListLength != null)
                 {
                     Debug.WriteLine($"AddToCart returned waiting list message: {resultData.message}");
-                    return Json(new { success = false, message = resultData.message, waitingListLength = resultData.waitingListLength });
+                    return Json(new { success = false, message = resultData.message, waitingListLength = resultData.waitingListLength, action = "promptWaitingList" });
                 }
                 else
                 {
@@ -230,7 +237,7 @@ namespace Ebook_Libary_project.Controllers.user
         {
             try
             {
-                var reviews = Userdatabase.GetReviewsById(bookid); // Method to fetch reviews
+                var reviews = Userdatabase.GetReviewsById(UserSession.GetCurrentUserId(),bookid); // Method to fetch reviews
                 return Json(new { success = true, reviews }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

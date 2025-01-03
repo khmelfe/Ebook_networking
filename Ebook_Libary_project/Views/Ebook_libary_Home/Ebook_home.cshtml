@@ -46,17 +46,17 @@
                 text-align: center;
                 position: relative;
                 overflow: hidden;
-                word-wrap: break-word; /* Allows long words to wrap */
-                word-break: break-word; /* Prevents overflow for long words */
+                word-wrap: break-word;
+                word-break: break-word;
             }
 
                 .scrollmenu .column h3 {
-                    white-space: normal; /* Prevents text from staying on a single line */
-                    overflow: hidden; /* Ensures text overflow is hidden */
-                    text-overflow: ellipsis; /* Adds ellipsis for overflowing text */
-                    max-height: 3em; /* Limits the height of the title to 2 lines */
-                    line-height: 1.5em; /* Sets the line height for better readability */
-                    margin-bottom: 10px; /* Adds space below the title */
+                    white-space: normal;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-height: 3em;
+                    line-height: 1.5em;
+                    margin-bottom: 10px;
                 }
 
             .scrollmenu::-webkit-scrollbar {
@@ -109,6 +109,7 @@
                         <a href="@Url.Action("BookPage", "User", new { id = book.Id })" style="text-decoration: none; color: inherit;">
                             <h3>@book.Name</h3>
                             <p>Author: @book.Author</p>
+                            <p>Min Age: @book.minage</p>
                             @if (book.Sale > 0)
                             {
                                 decimal saleFactor = book.Sale / 100m;
@@ -174,6 +175,7 @@
                             <h3>@borrowed.Book.Name</h3>
                             <p>Author: @borrowed.Book.Author</p>
                             <p class="return-date">Return Date: @borrowed.ReturnDate.ToShortDateString()</p>
+                            <button class="btn btn-warning" onclick="confirmReturnBook( @borrowed.Book.Id)">Return</button>
                         </div>
                     </div>
                 }
@@ -185,4 +187,44 @@
         </div>
     }
 </body>
+<script>
+    function confirmRemoveBoughtBook(bookId) {
+        if (confirm("Are you sure you want to remove this book?")) {
+            $.ajax({
+                url: '/Ebook_libary_Home/RemoveBoughtBook',
+                type: 'POST',
+                data: { bookId: bookId },
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while removing the book.");
+                }
+            });
+        }
+    }
+
+    function confirmReturnBook(bookId) {
+        if (confirm("Are you sure you want to return this book?")) {
+            $.ajax({
+                url: '/Ebook_libary_Home/ReturnBook',
+                type: 'POST',
+                data: { bookId: bookId },
+                success: function (response) {
+                    alert(response.message);
+                    if (response.success) {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while returning the book.");
+                }
+            });
+        }
+    }
+
+</script>
 </html>

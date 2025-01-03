@@ -175,10 +175,10 @@
     <Compile Include="UserSession.cs" />
   </ItemGroup>
   <ItemGroup>
-<!--<<<<<<< HEAD-->
+    <!--<<<<<<< HEAD-->
     <Content Include="bin\Ebook_Libary_project.dll" />
     <Content Include="bin\Ebook_Libary_project.pdb" />
-<!--=======-->
+    <!--=======-->
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\Ebook_Libary_project.dll" />
@@ -263,7 +263,7 @@
     <Content Include="bin\System.Web.WebPages.Razor.xml" />
     <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="bin\WebGrease.dll" />
-<!-->>>>>>> c841b7dc3507be79563700fd68d18580de87b970-->
+    <!-->>>>>>> c841b7dc3507be79563700fd68d18580de87b970-->
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -307,9 +307,9 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-<!--<<<<<<< HEAD-->
+    <!--<<<<<<< HEAD-->
     <Content Include=".vs\Ebook_Libary_project.csproj.dtbcache.json" />
-<!--=======-->
+    <!--=======-->
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
     <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <Content Include="obj\Debug\Ebook_Li.470F2DF5.Up2Date" />
@@ -328,7 +328,13 @@
     <Content Include="bin\roslyn\vbc.exe.config" />
     <Content Include="bin\roslyn\vbc.rsp" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
-<!-->>>>>>> c841b7dc3507be79563700fd68d18580de87b970-->
+    <Content Include="Content\Books\5f080370-caa0-4ab2-bd4d-d74d3be14d69.pdf" />
+    <Content Include="Content\Books\43c3a56d-50cf-47b1-9ac9-c6ef1c33f4ea.pdf" />
+    <Content Include="Content\Books\443b1165-886c-486a-8fc5-d35f83e91bc1.pdf" />
+    <Content Include="Content\Books\ad6db946-ae6b-4342-ae2b-6d1e67ad5743.pdf" />
+    <Content Include="Content\Books\bd570810-ea91-4ae8-a4ec-013e6d3baba2.pdf" />
+    <Content Include="Content\Books\dfc5433f-30fc-463a-858b-277b4d5bee73.pdf" />
+    <!-->>>>>>> c841b7dc3507be79563700fd68d18580de87b970-->
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -370,7 +376,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\Books\" />
     <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="Views\Login_Model\" />
   </ItemGroup>
