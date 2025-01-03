@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Microsoft.Ajax.Utilities;
 using Ebook_Library_Project;
 using System;
+using System.Web;
 
 
 namespace Ebook_Libary_project.Controllers.user
@@ -16,17 +17,82 @@ namespace Ebook_Libary_project.Controllers.user
     {
         public ActionResult Index()
         {
-            List<int> userIds = Userdatabase.getallusersid();
-            var model = new DashboardViewModel
+            //List<int> userIds = Userdatabase.getallusersid();
+            //var model = new DashboardViewModel
+            //{
+            //    UserCount = Userdatabase.Amount_of_users(),
+            //    BookAmount = Userdatabase.Amount_of_books(),
+            //    Userids = userIds,//all users ids.
+            //};
+
+
+
+            return View("~/Views/User/Dashboard.cshtml");
+        }
+        public  JsonResult  amountof_users()
+        {
+            int amount;
+            try
             {
-                UserCount = Userdatabase.Amount_of_users(),
-                BookAmount = Userdatabase.Amount_of_books(),
-                Userids = userIds,//all users ids.
-            };
-
-
-
-            return View("~/Views/User/Dashboard.cshtml", model);
+                amount = Userdatabase.Amount_of_users();
+                return Json(new { success = true, count = amount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
+        }
+        public JsonResult amountof_books()
+        {
+            int amount;
+            try
+            {
+                amount = Userdatabase.Amount_of_books();
+                return Json(new { success = true, count = amount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
+        }
+        public JsonResult Purchasedamount()
+        {
+            int amount;
+            try
+            {
+                amount = Userdatabase.Amount_of_books_purchased();
+                return Json(new { success = true, count = amount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
+        }
+        public JsonResult borrowedamount()
+        {
+            int amount;
+            try
+            {
+                amount = Userdatabase.Amount_of_books_inborrow_status();
+                return Json(new { success = true, count = amount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
+        }
+        public JsonResult waitingamount()
+        {
+            int amount;
+            try
+            {
+                amount = Userdatabase.Amount_of_Waitinglists();
+                return Json(new { success = true, count = amount }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
         }
         public ActionResult GetUserDetails(int userId)
         {
@@ -94,11 +160,17 @@ namespace Ebook_Libary_project.Controllers.user
         //Books functions
 
         [HttpPost]
-        public JsonResult Addingbook(string title, string author, int availableCopies, decimal buyPrice, decimal borrowPrice, string image)
+        public JsonResult Addingbook(string title,
+     string author,
+     int availableCopies,
+     decimal buyPrice,
+     decimal borrowPrice, int age = 0,
+     HttpPostedFileBase imageFile = null,
+     HttpPostedFileBase bookFile = null )// Accept PDF, EPUB, or MOBI)
         {
             try
             {
-                Userdatabase.AddBook(title, author, availableCopies, buyPrice, borrowPrice, image);
+                Userdatabase.AddBook(title, author, availableCopies, buyPrice, borrowPrice,age, imageFile, bookFile);
                 return Json(new { success = true });
             }
             catch (Exception ex)
