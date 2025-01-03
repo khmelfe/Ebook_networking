@@ -15,11 +15,7 @@ namespace Ebook_Libary_project.Models
         public decimal BuyingPrice { get; set; } // Price for buying
         public decimal BorrowPrice { get; set; } // Price for borrowing
         public int AvailableCopies { get; set; } // Number of books available for borrowing
-
-        public int Age { get; set; }
-
-        public byte[] File { get; set; } // Added File property
-
+      
 
         // Constructor
         public BookModel()
