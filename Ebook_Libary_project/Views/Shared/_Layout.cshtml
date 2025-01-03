@@ -257,14 +257,13 @@
         // Check Login State
         const userId = getCookie("userId");
         var storedUserData = JSON.parse(localStorage.getItem("userData"));
-        if (userId) { 
+        if (userId) {
             if (storedUserData && storedUserData.isAdmin) {
                 document.getElementById("Dashboard").style.display = "block";
             }
 
             document.getElementById("openLoginButton").style.display = "none";
             document.getElementById("logoutButton").style.display = "block";
-            
             document.getElementById("viewCartButton").style.display = "block";
             document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, User ${userId}!</p>`);
         } else {

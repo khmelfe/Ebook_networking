@@ -19,8 +19,8 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -1502,26 +1502,17 @@ namespace Ebook_Library_Project
             }
         }
 
-
-        public static List<Review> GetReviewsById(int? userid = null, int? bookid = null)
+        public static List<Review> GetReviewsById(int userid, int bookid)
         {
-            string query = "SELECT userid, bookid, review FROM Reviews WHERE 1=1";
-
-            // Add conditions based on parameters
-            if (userid.HasValue)
-                query += " AND userid = @UserId";
-            if (bookid.HasValue)
-                query += " AND bookid = @BookId";
+            string query = "SELECT userid, bookid, review FROM Reviews WHERE userid = @UserId AND bookid = @BookId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
 
-                // Add parameters if applicable
-                if (userid.HasValue)
-                    command.Parameters.AddWithValue("@UserId", userid.Value);
-                if (bookid.HasValue)
-                    command.Parameters.AddWithValue("@BookId", bookid.Value);
+                // Add parameters for the user ID and book ID
+                command.Parameters.AddWithValue("@UserId", userid);
+                command.Parameters.AddWithValue("@BookId", bookid);
 
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -1541,6 +1532,22 @@ namespace Ebook_Library_Project
             }
         }
 
+        public static void RemoveBoughtBook(int userId, int bookId)
+        {
+            string query = "DELETE FROM BoughtBooks WHERE UserID = @UserId AND BookID = @BookId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@BookId", bookId);
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    throw new Exception("Failed to remove the book. It might not exist in the user's bought books.");
+                }
+            }
+        }
 
 
 

@@ -65,7 +65,7 @@ namespace Ebook_Libary_project.Controllers.user
                     {
                         return Json(new { success = false, message = "Book not found.", action = "" });
                     }
-                    if (book.minage >Userdatabase.GetUserAgeById(UserSession.GetCurrentUserId()))
+                    if (book.minage > Userdatabase.GetUserAgeById(UserSession.GetCurrentUserId()))
                     {
                         return Json(new { success = false, message = "youre too young to buy this book", action = "" });
                     }
@@ -237,7 +237,7 @@ namespace Ebook_Libary_project.Controllers.user
         {
             try
             {
-                var reviews = Userdatabase.GetReviewsById(bookid); // Method to fetch reviews
+                var reviews = Userdatabase.GetReviewsById(UserSession.GetCurrentUserId(),bookid); // Method to fetch reviews
                 return Json(new { success = true, reviews }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)

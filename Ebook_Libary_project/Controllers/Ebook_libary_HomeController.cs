@@ -80,7 +80,6 @@ namespace Ebook_Libary_project.Controllers
 
             return borrowedBooks;
         }
-
         [HttpPost]
         public JsonResult RemoveBoughtBook(int bookId)
         {
@@ -94,9 +93,8 @@ namespace Ebook_Libary_project.Controllers
                 return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
         }
-
         [HttpPost]
-        public JsonResult ReturnBook( int bookId)
+        public JsonResult ReturnBook(int bookId)
         {
             try
             {
@@ -108,6 +106,5 @@ namespace Ebook_Libary_project.Controllers
                 return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
         }
-
     }
 }
