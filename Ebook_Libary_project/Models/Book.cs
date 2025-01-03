@@ -11,6 +11,7 @@ namespace Ebook_Libary_project.Models
         public int Sale { get; set; } // Unique identifier
         public string ImagePath { get; set; } // Path to the book's image
         public string Name { get; set; } // Book title
+        public string Category { get; set; } // Book title
         public string Author { get; set; } // Author name
         public decimal BuyingPrice { get; set; } // Price for buying
         public decimal BorrowPrice { get; set; } // Price for borrowing
@@ -22,6 +23,7 @@ namespace Ebook_Libary_project.Models
         {
             minage = 0;
             Sale = 0;
+
         }
         public string GetName()
         {

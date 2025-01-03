@@ -470,10 +470,12 @@ namespace Ebook_Library_Project
             Id, 
             Name, 
             Author, 
+            Category,
             BuyingPrice,
             BorrowPrice,
             Sale,
-            ImagePath
+            ImagePath,
+            minage
         FROM Books 
         WHERE Name LIKE @SearchTerm OR Author LIKE @SearchTerm";
 
@@ -494,10 +496,12 @@ namespace Ebook_Library_Project
                             Id = (int)reader["Id"],
                             Title = reader["Name"].ToString(),
                             Author = reader["Author"].ToString(),
+                            Category = reader["Category"],
                             Buyingprice = reader["BuyingPrice"],
                             BorrowPrice = reader["BorrowPrice"],
                             Sale = reader["Sale"],
-                            ImagePath = reader["ImagePath"]
+                            ImagePath = reader["ImagePath"],
+                            minage= reader["minage"]
 
                         });
                     }
@@ -832,7 +836,7 @@ namespace Ebook_Library_Project
 
         public static BookModel GetBookById(int bookId)
         {
-            string query = "SELECT Id, Sale, ImagePath, Name, Author, BuyingPrice, BorrowPrice, AvailableCopies FROM Books WHERE Id = @BookID";
+            string query = "SELECT Id, Sale, ImagePath, Name, Author,Category, BuyingPrice, BorrowPrice, AvailableCopies FROM Books WHERE Id = @BookID";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -851,6 +855,7 @@ namespace Ebook_Library_Project
                             ImagePath = reader["ImagePath"].ToString(),
                             Name = reader["Name"].ToString(),
                             Author = reader["Author"].ToString(),
+                            Category = reader["Category"].ToString(),
                             BuyingPrice = (decimal)reader["BuyingPrice"],
                             BorrowPrice = (decimal)reader["BorrowPrice"],
                             AvailableCopies = (int)reader["AvailableCopies"],
