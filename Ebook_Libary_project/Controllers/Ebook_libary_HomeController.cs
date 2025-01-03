@@ -80,5 +80,34 @@ namespace Ebook_Libary_project.Controllers
 
             return borrowedBooks;
         }
+
+        [HttpPost]
+        public JsonResult RemoveBoughtBook(int bookId)
+        {
+            try
+            {
+                Userdatabase.RemoveBoughtBook(UserSession.GetCurrentUserId(), bookId);
+                return Json(new { success = true, message = "Book removed successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ReturnBook( int bookId)
+        {
+            try
+            {
+                Userdatabase.ReturnBook(UserSession.GetCurrentUserId(), bookId);
+                return Json(new { success = true, message = "Book returned successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
     }
 }

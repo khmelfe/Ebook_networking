@@ -137,51 +137,55 @@
         });
     };
 
- document.getElementById('buyNowButton').onclick = function () {
-    const format = document.getElementById('formatSelect').value;
-    const action = document.querySelector('input[name="action"]:checked').value; // Get the selected action dynamically
+    document.getElementById('buyNowButton').onclick = function () {
+        const format = document.getElementById('formatSelect').value;
+        const action = document.querySelector('input[name="action"]:checked').value;
 
-    $.ajax({
-        url: '/User/Buynow',
-        type: 'POST',
-        data: { bookId: @Model.Id, action: action, format: format },
-        success: function (response) {
-            if (!response.success && response.waitingListLength !== undefined) {
-                // Show the waiting list prompt only once
-                if (confirm(`${response.message} The waiting list length is ${response.waitingListLength}. Do you want to join?`)) {
-                    // User chose to join the waiting list
-                    $.ajax({
-                        url: '/User/Buynow',
-                        type: 'POST',
-                        data: { bookId: @Model.Id, action: action, format: format, joinWaitingList: true },
-                        success: function (res) {
-                            if (res.success) {
-                                // Redirect to payment if joining the waiting list succeeds
-                                window.location.href = '/Payment';
-                            } else {
-                                alert(res.message);
+        $.ajax({
+            url: '/User/Buynow',
+            type: 'POST',
+            data: { bookId: bookId, action: action, format: format },
+            success: function (response) {
+                if (response.success && response.action === "payment") {
+                    // Redirect to payment page
+                    window.location.href = '/Payment';
+                } else if (response.action === "waitinglist") {
+                    // Redirect to payment after waiting list success
+                    alert(response.message);
+                    window.location.href = '/Payment';
+                } else if (response.action === "promptWaitingList") {
+                    // Prompt user to join the waiting list
+                    if (confirm(`${response.message} The waiting list length is ${response.waitingListLength}. Do you want to join?`)) {
+                        // User chose to join the waiting list
+                        $.ajax({
+                            url: '/User/Buynow',
+                            type: 'POST',
+                            data: { bookId: bookId, action: action, format: format, joinWaitingList: true },
+                            success: function (res) {
+                                if (res.success && res.action === "payment") {
+                                    window.location.href = '/Payment';
+                                } else {
+                                    alert(res.message);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error adding to waiting list:", error);
                             }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Error processing waiting list join:", error);
-                        }
-                    });
+                        });
+                    } else {
+                        alert("You chose not to join the waiting list.");
+                    }
                 } else {
-                    alert("You chose not to join the waiting list.");
+                    alert(response.message);
                 }
-            } else if (response.success) {
-                // Redirect to payment if successful
-                window.location.href = '/Payment';
-            } else {
-                alert(response.message);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error processing Buy Now:", error);
+                alert("An error occurred while processing your request.");
             }
-        },
-        error: function (xhr, status, error) {
-            console.error("Error processing Buy Now:", error);
-            alert("An error occurred while processing your request.");
-        }
-    });
-};
+        });
+    };
+
 
 
     // Add a new review
