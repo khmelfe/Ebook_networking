@@ -4,39 +4,157 @@
 }
 
 <h2>Payment</h2>
-
-@if (cart != null)
-{
-    if (cart.Items.Count > 0)
-    {
-        <h3>Total: <span style="color: green;">@cart.CalculateTotalPrice().ToString("C")</span></h3>
-
-        <h3>Payment Details</h3>
-        <form method="post" action="/Payment/paymentconfirm">
-            <div>
-                <label for="cardNumber">Card Number:</label><br />
-                <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" placeholder="1234 5678 9012 3456" maxlength="19" /><br />
-            </div>
-
-            <div>
-                <label for="expiry">Expiry Date:</label><br />
-                <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required pattern="\d{2}/\d{2}" /><br />
-            </div>
-
-            <div>
-                <label for="cvv">CVV:</label><br />
-                <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3" /><br />
-            </div>
-
-            <button type="submit" class="btn btn-success">Confirm Payment</button>
-        </form>
+<style>
+    /* General Frame Styling */
+    .frame {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        margin-bottom: 20px;
     }
-    else
-    {
-        <p>Your cart is currently empty. You cannot proceed with payment.</p>
+
+    /* Header Styling */
+    h2, h3 {
+        color: #002366; /* Deep Blue */
+        font-weight: bold;
+        text-align: center;
     }
-}
-else
-{
-    <p>Unable to retrieve cart details.</p>
-}
+
+    /* Input Field Styling */
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease, border 0.3s ease;
+    }
+
+        input[type="text"]:focus {
+            border-color: #002366; /* Deep Blue */
+            box-shadow: 0 0 5px rgba(0, 35, 102, 0.5); /* Blue glow */
+            outline: none;
+        }
+
+    /* Button Styling */
+    .btn {
+        padding: 8px 16px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .btn-success {
+        background-color: #0047AB; /* Medium Blue */
+        color: white;
+        border: none;
+    }
+
+        .btn-success:hover {
+            background-color: #003580; /* Darker Blue */
+            transform: scale(1.05); /* Slight grow effect */
+        }
+
+    .btn-paypal {
+        background-color: #ffc439; /* PayPal Yellow */
+        color: #002366; /* Deep Blue */
+        border: none;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+
+        .btn-paypal:hover {
+            background-color: #f5b800; /* Darker Yellow */
+            transform: scale(1.05);
+        }
+
+    /* Cart Total Styling */
+    .cart-total {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #0047AB; /* Medium Blue */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Payment Form Alignment */
+    form {
+        max-width: 400px;
+        margin: 0 auto; /* Center align the form */
+    }
+
+    label {
+        font-weight: bold;
+        color: #002366; /* Deep Blue */
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Align PayPal Button */
+    .paypal-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="frame">
+        <h2>Payment</h2>
+
+        @if (cart != null)
+        {
+            if (cart.Items.Count > 0)
+            {
+                <!-- Cart Total -->
+                <div class="cart-total">
+                    Total: @cart.CalculateTotalPrice().ToString("C")
+                </div>
+
+                <!-- Payment Form -->
+                <h3>Payment Details</h3>
+                <form method="post" action="/Payment/paymentconfirm">
+                    <div>
+                        <label for="cardNumber">Card Number:</label>
+                        <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" placeholder="1234 5678 9012 3456" maxlength="19" />
+                    </div>
+
+                    <div>
+                        <label for="expiry">Expiry Date:</label>
+                        <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required pattern="\d{2}/\d{2}" />
+                    </div>
+
+                    <div>
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3" />
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button type="submit" class="btn btn-success">Confirm Payment</button>
+                    </div>
+                </form>
+
+                <!-- PayPal Button -->
+                <div class="paypal-container">
+                    <a href="https://www.paypal.com/il/home" target="_blank">
+                        <button class="btn btn-paypal">Pay with PayPal</button>
+                    </a>
+                </div>
+            }
+            else
+            {
+                <p>Your cart is currently empty. You cannot proceed with payment.</p>
+            }
+        }
+        else
+        {
+            <p>Unable to retrieve cart details.</p>
+        }
+    </div>
+</div>
+
