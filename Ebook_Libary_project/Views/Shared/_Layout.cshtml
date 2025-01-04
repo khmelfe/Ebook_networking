@@ -11,6 +11,7 @@
 
 <body>
     <header>
+
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">My E-Book Library</a>
@@ -27,12 +28,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/About">About</a>
-                        </li>
-                        @*Only admins*@
-                        <li class="nav-item" id="Dashboard" style="display:none">
-                            
-                            <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
-                        </li>
+                        </li>     
+                                   
+                            <li class="nav-item" id="Dashboard" style="display:none">
+                                <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
+                            </li>
+                        
                         <li class="nav-item">
                             <!-- Login Button -->
                             <button id="openLoginButton" class="btn btn-primary" type="button">Login</button>
@@ -185,7 +186,7 @@
             }
         };
 
-        // Login Functionality
+        //// Login Functionality
         document.getElementById("loginButton").onclick = function (event) {
             event.preventDefault();
 
@@ -198,9 +199,21 @@
                 data: { username, password },
                 success: function (response) {
                     if (response.success) {
-                        document.cookie = `userId=${response.userId}; path=/; max-age=900;`;
-                        alert("Login successful!");
-                        window.location.reload(); // Reload the page to reflect login state
+                        // Store user data in localStorage
+                        localStorage.setItem('userId', response.userId);
+                        localStorage.setItem('isAdmin', response.isAdmin);
+
+                        // Show admin-specific content if applicable
+                        if (response.isAdmin) {
+                            alert('Welcome Admin!');
+                           
+
+                        } else {
+                            alert('Login successful!');
+                        }
+
+                        // Redirect or reload the page
+                        window.location.href = '/'; // Redirect to the homepage
                     } else {
                         alert(response.message || "Invalid username or password.");
                     }
@@ -211,6 +224,32 @@
                 }
             });
         };
+
+        //document.getElementById("loginButton").onclick = function (event) {
+        //    event.preventDefault();
+            
+        //    var username = document.getElementById("username").value;
+        //    var password = document.getElementById("password").value;
+
+        //    $.ajax({
+        //        url: '/Login/Submit',
+        //        type: 'POST',
+        //        data: { username, password },
+        //        success: function (response) {
+        //            if (response.success) {
+        //                document.cookie = `userId=${response.userId}; path=/; max-age=900;`;
+        //                alert("Login successful!");
+        //                window.location.reload(); // Reload the page to reflect login state
+        //            } else {
+        //                alert(response.message || "Invalid username or password.");
+        //            }
+        //        },
+        //        error: function (xhr, status, error) {
+        //            console.error("Login error:", error);
+        //            alert("An error occurred during login. Please try again.");
+        //        }
+        //    });
+        //};
 
         // Registration Functionality
         document.getElementById("registerButton").onclick = function (event) {
@@ -259,23 +298,25 @@
         var storedUserData = JSON.parse(localStorage.getItem("userData"));
         if (userId) {
             if (storedUserData && storedUserData.isAdmin) {
+               
                 document.getElementById("Dashboard").style.display = "block";
             }
-
+            
             document.getElementById("openLoginButton").style.display = "none";
             document.getElementById("logoutButton").style.display = "block";
             document.getElementById("viewCartButton").style.display = "block";
+            if (localStorage.getItem('isAdmin')) { document.getElementById("Dashboard").style.display = "block"; }
             document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, User ${userId}!</p>`);
         } else {
             document.getElementById("openLoginButton").style.display = "block";
             document.getElementById("logoutButton").style.display = "none";
+            document.getElementById("Dashboard").style.display = "none";
+
         }
+
+
+
     </script>
-
-
-
-
-
 
 
 </body>
