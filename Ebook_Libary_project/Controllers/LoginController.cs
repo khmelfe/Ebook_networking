@@ -55,7 +55,7 @@ namespace Ebook_Libary_project.Controllers
             Debug.WriteLine("Getout");
             try
             {
-                
+
                 bool Valid = RegistrationModel.ValitdateUser(name, password, con_pass, mail, age, isadmin);
                 int age_dig = int.Parse(age);
                 if (Valid)
@@ -71,13 +71,59 @@ namespace Ebook_Libary_project.Controllers
                 }
                 return Json(new { success = false });
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
             }
 
-        } 
-    }
+        }
+        [HttpPost]
+        public JsonResult email_pass_reset(string email, string username)
+        {
+            try
+            {
+                var port = Request.Url.Port; // getting user port.
+                Userdatabase.Sendemail_for_resetpass(email, username, port);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+            //funtion for Passwordreset.
+        }
+        public ActionResult Resetpassword()
+        {
+            return View("~/Views/Login/Resetpassword.cshtml");
+        }
+        [HttpPost]
+        public JsonResult resetpassword_for_user(string password, string conpassword, string username)
+        {
+            try
+            {
+                bool pass = RegistrationModel.IsPasswordMatch(password, conpassword);
+                bool username_check = Userdatabase.userexistbyname(username);
+                if (pass && username_check)
+                {
+                   bool change =  Userdatabase.UpdatePasswordByUsername(username, password);
+                    if (change) { return Json(new { success = true }); } 
+                    else { return Json(new { success = false }); }
+                   
+                }
+                else { return Json(new { success = false }); }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public void RunAfterPasswordChange()
+        {
+            Ebook_libary_HomeController controller = new Ebook_libary_HomeController();
 
+            controller.Ebook_home();//going to home page.
+        }
+    }
 }
 
 

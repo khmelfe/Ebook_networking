@@ -455,6 +455,11 @@
                                     <input type="text" id="author" name="author" required style="width: 100%;">
                                 </div>
                             </div>
+                            <div style="flex: 1;">
+                                <label for="image" style="min-width: 80px;">Image File:</label>
+                                <input type="file" id="image" name="image" accept="image/*" required />
+                            </div>
+                        </div>
 
                             <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
                                 <!-- Second row: Buy Price, Borrow Price, and Age -->
@@ -1138,7 +1143,8 @@
             const formData = new FormData();
 
             const title = document.getElementById('title').value;
-            const author = document.getElementById('author').value;
+            const author = document.getElementById('author').value; 
+
             const buyPrice = parseFloat(document.getElementById('buyPrice').value);
             const borrowPrice = parseFloat(document.getElementById('borrowPrice').value);
             const copies = parseInt(document.getElementById('copies').value);

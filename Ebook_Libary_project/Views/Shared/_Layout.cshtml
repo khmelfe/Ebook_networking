@@ -77,14 +77,40 @@
 
                 <button type="button" div class="login_container" class="registerbtn" onclick="switchToRegister()">Register</button>
                 <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                <span class="psw">Forgot <a href="#">password?</a></span>
+                <button type="button" div class="login_container" onclick="switchToForgotPassword()">Forgot Password</button>
             </div>
 
             <div id="errorMessage" style="color: red; display: none;">
                 Invalid username or password. Please try again.
             </div>
         </form>
+            <!-- Forgot Password Form -->
+            <form id="forgotPasswordForm" class="modal-content animate" style="display: none;">
+                <div class="imgcontainer">
+                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                    <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+                </div>
 
+                <div class="login_container">
+                    <label for="email"><b>Email</b></label>
+                    <input type="email" placeholder="Enter Your Email Address" id="forgotEmail" name="email" required>
+
+                    <label for="Uname_reset"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" id="Username_forreset" name="Uname_reset" required>
+
+
+                    <button type="button" id="resetPasswordButton">Reset Password</button>
+
+                    <div id="forgotPasswordMessage" style="display: none; color: green;">
+                        If this email is registered, a password reset link will be sent.
+                    </div>
+                </div>
+
+                <div class="container" style="background-color:#f1f1f1">
+                    <button type="button" div class="login_container" onclick="switchToLogin()">Back to Login</button>
+                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+                </div>
+            </form>
         <!-- Registration Form -->
         <form id="registerForm" class="modal-content animate" style="display: none;">
             <div class="imgcontainer">
@@ -164,11 +190,19 @@
         function switchToRegister() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('forgotPasswordForm').style.display = 'none';
         }
 
         function switchToLogin() {
             document.getElementById('registerForm').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('forgotPasswordForm').style.display = 'none';
+        }
+
+        function switchToForgotPassword() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('forgotPasswordForm').style.display = 'block';
         }
 
         document.getElementById('openLoginButton').onclick = function () {
@@ -235,7 +269,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert("User registered successfully!");
-                        window.location.reload();
+                        switchToLogin();
                     } else {
                         alert(response.message || "An error occurred. Please try again.");
                     }
@@ -243,6 +277,31 @@
                 error: function (xhr, status, error) {
                     console.error("Registration error:", error);
                     alert("An unexpected error occurred. Please try again.");
+                }
+            });
+        };
+        //forgot password.
+        document.getElementById("resetPasswordButton").onclick = function (event) {
+            event.preventDefault();
+
+            var email = document.getElementById("forgotEmail").value;
+            var username = document.getElementById("Username_forreset").value;
+
+            $.ajax({
+                url: '/Login/email_pass_reset',
+                type: 'POST',
+                data: { email,username },
+                success: function (response) {
+                    if (response.success) {
+                        alert("An email has been sent with instructions to reset your password, if the address is associated with an account.");
+                        switchToLogin(); // Reload the page to reflect login state
+                    } else {
+                        alert(response.message || "Invalid username or password.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Login error:", error);
+                    alert("An error occurred during login. Please try again.");
                 }
             });
         };
