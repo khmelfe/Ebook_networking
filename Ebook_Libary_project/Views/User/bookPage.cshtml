@@ -1,77 +1,208 @@
 ﻿@model Ebook_Libary_project.Models.BookModel
 
-<div class="book-details">
-    <h2>@Model.Name</h2>
-    <img src="@Model.ImagePath" alt="@Model.Name" style="max-width: 200px; max-height: 300px;" />
-    <p><strong>Author:</strong> @Model.Author</p>
-    <p>
-        <strong>Buying Price:</strong>
-        @if (@Model.Sale > 0)
-        {
-            <span class="text-decoration-line-through">@Model.BuyingPrice</span>
-            <span class="text-success">
-                @(@Model.BuyingPrice - (@Model.BuyingPrice * @Model.Sale / 100m))
-            </span>
-        }
-        else
-        {
-            @Model.BuyingPrice
-        }
-    </p>
-    <p>
-        <strong>Borrowing Price:</strong>
-        @if (@Model.Sale > 0)
-        {
-            <span class="text-decoration-line-through">@Model.BorrowPrice</span>
-            <span class="text-success">
-                @(@Model.BorrowPrice - (@Model.BorrowPrice * @Model.Sale / 100m))
-            </span>
-        }
-        else
-        {
-            @Model.BorrowPrice
-        }
-    </p>
-    <p><strong>Available Copies:</strong> @Model.AvailableCopies</p>
+<style>
+    /* General Frame Styling */
+    .frame {
+        background-color: #f9f9f9; /* Light background */
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        margin-bottom: 20px;
+        transition: all 0.3s ease; /* For hover effects */
+        display: flex;
+        flex-direction: column; /* Ensures content stacks properly */
+    }
 
-    <!-- Format Selection -->
-    <div>
-        <label for="formatSelect"><strong>Select Format:</strong></label>
-        <select id="formatSelect" class="form-select">
-            <option value="ebook">Ebook</option>
-            <option value="hardcover">Hardcover</option>
-            <option value="paperback">Paperback</option>
-        </select>
+        .frame:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+        }
+
+    /* Book Details Styling */
+    .book-details h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #002366; /* Deep Blue */
+        text-align: center;
+    }
+
+    .book-details img {
+        display: block;
+        margin: 20px auto;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .book-details p {
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .book-details strong {
+        color: #002366;
+    }
+
+    /* Actions Section */
+    .actions h4 {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #002366;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+        margin-top: auto; /* Pushes buttons to the bottom */
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-primary {
+        background-color: #0047AB;
+        color: white;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #003580;
+            transform: scale(1.05);
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+
+    /* Reviews Section */
+    .reviews-section h3, .reviews-section h4 {
+        color: #002366;
+    }
+
+    #reviews p {
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    #newReview {
+        width: 100%;
+        height: 80px;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+</style>
+
+<div class="container">
+    <div class="row align-items-stretch">
+        <!-- Book Details -->
+        <div class="col-md-6 d-flex">
+            <div class="frame book-details flex-fill">
+                <h2>@Model.Name</h2>
+                <img src="@Model.ImagePath" alt="@Model.Name" />
+                <p><strong>Author:</strong> @Model.Author</p>
+                <p>
+                    <strong>Buying Price:</strong>
+                    @if (@Model.Sale > 0)
+                    {
+                        <span class="text-decoration-line-through">@Model.BuyingPrice</span>
+                        <span class="text-success">
+                            @(@Model.BuyingPrice - (@Model.BuyingPrice * @Model.Sale / 100m))
+                        </span>
+                    }
+                    else
+                    {
+                        @Model.BuyingPrice
+                    }
+                </p>
+                <p>
+                    <strong>Borrowing Price:</strong>
+                    @if (@Model.Sale > 0)
+                    {
+                        <span class="text-decoration-line-through">@Model.BorrowPrice</span>
+                        <span class="text-success">
+                            @(@Model.BorrowPrice - (@Model.BorrowPrice * @Model.Sale / 100m))
+                        </span>
+                    }
+                    else
+                    {
+                        @Model.BorrowPrice
+                    }
+                </p>
+                <p><strong>Available Copies:</strong> @Model.AvailableCopies</p>
+            </div>
+        </div>
+
+        <!-- Buying/Borrowing Actions -->
+        <div class="col-md-6 d-flex">
+            <div class="frame actions flex-fill">
+                <h4>Choose Format</h4>
+                <select id="formatSelect" class="form-select">
+                    <option value="ebook">Ebook</option>
+                    <option value="hardcover">Hardcover</option>
+                    <option value="paperback">Paperback</option>
+                </select>
+                <h4>Choose Action</h4>
+                <div>
+                    <input type="radio" id="borrowOption" name="action" value="borrow" checked />
+                    <label for="borrowOption">Borrow</label>
+                </div>
+                <div>
+                    <input type="radio" id="buyOption" name="action" value="buy" />
+                    <label for="buyOption">Buy</label>
+                </div>
+                <div class="action-buttons">
+                    <button id="buyNowButton" class="btn btn-primary">Buy Now</button>
+                    <button id="addToCartButton" class="btn btn-secondary">Add to Cart</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Borrow or Buy Selection -->
-    <div>
-        <label><strong>Choose Action:</strong></label>
-        <div>
-            <input type="radio" id="borrowOption" name="action" value="borrow" checked />
-            <label for="borrowOption">Borrow</label>
+    <!-- Reviews Section -->
+    <div class="frame reviews-section">
+        <h3>Reviews</h3>
+        <div id="reviews">
+            <p>User 1: Great book!</p>
+            <p>User 2: Informative and well-written.</p>
         </div>
-        <div>
-            <input type="radio" id="buyOption" name="action" value="buy" />
-            <label for="buyOption">Buy</label>
-        </div>
-    </div>
 
-    <!-- Buttons -->
-    <button id="buyNowButton" class="btn btn-primary">Buy Now</button>
-    <button id="addToCartButton" class="btn btn-secondary">Add to Cart</button>
+        <h4>Add a Review</h4>
+        <textarea id="newReview" placeholder="Write your review here"></textarea>
+        <button id="submitReviewButton" class="btn btn-success mt-3">Submit Review</button>
+    </div>
 </div>
 
-<div class="reviews-section">
-    <h3>Reviews</h3>
-    <div id="reviews">
-        <!-- Reviews will be dynamically loaded here -->
-    </div>
-
-    <h4>Add a Review</h4>
-    <textarea id="newReview" placeholder="Write your review here"></textarea>
-    <button id="submitReviewButton" class="btn btn-success">Submit Review</button>
-</div>
 
 <script>
     const bookId = @Model.Id; // Use the book ID for review actions
