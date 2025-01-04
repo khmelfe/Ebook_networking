@@ -35,8 +35,7 @@ public class RouteConfig
             defaults: new { controller = "Books", action = "Details", id = UrlParameter.Optional }
         );
 
-        // Main_Page
-        routes.MapRoute(
+   routes.MapRoute(
             name: "Default",
             url: "{controller}/{action}/{id}",
             defaults: new { controller = "Ebook_libary_Home", action = "Ebook_home", id = UrlParameter.Optional }

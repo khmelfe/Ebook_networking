@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using System.Xml.Linq;
 
 
@@ -329,6 +330,7 @@ namespace Ebook_Library_Project
         public static void AddBook(
      string title,
      string author,
+     string category,
      int availableCopies,
      decimal buyPrice,
      decimal borrowPrice, int age = 0,
@@ -382,8 +384,8 @@ namespace Ebook_Library_Project
             }
 
             // Define the SQL query
-            string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, min age,Sale) " +
-                 "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @Age,0)";
+            string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice,minage,Sale,category) " +
+                 "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @minage,0,@Category)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -397,10 +399,11 @@ namespace Ebook_Library_Project
 
                 command.Parameters.AddWithValue("@Name", title);
                 command.Parameters.AddWithValue("@Author", author);
+                command.Parameters.AddWithValue("@Category", category);
                 command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
                 command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
                 command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
-                command.Parameters.AddWithValue("@Age", age); // Ensure age value is passed correctly
+                command.Parameters.AddWithValue("@minage", age); 
                 connection.Open();
                 command.ExecuteNonQuery();
             }
@@ -455,10 +458,12 @@ namespace Ebook_Library_Project
             Id, 
             Name, 
             Author, 
+            Category,
             BuyingPrice,
             BorrowPrice,
             Sale,
-            ImagePath
+            ImagePath,
+            minage
         FROM Books 
         WHERE Name LIKE @SearchTerm OR Author LIKE @SearchTerm";
 
@@ -479,10 +484,12 @@ namespace Ebook_Library_Project
                             Id = (int)reader["Id"],
                             Title = reader["Name"].ToString(),
                             Author = reader["Author"].ToString(),
+                            Category = reader["Category"].ToString(),
                             Buyingprice = reader["BuyingPrice"],
                             BorrowPrice = reader["BorrowPrice"],
                             Sale = reader["Sale"],
-                            ImagePath = reader["ImagePath"]
+                            ImagePath = reader["ImagePath"],
+                            minage= reader["minage"]
 
                         });
                     }
@@ -899,7 +906,7 @@ namespace Ebook_Library_Project
 
         public static BookModel GetBookById(int bookId)
         {
-            string query = "SELECT Id, Sale, ImagePath, Name, Author, BuyingPrice, BorrowPrice, AvailableCopies FROM Books WHERE Id = @BookID";
+            string query = "SELECT Id, Sale, ImagePath, Name, Author,Category, BuyingPrice, BorrowPrice, AvailableCopies FROM Books WHERE Id = @BookID";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -918,6 +925,7 @@ namespace Ebook_Library_Project
                             ImagePath = reader["ImagePath"].ToString(),
                             Name = reader["Name"].ToString(),
                             Author = reader["Author"].ToString(),
+                            Category = reader["Category"].ToString(),
                             BuyingPrice = (decimal)reader["BuyingPrice"],
                             BorrowPrice = (decimal)reader["BorrowPrice"],
                             AvailableCopies = (int)reader["AvailableCopies"],
@@ -1409,7 +1417,86 @@ namespace Ebook_Library_Project
                 command.ExecuteNonQuery();
             }
         }
+        public static void AddReviewWeb(string Username, string review)
+        {
+            if (string.IsNullOrWhiteSpace(Username))
+                throw new ArgumentException("Username cannot be null or empty.", nameof(Username));
 
+            if (string.IsNullOrWhiteSpace(review))
+                throw new ArgumentException("Review cannot be null or empty.", nameof(review));
+
+                int id = Getuseridbyname(Username);
+                string query = "INSERT INTO WebReviews (userid, review) VALUES (@UserId,  @Review)";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", id);
+                    command.Parameters.AddWithValue("@Review", review);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+         public static List<dynamic> GetWebReviews()
+        {
+            List<dynamic> reviews = new List<dynamic>();
+
+            string query = "SELECT userid, review FROM WebReviews";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        reviews.Add(new
+                        {
+                            username = reader["userid"].ToString(),
+                            ReviewText = reader["review"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return reviews;
+        }
+    
+
+        public static int Getuseridbyname(string Username)
+        {
+            if (userexistbyname(Username))
+            {
+                string query = "SELECT id FROM Users WHERE Name = @Name";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Name", Username);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read()) // If a user is found
+                        {
+                            return (int)reader["id"]; ;
+                        }
+                        else
+                        {
+                            throw new Exception("Username Doesn't exist");
+                        }
+                    }
+
+                }
+
+            }
+            else
+            {
+                throw new Exception("Username Doesn't exist");
+            }
+        }
 
 
         public static bool ReviewExists(int userid, int bookid)

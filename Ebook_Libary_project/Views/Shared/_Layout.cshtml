@@ -26,11 +26,11 @@
                             <a class="nav-link" href="/Books">Books</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/About">About</a>
+                            <a class="nav-link" href="/Ebook_libary_Home/SiteReview">Feedback</a>
                         </li>
                         @*Only admins*@
                         <li class="nav-item" id="Dashboard" style="display:none">
-                            
+
                             <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
                         </li>
                         <li class="nav-item">
@@ -84,33 +84,33 @@
                 Invalid username or password. Please try again.
             </div>
         </form>
-            <!-- Forgot Password Form -->
-            <form id="forgotPasswordForm" class="modal-content animate" style="display: none;">
-                <div class="imgcontainer">
-                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-                    <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+        <!-- Forgot Password Form -->
+        <form id="forgotPasswordForm" class="modal-content animate" style="display: none;">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="login_container">
+                <label for="email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Your Email Address" id="forgotEmail" name="email" required>
+
+                <label for="Uname_reset"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="Username_forreset" name="Uname_reset" required>
+
+
+                <button type="button" id="resetPasswordButton">Reset Password</button>
+
+                <div id="forgotPasswordMessage" style="display: none; color: green;">
+                    If this email is registered, a password reset link will be sent.
                 </div>
+            </div>
 
-                <div class="login_container">
-                    <label for="email"><b>Email</b></label>
-                    <input type="email" placeholder="Enter Your Email Address" id="forgotEmail" name="email" required>
-
-                    <label for="Uname_reset"><b>Username</b></label>
-                    <input type="text" placeholder="Enter Username" id="Username_forreset" name="Uname_reset" required>
-
-
-                    <button type="button" id="resetPasswordButton">Reset Password</button>
-
-                    <div id="forgotPasswordMessage" style="display: none; color: green;">
-                        If this email is registered, a password reset link will be sent.
-                    </div>
-                </div>
-
-                <div class="container" style="background-color:#f1f1f1">
-                    <button type="button" div class="login_container" onclick="switchToLogin()">Back to Login</button>
-                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                </div>
-            </form>
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" div class="login_container" onclick="switchToLogin()">Back to Login</button>
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
         <!-- Registration Form -->
         <form id="registerForm" class="modal-content animate" style="display: none;">
             <div class="imgcontainer">
@@ -149,14 +149,19 @@
             </div>
         </form>
     </div>
+    <div id="id01" class="modal">
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+        </div>
 
-    <div id="errorMessage" style="color: red; display: none;">
-        Invalid username or password. Please try again.
+
+        <div id="errorMessage" style="color: red; display: none;">
+            Invalid username or password. Please try again.
+        </div>
+
+        </form>
     </div>
-    </form>
-    </div>
-
-
 
     <!-- Main Content -->
     <div class="container">
@@ -205,6 +210,9 @@
             document.getElementById('forgotPasswordForm').style.display = 'block';
         }
 
+        document.getElementById('openLoginButton').onclick = function () {
+            document.getElementById('id01').style.display = 'block';
+        };
         document.getElementById('openLoginButton').onclick = function () {
             document.getElementById('id01').style.display = 'block';
         };
@@ -290,7 +298,7 @@
             $.ajax({
                 url: '/Login/email_pass_reset',
                 type: 'POST',
-                data: { email,username },
+                data: { email, username },
                 success: function (response) {
                     if (response.success) {
                         alert("An email has been sent with instructions to reset your password, if the address is associated with an account.");
