@@ -390,6 +390,7 @@
                         <button class="btn btn-success" style="margin-top: 10px;" onclick="openBook(@borrowed.Book.Id)">Open PDF</button>
 
                     </div>
+
                 }
             }
             else
@@ -432,7 +433,7 @@
         const openUrl = `/Ebook_libary_Home/GetBookFilePath?bookId=${bookId}&format=pdf`;
 
         // Open the PDF in a new tab
-        window.open(openUrl, '_blank');
+       window.open(openUrl, '_blank');
     }
 
 
