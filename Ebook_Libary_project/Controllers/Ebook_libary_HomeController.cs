@@ -32,7 +32,21 @@ namespace Ebook_Libary_project.Controllers
 
             return View();
         }
+        [HttpGet]
+        public ActionResult Check_webreview_ofuser()
+        {
+            int currentuser = UserSession.GetCurrentUserId();
 
+            if (Userdatabase.check_ifmade_webreview(currentuser))
+            {
+                return Json(new { success = true, message = "You have already submitted a review." }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
+                return Json(new { success = false, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult SiteReview()
         {
             return View("~/Views/User/Webreview.cshtml");

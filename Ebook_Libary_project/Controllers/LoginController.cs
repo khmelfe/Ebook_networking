@@ -94,6 +94,7 @@ namespace Ebook_Libary_project.Controllers
         }
         public ActionResult Resetpassword()
         {
+
             return View("~/Views/Login/Resetpassword.cshtml");
         }
         [HttpPost]

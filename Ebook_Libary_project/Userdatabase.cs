@@ -3,6 +3,7 @@ using Ebook_Libary_project.Models;
 using EbookLibraryProject.Models;
 using Microsoft.Ajax.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -1468,6 +1469,21 @@ namespace Ebook_Library_Project
             return reviews;
         }
     
+         public static bool check_ifmade_webreview(int userid)
+        {
+            string query = "SELECT COUNT(*) FROM WebReviews WHERE userid =@UserID";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserID", userid);
+
+                connection.Open();
+
+                int count = (int)command.ExecuteScalar();
+
+                return count > 0;
+            }
+        }
 
         public static int Getuseridbyname(string Username)
         {
