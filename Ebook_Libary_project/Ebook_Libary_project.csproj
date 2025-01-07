@@ -378,6 +378,7 @@
     <Content Include="Views\User\_UserDetailsPartial.cshtml" />
     <Content Include="Views\Login\Resetpassword.cshtml" />
     <Content Include="Views\User\Webreview.cshtml" />
+    <Content Include="Views\Ebook_libary_Home\BookViewer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
