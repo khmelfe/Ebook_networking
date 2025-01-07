@@ -6,6 +6,9 @@ using Ebook_Libary_project.Models;
 using System.Data.SqlClient;
 using System;
 using System.Linq;
+using System.IO;
+using System.Diagnostics;
+using System.Web;
 
 namespace Ebook_Libary_project.Controllers
 {
@@ -147,7 +150,7 @@ namespace Ebook_Libary_project.Controllers
             try
             {
                 Userdatabase.ReturnBook(UserSession.GetCurrentUserId(), bookId);
-                return Json(new { success = true, message = "Book returned successfully." });
+                return Json(new { success = true, message = "Book"+bookId+" returned successfully." });
             }
             catch (Exception ex)
             {
@@ -236,6 +239,34 @@ namespace Ebook_Libary_project.Controllers
             return Json(allb);
         }
 
+        [HttpGet]
+        public ActionResult GetBookFilePath(int bookId, string format)
+        {
+            try
+            {
+                // Retrieve the full file path
+                string relativePath = Userdatabase.GetBookpathbyid(bookId, format);
+                string filePath = Server.MapPath("~" + relativePath);
+
+
+                // Ensure the file exists
+                if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+                {
+                    return new HttpStatusCodeResult(404, "File not found or invalid format.");
+                }
+
+                // Extract the MIME type of the file
+                string mimeType = MimeMapping.GetMimeMapping(filePath);
+
+                // Return the file content directly for download/viewing
+                return File(filePath, mimeType, Path.GetFileName(filePath));
+            }
+            catch (Exception ex)
+            {
+                // Log the error and return an appropriate HTTP status
+                return new HttpStatusCodeResult(500, $"Error occurred: {ex.Message}");
+            }
+        }
 
 
     }

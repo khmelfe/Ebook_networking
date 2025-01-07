@@ -344,7 +344,22 @@
                         <div style="text-decoration: none; color: inherit; cursor: default;">
                             <h3>@book.Name</h3>
                             <p>Author: @book.Author</p>
+
+                            <!-- Existing Remove Button -->
                             <button class="btn btn-danger" onclick="confirmRemoveBoughtBook(@book.Id)">Remove</button>
+
+                            <!-- Dropdown for choosing download format -->
+                            <div style="margin-top: 10px;">
+                                <label for="format-@book.Id">Download Format:</label>
+                                <select id="format-@book.Id">
+                                    <option value="pdf">PDF</option>
+                                    <option value="epub">EPUB</option>
+                                    <option value="fb2">FB2</option>
+                                    <option value="mobi">MOBI</option>
+                                </select>
+
+                            </div>
+                            <button class="btn btn-primary" onclick="downloadBook(@book.Id)">Download</button>
                         </div>
                     </div>
                 }
@@ -366,8 +381,14 @@
                             <h3>@borrowed.Book.Name</h3>
                             <p>Author: @borrowed.Book.Author</p>
                             <p class="return-date">Return Date: @borrowed.ReturnDate.ToShortDateString()</p>
+
+                            <!-- Existing Return Button -->
                             <button class="btn btn-warning" onclick="confirmReturnBook(@borrowed.Book.Id)">Return</button>
+
+                            <!-- Open PDF Button -->
                         </div>
+                        <button class="btn btn-success" style="margin-top: 10px;" onclick="openBook(@borrowed.Book.Id)">Open PDF</button>
+
                     </div>
                 }
             }
@@ -376,18 +397,46 @@
                 <p>No borrowed books to display.</p>
             }
         </div>
+
+
     }
-@*Need to add the ability that only logged users can see this.*@
-<div class="container__right">
-    <h1>Customer Reviews</h1>
-    <div class="horizontal-scroll" id="reviewsContainer">
-        <!-- Reviews will be dynamically added here via JavaScript -->
+    @*Need to add the ability that only logged users can see this.*@
+    <div class="container__right">
+        <h1>Customer Reviews</h1>
+        <div class="horizontal-scroll" id="reviewsContainer">
+            <!-- Reviews will be dynamically added here via JavaScript -->
+        </div>
     </div>
-</div>
-  
+
 
 </body>
 <script>
+    function downloadBook(bookId) {
+        const format = document.getElementById(`format-${bookId}`).value;
+
+        // Construct the file URL
+        const downloadUrl = `/Ebook_libary_Home/GetBookFilePath?bookId=${bookId}&format=${format}`;
+
+        // Use a link element to trigger the download
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = ''; // Optional: Filename is determined by the server
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
+    function openBook(bookId) {
+        // Create a URL pointing to the controller action
+        const openUrl = `/Ebook_libary_Home/GetBookFilePath?bookId=${bookId}&format=pdf`;
+
+        // Open the PDF in a new tab
+        window.open(openUrl, '_blank');
+    }
+
+
+
     function confirmRemoveBoughtBook(bookId) {
         if (confirm("Are you sure you want to remove this book?")) {
             $.ajax({

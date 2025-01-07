@@ -990,7 +990,35 @@ namespace Ebook_Library_Project
             }
             return name;
         }
+        public static string GetBookpathbyid(int bookid,string format)
+        {
+            string path = string.Empty;
+            string query = "SELECT BookFilePathpdf FROM Books WHERE id = @bookId";
+            if (format=="pdf")
+            query = "SELECT BookFilePathpdf FROM Books WHERE id = @bookId";
+            if (format == "epub")
+            query = "SELECT BookFilePathepub FROM Books WHERE id = @bookId";
+            if (format == "mobi")
+             query = "SELECT BookFilePathmobi FROM Books WHERE id = @bookId";
+            if (format == "f2b")
+             query = "SELECT BookFilePathf2b FROM Books WHERE id = @bookId";
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@bookId", bookid);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        path = reader.GetString(0);
+                    }
+                }
+            }
+            return path;
+        }
         //get Users with borrowedbooks
         public static List<dynamic> Users_with_borrowed_books()
         {
@@ -1243,7 +1271,7 @@ namespace Ebook_Library_Project
         public static string ReturnBook(int userId, int bookId)
         {
             string message = string.Empty;
-
+            Debug.WriteLine("10started reurn of"+bookId);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -1259,6 +1287,7 @@ namespace Ebook_Library_Project
                     SqlDataReader reader = null;
                     try
                     {
+                        Debug.WriteLine("2!!!!" + bookId);
                         reader = waitingListCommand.ExecuteReader();
                         if (reader.Read())
                         {
@@ -1267,10 +1296,10 @@ namespace Ebook_Library_Project
 
                             // Close the reader before executing the next command
                             reader.Close();
-
+                            Debug.WriteLine("3!!!!" + bookId);
                             // Remove the current entry from BorrowedBooks
                             string deleteBorrowedQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID AND BookID = @BookID";
-
+                            Debug.WriteLine("actually deleted stuff" + bookId);
                             using (SqlCommand deleteBorrowedCommand = new SqlCommand(deleteBorrowedQuery, connection))
                             {
                                 deleteBorrowedCommand.Parameters.AddWithValue("@UserID", userId);
@@ -1308,7 +1337,16 @@ namespace Ebook_Library_Project
                         {
                             // Close the reader before executing the next command
                             reader.Close();
+                            string deleteBorrowedQuery = "DELETE FROM BorrowedBooks WHERE UserID = @UserID AND BookID = @BookID";
+                            Debug.WriteLine("actually deleted stuff" + bookId);
+                            using (SqlCommand deleteBorrowedCommand = new SqlCommand(deleteBorrowedQuery, connection))
+                            {
+                                deleteBorrowedCommand.Parameters.AddWithValue("@UserID", userId);
+                                deleteBorrowedCommand.Parameters.AddWithValue("@BookID", bookId);
+                                deleteBorrowedCommand.ExecuteNonQuery();
+                            }
 
+                            Debug.WriteLine("actually deleted stuff no waiting" + bookId);
                             // No one in the waiting list, increase available copies
                             string updateCopiesQuery = "UPDATE Books SET AvailableCopies = AvailableCopies + 1 WHERE Id = @BookID";
 
@@ -1324,7 +1362,7 @@ namespace Ebook_Library_Project
                     catch (Exception ex)
                     {
                         reader?.Close(); // Ensure the reader is closed in case of an exception
-                        throw new Exception($"Error processing ReturnBook: {ex.Message}", ex);
+                        throw new Exception($"Error processing ReturnBook:reader {ex.Message}", ex);
                     }
                 }
             }
