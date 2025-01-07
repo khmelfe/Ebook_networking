@@ -162,6 +162,7 @@ namespace Ebook_Libary_project.Controllers.user
         [HttpPost]
         public JsonResult Addingbook(string title,
      string author,
+     string category,
      int availableCopies,
      decimal buyPrice,
      decimal borrowPrice, int age = 0,
@@ -170,7 +171,7 @@ namespace Ebook_Libary_project.Controllers.user
         {
             try
             {
-                Userdatabase.AddBook(title, author, availableCopies, buyPrice, borrowPrice,age, imageFile, bookFile);
+                Userdatabase.AddBook(title, author, category, availableCopies, buyPrice, borrowPrice,age, imageFile, bookFile);
                 return Json(new { success = true });
             }
             catch (Exception ex)

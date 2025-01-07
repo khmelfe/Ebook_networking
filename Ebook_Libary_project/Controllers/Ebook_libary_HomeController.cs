@@ -33,6 +33,39 @@ namespace Ebook_Libary_project.Controllers
             return View();
         }
 
+        public ActionResult SiteReview()
+        {
+            return View("~/Views/User/Webreview.cshtml");
+        }
+        [HttpPost]
+        public JsonResult addreviewweb(string username,string text)
+        {
+
+            try
+            {
+                Userdatabase.AddReviewWeb(username,text);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, ex });
+            }
+        }
+
+        public JsonResult getwebreviews()
+        {
+            try
+            {
+               List<dynamic> webreviews = Userdatabase.GetWebReviews();
+                return Json(new { success = true, data = webreviews }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        
+        
 
 
         private List<BookModel> GetBoughtBooks(int userId)

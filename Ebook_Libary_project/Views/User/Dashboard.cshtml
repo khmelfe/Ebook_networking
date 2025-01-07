@@ -445,7 +445,7 @@
                         <div class="col" style="padding: 15px;">
 
                             <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                                <!-- First row: Title and Author -->
+                                <!-- First row: Title and Author and Category -->
                                 <div style="flex: 1;">
                                     <label for="title" style="min-width: 80px;">Title:</label>
                                     <input type="text" id="title" name="title" required style="width: 100%;">
@@ -454,8 +454,17 @@
                                     <label for="author" style="min-width: 80px;">Author:</label>
                                     <input type="text" id="author" name="author" required style="width: 100%;">
                                 </div>
+                                <div style="flex: 1;">
+                                    <label for="category" style="min-width: 80px;">Category:</label>
+                                    <select id="category" name="category" required style="width: 100%;">
+                                        <option value="" disabled selected>Select a category</option>
+                                        <option value="Romance">Romance</option>
+                                        <option value="young-adult">Young Adult</option>
+                                        <option value="fantasy">Fantasy</option>
+                                        <option value="educational">Educational</option>
+                                    </select>
+                                </div>
                             </div>
-
                             <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
                                 <!-- Second row: Buy Price, Borrow Price, and Age -->
                                 <div style="flex: 1;">
@@ -497,7 +506,7 @@
                         </div>
                     </div>
                 </div>
-            </form> 
+            </form>
             <form id="SearchBookForm" style="display: none;">
                 <h2 id="search_books">Search Books</h2>
                 <div class="well">
@@ -520,6 +529,7 @@
                                                 <p><strong>Id:</strong> <span id="bookId"></span></p>
                                                 <p><strong>Title:</strong> <span id="bookTitle"></span></p>
                                                 <p><strong>Author:</strong> <span id="bookAuthor"></span></p>
+                                                <p><strong>Category:</strong> <span id="bookCategory"></span></p>
                                                 <p><strong>Buying Price:</strong> $<span id="buying_bookPrice"></span></p>
                                                 <p><strong>Borrow Price:</strong> $<span id="borrow_bookPrice"></span></p>
                                                 <p id="saleSection" style="display: none;">
@@ -587,9 +597,9 @@
                     </div>
                 </div>
             </form>
-        </div>
+     </div>
 
-    </div>
+
 
 </body>
 
@@ -956,11 +966,6 @@
         };
     }
 
-
-
-
-
-
     window.onload = () => {
         loadUsersWithBorrowedTime();
         loadBooksWithWaiting();
@@ -1138,7 +1143,8 @@
             const formData = new FormData();
 
             const title = document.getElementById('title').value;
-            const author = document.getElementById('author').value;
+            const author = document.getElementById('author').value; 
+            const category = document.getElementById('category').value;
             const buyPrice = parseFloat(document.getElementById('buyPrice').value);
             const borrowPrice = parseFloat(document.getElementById('borrowPrice').value);
             const copies = parseInt(document.getElementById('copies').value);
@@ -1156,6 +1162,7 @@
             // Append form data
             formData.append('title', title);
             formData.append('author', author);
+            formData.append('category', category);
             formData.append('buyPrice', buyPrice);
             formData.append('borrowPrice', borrowPrice);
             formData.append('availableCopies', copies);
@@ -1208,6 +1215,7 @@
         const bookId = $("#bookId");
         const bookTitle = $("#bookTitle");
         const bookAuthor = $("#bookAuthor");
+        const bookcategory = $("#bookCategory");
         const buyingBookPrice = $("#buying_bookPrice");
         const borrowBookPrice = $("#borrow_bookPrice");
         const saleprec = $("#sale_percentage");
@@ -1240,7 +1248,7 @@
 
                         data.forEach(book => {
                             const listItem = $("<li></li>")
-                                .text(`${book.Title} by ${book.Author}`)
+                                .text(`${book.Title} by ${book.Author}`)  
                                 .data("bookId", book.Id)
                                 .data("buyingPrice", book.Buyingprice)
                                 .data("borrowPrice", book.BorrowPrice)
@@ -1251,6 +1259,7 @@
                                     bookId.text(book.Id);
                                     bookTitle.text(book.Title);
                                     bookAuthor.text(book.Author);
+                                    bookcategory.text(book.Category);
                                     buyingBookPrice.text(parseFloat(book.Buyingprice).toFixed(2));
                                     borrowBookPrice.text(parseFloat(book.BorrowPrice).toFixed(2));
                                     if (book.Sale > 0) {

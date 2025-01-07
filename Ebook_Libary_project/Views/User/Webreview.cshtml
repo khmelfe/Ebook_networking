@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+@*@import url(
+'https://fonts.googleapis.com/css2?family=Poppins&display=swap');*@
+
+body {
+    /*margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    height: 100vh;*/
+    background-color: #bde5d2;
+    /*font-family: 'Poppins', sans-serif;*/
+
+}
+
+.textup {
+    text-align: center;
+    color: rgb(11, 118, 11);
+    font-weight: 700;
+}
+
+i {
+    margin-right: 3px;
+}
+
+.form-box {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(36, 67, 40, 0.8);
+    padding: 50px;
+    border-radius: 8px;
+    width: 500px;
+    margin:auto;
+    margin-top:5%;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.radio-group {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+input[type="radio"] {
+    margin-right: 8px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 17px;
+    color: green;
+    font-weight: 600;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border-radius: 10px;
+
+}
+
+button {
+    background-color: #368b44;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 15px;
+    transition: .2s linear;
+}
+
+button:hover {
+    background-color: #0a6808;
+    border: none;
+    transform: translateY(-10px);
+}
+
+h1 {
+    color: green;
+}
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0">
+    <title>Responsive Form Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="form-box">
+        <div class="textup">
+            <i class="fa fa-solid fa-clock"></i>
+            It only takes two minutes!!
+        </div>
+        <form id="reviewForm">
+            <!-- Assign an ID to the form -->
+            <label for="uname">
+                <i class="fa fa-solid fa-user"></i>
+                UserName
+            </label>
+            <input type="text" id="uname" name="uname" required>
+
+            <label for="msg">
+                <i class="fa-solid fa-comments" style="margin-right: 3px;"></i>
+                Write your Suggestions:
+            </label>
+            <textarea id="msg" name="msg" rows="4" cols="10" required></textarea>
+
+            <button type="submit" id="submitreview">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Wait for the DOM to load before attaching event listeners
+        document.addEventListener("DOMContentLoaded", function () {
+            // Attach submit event to the form directly
+            document.getElementById("reviewForm").addEventListener("submit", function (event) {
+                event.preventDefault();  // Prevent default form submission (page reload)
+
+                // Get form data
+                const uname = document.getElementById("uname").value;
+                const msg = document.getElementById("msg").value.trim();
+
+                // AJAX request to send data to the backend
+                $.ajax({
+                    url: '/Ebook_libary_Home/addreviewweb',  // Update this URL with the correct one
+                    type: 'POST',
+                    contentType: 'application/json',  // Make sure it's JSON
+                    data: JSON.stringify({ username: uname, text: msg }),  // Send data as JSON
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Review added successfully!');
+                            document.getElementById("reviewForm").reset();  // Reset the form fields
+                        } else {
+                            alert(response.message || "Failed to add review.");
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Error adding review:", error);
+                        alert("Failed to add review. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -12,6 +12,8 @@ using System.Drawing;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Xml.Linq;
 
 
 
@@ -19,8 +21,8 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -190,22 +192,6 @@ namespace Ebook_Library_Project
             }
         }
 
-        // Function to change the price for buying or borrowing a book
-        //public static void UpdateBookPrice(int bookId, decimal newPrice, string action)
-        //{
-        //    string column = action.ToLower() == "buying" ? "BuyPrice" : "BorrowPrice";
-        //    string query = $"UPDATE Books SET {column} = @NewPrice WHERE Id = @BookID";
-
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        SqlCommand command = new SqlCommand(query, connection);
-        //        command.Parameters.AddWithValue("@NewPrice", newPrice);
-        //        command.Parameters.AddWithValue("@BookID", bookId);
-
-        //        connection.Open();
-        //        command.ExecuteNonQuery();
-        //    }
-        //}
 
         public static void UpdateBookPrice(int bookId, decimal newPrice, string action)
         {
@@ -213,13 +199,13 @@ namespace Ebook_Library_Project
             string query = "";
             if (column == "BuyPrice")
             {
-                 query = $"UPDATE Books SET BuyingPrice = @NewPrice WHERE Id = @BookID";
+                query = $"UPDATE Books SET BuyingPrice = @NewPrice WHERE Id = @BookID";
             }
             else
             {
-                 query = $"UPDATE Books SET BorrowPrice = @NewPrice WHERE Id = @BookID";
+                query = $"UPDATE Books SET BorrowPrice = @NewPrice WHERE Id = @BookID";
             }
-            
+
 
             // Check if action is 'buying' and if newPrice is greater than the borrow price
             if (action == "BuyPrice")
@@ -344,6 +330,7 @@ namespace Ebook_Library_Project
         public static void AddBook(
      string title,
      string author,
+     string category,
      int availableCopies,
      decimal buyPrice,
      decimal borrowPrice, int age = 0,
@@ -356,7 +343,7 @@ namespace Ebook_Library_Project
             string bookDirectory = HttpContext.Current.Server.MapPath("~/Content/Books/");
             string imagePath = null;
             string bookFilePath = null;
-            
+
 
             // Handle the image upload
             if (imageFile != null && imageFile.ContentLength > 0)
@@ -397,8 +384,8 @@ namespace Ebook_Library_Project
             }
 
             // Define the SQL query
-            string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, Age,Sale) " +
-                 "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @Age,0)";
+            string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice,minage,Sale,category) " +
+                 "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @minage,0,@Category)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -412,10 +399,11 @@ namespace Ebook_Library_Project
 
                 command.Parameters.AddWithValue("@Name", title);
                 command.Parameters.AddWithValue("@Author", author);
+                command.Parameters.AddWithValue("@Category", category);
                 command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
                 command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
                 command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
-                command.Parameters.AddWithValue("@Age", age); // Ensure age value is passed correctly
+                command.Parameters.AddWithValue("@minage", age); 
                 connection.Open();
                 command.ExecuteNonQuery();
             }
@@ -496,7 +484,7 @@ namespace Ebook_Library_Project
                             Id = (int)reader["Id"],
                             Title = reader["Name"].ToString(),
                             Author = reader["Author"].ToString(),
-                            Category = reader["Category"],
+                            Category = reader["Category"].ToString(),
                             Buyingprice = reader["BuyingPrice"],
                             BorrowPrice = reader["BorrowPrice"],
                             Sale = reader["Sale"],
@@ -574,6 +562,71 @@ namespace Ebook_Library_Project
 
                     insertCommand.ExecuteNonQuery();
                 }
+            }
+        }
+        //Reset password
+        public static void Sendemail_for_resetpass(string email, string username, int port)
+        {
+            // Corrected query with proper parameter references
+            string query = "SELECT COUNT(*) FROM Users WHERE Name = @Name AND Mail = @Mail";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+
+                // Add the parameters with the correct names
+                command.Parameters.AddWithValue("@Mail", email);
+                command.Parameters.AddWithValue("@Name", username);
+
+                connection.Open();
+
+                // Execute the query to get the count of matching records
+                int count = (int)command.ExecuteScalar();
+
+                if (count > 0) // There is at least one matching record
+                {
+                    // Construct the reset URL
+                    var url = $"http://localhost:{port}/Login/Resetpassword";
+
+                    // Email service and message
+                    var emailService = new EmailService();
+                    string subject = "Reset Your Password";
+                    string body = $@"
+                            <html>
+                            <body>
+                                <p>Dear {username},</p>
+                                <p>We received a request to reset your password. If you made this request, please click the link below to reset your password:</p>
+                                <p><a href='{url}'>Reset your password</a></p>
+                                <p>This link will expire in [time limit, e.g., 24 hours]. If you did not request a password reset, please ignore this email or contact our support team if you have concerns.</p>
+                                <p>For your security, please do not share this email or the reset link with anyone.</p>
+                                <p>Thank you,<br/>Ebook Team<br/>Support Team</p>
+                            </body>
+                            </html>";
+
+                    // Send the email
+                    emailService.SendEmail(email, subject, body);
+                }
+                else
+                {
+                    throw new Exception("No matching record found for the provided email and username.");
+                }
+            }
+        }
+        public static bool UpdatePasswordByUsername(string username, string newPassword)
+        {
+
+            string query = "UPDATE Users SET Password = @Password WHERE Name = @Username"; 
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Password", newPassword);
+                command.Parameters.AddWithValue("@Username", username);  
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+
+                return rowsAffected > 0; // Returns true if the update was successful
             }
         }
         //Make  An admin
@@ -661,6 +714,23 @@ namespace Ebook_Library_Project
                     HttpContext.Current.Response.Cookies["userId"].Value = userId.ToString();
                     HttpContext.Current.Response.Cookies["userId"].Path = "/";
                 }
+
+                return count > 0;
+            }
+        }
+        public static bool userexistbyname(string name)
+        {
+            string query = "SELECT COUNT(*) FROM Users WHERE name = @Name";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Name", name);
+                
+
+                connection.Open();
+
+                int count = (int)command.ExecuteScalar();
 
                 return count > 0;
             }
@@ -908,9 +978,9 @@ namespace Ebook_Library_Project
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.Read()) 
+                    if (reader.Read())
                     {
-                        name = reader.GetString(0); 
+                        name = reader.GetString(0);
                     }
                 }
             }
@@ -1311,7 +1381,7 @@ namespace Ebook_Library_Project
         public static int GetUserAgeById(int userId)
         {
             int age = 0;
-            string query = "SELECT age FROM Users WHERE id = @UserId";
+            string query = "SELECT Age FROM Users WHERE id = @UserId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -1347,7 +1417,86 @@ namespace Ebook_Library_Project
                 command.ExecuteNonQuery();
             }
         }
+        public static void AddReviewWeb(string Username, string review)
+        {
+            if (string.IsNullOrWhiteSpace(Username))
+                throw new ArgumentException("Username cannot be null or empty.", nameof(Username));
 
+            if (string.IsNullOrWhiteSpace(review))
+                throw new ArgumentException("Review cannot be null or empty.", nameof(review));
+
+                int id = Getuseridbyname(Username);
+                string query = "INSERT INTO WebReviews (userid, review) VALUES (@UserId,  @Review)";
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", id);
+                    command.Parameters.AddWithValue("@Review", review);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+         public static List<dynamic> GetWebReviews()
+        {
+            List<dynamic> reviews = new List<dynamic>();
+
+            string query = "SELECT userid, review FROM WebReviews";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        reviews.Add(new
+                        {
+                            username = reader["userid"].ToString(),
+                            ReviewText = reader["review"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return reviews;
+        }
+    
+
+        public static int Getuseridbyname(string Username)
+        {
+            if (userexistbyname(Username))
+            {
+                string query = "SELECT id FROM Users WHERE Name = @Name";
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@Name", Username);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read()) // If a user is found
+                        {
+                            return (int)reader["id"]; ;
+                        }
+                        else
+                        {
+                            throw new Exception("Username Doesn't exist");
+                        }
+                    }
+
+                }
+
+            }
+            else
+            {
+                throw new Exception("Username Doesn't exist");
+            }
+        }
 
 
         public static bool ReviewExists(int userid, int bookid)
@@ -1436,7 +1585,7 @@ namespace Ebook_Library_Project
             string query = @"
     SELECT UserID, BookID, NumberInQueue
     FROM WaitingList WHERE BookID =@waitingListId";
-   
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
