@@ -164,7 +164,6 @@
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\Usermodel.cs" />
-    <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -309,9 +308,6 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="obj\Debug\Ebook_Libary_project.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\Ebook_Libary_project.dll" />
-    <Content Include="obj\Debug\Ebook_Libary_project.pdb" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -321,11 +317,6 @@
     <!--<<<<<<< HEAD-->
     <Content Include=".vs\Ebook_Libary_project.csproj.dtbcache.json" />
     <!--=======-->
-    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
-    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <Content Include="obj\Debug\Ebook_Li.470F2DF5.Up2Date" />
-    <Content Include="obj\Debug\Ebook_Libary_project.csproj.AssemblyReference.cache" />
-    <Content Include="obj\Debug\Ebook_Libary_project.csproj.CoreCompileInputs.cache" />
     <Content Include=".vs\Ebook_Libary_project.csproj.dtbcache.json" />
     <Content Include="bin\Ebook_Libary_project.dll.config" />
     <Content Include="bin\roslyn\csc.exe.config" />
@@ -389,7 +380,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="obj\Debug\TempPE\" />
     <Folder Include="Views\Login_Model\" />
   </ItemGroup>
   <ItemGroup>
