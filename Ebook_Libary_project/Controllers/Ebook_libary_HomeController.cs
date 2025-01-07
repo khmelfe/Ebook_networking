@@ -52,15 +52,21 @@ namespace Ebook_Libary_project.Controllers
         }
         public ActionResult SiteReview()
         {
+            int userId = UserSession.GetCurrentUserId();
+            string userName = Userdatabase.GetUserNameById(userId); // Replace with your actual method to fetch the name
+
+            // Pass the user name to the view
+            ViewBag.UserName = userName;
             return View("~/Views/User/Webreview.cshtml");
         }
         [HttpPost]
-        public JsonResult addreviewweb(string username,string text)
+        public JsonResult addreviewweb(string text)
         {
-            
+            int userId = UserSession.GetCurrentUserId();
+            string userName = Userdatabase.GetUserNameById(userId);
             try
             {
-                Userdatabase.AddReviewWeb(username,text);
+                Userdatabase.AddReviewWeb(userName, text);
                 return Json(new { success = true });
             }
             catch (Exception ex)
@@ -264,6 +270,31 @@ namespace Ebook_Libary_project.Controllers
             catch (Exception ex)
             {
                 // Log the error and return an appropriate HTTP status
+                return new HttpStatusCodeResult(500, $"Error occurred: {ex.Message}");
+            }
+        }
+
+        public ActionResult ViewBookPdf(int bookId)
+        {
+            try
+            {
+                // Retrieve the file path for the book
+                string relativePath = Userdatabase.GetBookpathbyid(bookId, "pdf");
+                string filePath = Server.MapPath("~" + relativePath);
+
+                // Ensure the file exists
+                if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+                {
+                    return HttpNotFound("PDF file not found.");
+                }
+
+                // Pass the relative path of the PDF to the view
+                string pdfUrl = Url.Content("~" + relativePath); // Generate the URL for embedding
+                return View("BookViewer", model: pdfUrl);
+            }
+            catch (Exception ex)
+            {
+                // Handle errors gracefully
                 return new HttpStatusCodeResult(500, $"Error occurred: {ex.Message}");
             }
         }

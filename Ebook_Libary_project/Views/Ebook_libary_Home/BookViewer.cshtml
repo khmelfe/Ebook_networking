@@ -1,0 +1,38 @@
+@model string
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View PDF</title>
+    <style>
+        .pdf-container {
+            width: 100%;
+            height: 100vh; /* Full height of the viewport */
+            border: none;
+        }
+       
+    </style>
+</head>
+<body>
+    <h1>Viewing Book</h1>
+    <iframe id="pdf-frame" src="about:blank" width="100%" height="500px" frameborder="0" oncontextmenu="return false;"></iframe>
+
+
+
+
+    <script>
+    var iframe = document.getElementById('pdf-frame');
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write('<html><body><iframe src="@Model" width="100%" height="100%" style="border: none;"></iframe></body></html>');
+    iframe.contentWindow.document.close();
+
+        document.getElementById('pdf-container').addEventListener('contextmenu', function (e) {
+            e.preventDefault(); // Disable right-click
+        });
+
+    </script>
+
+    @*// Optionally disable the right-click on the entire body or document
+    document.body.oncontextmenu = function () { return false; };*@
+</body>
+</html>

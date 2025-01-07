@@ -109,20 +109,18 @@ h1 {
         </div>
         <form id="reviewForm">
             <!-- Assign an ID to the form -->
-            <label for="uname">
+           
                 <i class="fa fa-solid fa-user"></i>
-                UserName
-            </label>
-            <input type="text" id="uname" name="uname" required>
+                <h1>Welcome, @ViewBag.UserName</h1>
+                <br />
+                <label for="msg">
+                    <i class="fa-solid fa-comments" style="margin-right: 3px;"></i>
+                    Write your Suggestions:
+                </label>
+                <textarea id="msg" name="msg" rows="4" cols="10" required></textarea>
 
-            <label for="msg">
-                <i class="fa-solid fa-comments" style="margin-right: 3px;"></i>
-                Write your Suggestions:
-            </label>
-            <textarea id="msg" name="msg" rows="4" cols="10" required></textarea>
-
-            <button type="submit" id="submitreview">Submit</button>
-        </form>
+                <button type="submit" id="submitreview">Submit</button>
+</form>
     </div>
 
     <script>
@@ -132,16 +130,14 @@ h1 {
             document.getElementById("reviewForm").addEventListener("submit", function (event) {
                 event.preventDefault();  // Prevent default form submission (page reload)
 
-                // Get form data
-                const uname = document.getElementById("uname").value;
+                
                 const msg = document.getElementById("msg").value.trim();
 
-                // AJAX request to send data to the backend
                 $.ajax({
                     url: '/Ebook_libary_Home/addreviewweb',  // Update this URL with the correct one
                     type: 'POST',
                     contentType: 'application/json',  // Make sure it's JSON
-                    data: JSON.stringify({ username: uname, text: msg }),  // Send data as JSON
+                    data: JSON.stringify({  text: msg }),  // Send data as JSON
                     success: function (response) {
                         if (response.success) {
                             alert('Review added successfully!');

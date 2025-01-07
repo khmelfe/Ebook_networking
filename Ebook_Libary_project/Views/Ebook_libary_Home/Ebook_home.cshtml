@@ -234,6 +234,7 @@
                         <option value="Romance">Romance</option>
                         <option value="Fiction">Fiction</option>
                         <option value="Classic">Classic</option>
+                        <option value="Young adult">Classic</option>
                         <option value="Education">Education</option>
                     </select>
 
@@ -387,7 +388,9 @@
 
                             <!-- Open PDF Button -->
                         </div>
-                        <button class="btn btn-success" style="margin-top: 10px;" onclick="openBook(@borrowed.Book.Id)">Open PDF</button>
+                        @*<button class="btn btn-success" style="margin-top: 10px;" onclick="openBook(@borrowed.Book.Id)">Open PDF</button>*@
+                        <button class="btn btn-success" style="margin-top: 10px;" onclick="viewBookPdf(@borrowed.Book.Id)">View PDF</button>
+
 
                     </div>
 
@@ -670,6 +673,10 @@ function fetchReviews() {
             // Append the review card to the container
             reviewsContainer.appendChild(reviewCard);
         });
+    }
+    function viewBookPdf(bookId) {
+        // Navigate to the new view for displaying the PDF
+        window.location.href = `/Ebook_libary_Home/ViewBookPdf?bookId=${bookId}`;
     }
 
 </script>
