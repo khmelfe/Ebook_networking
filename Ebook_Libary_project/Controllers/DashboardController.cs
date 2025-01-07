@@ -9,6 +9,7 @@ using Microsoft.Ajax.Utilities;
 using Ebook_Library_Project;
 using System;
 using System.Web;
+using System.IO;
 
 
 namespace Ebook_Libary_project.Controllers.user
@@ -160,23 +161,62 @@ namespace Ebook_Libary_project.Controllers.user
         //Books functions
 
         [HttpPost]
-        public JsonResult Addingbook(string title,
-     string author,
-     string category,
-     int availableCopies,
-     decimal buyPrice,
-     decimal borrowPrice, int age = 0,
-     HttpPostedFileBase imageFile = null,
-     HttpPostedFileBase bookFile = null )// Accept PDF, EPUB, or MOBI)
+        public JsonResult Addingbook(
+       string title,
+       string author,
+       string category,
+       int availableCopies,
+       decimal buyPrice,
+       decimal borrowPrice,
+       int age = 0,
+       HttpPostedFileBase imageFile = null,
+       HttpPostedFileBase pdffile = null,
+       HttpPostedFileBase mobifile = null,
+       HttpPostedFileBase f2bfile = null,
+       HttpPostedFileBase epubfile = null)
         {
             try
             {
-                Userdatabase.AddBook(title, author, category, availableCopies, buyPrice, borrowPrice,age, imageFile, bookFile);
+                // Process the files and other parameters
+                if (imageFile != null)
+                {
+                    //Image Book
+                    string imagePath = Path.Combine(Server.MapPath("~/Content/Images"), Path.GetFileName(imageFile.FileName));
+                    imageFile.SaveAs(imagePath);
+                }
+                //saving the books.
+                if (pdffile != null)
+                {
+                    
+                    string pdfPath = Path.Combine(Server.MapPath("~/Content/Books"), Path.GetFileName(pdffile.FileName));
+                    pdffile.SaveAs(pdfPath);
+                }
+
+                if (mobifile != null)
+                {
+                    string mobiPath = Path.Combine(Server.MapPath("~/Content/Books"), Path.GetFileName(mobifile.FileName));
+                    mobifile.SaveAs(mobiPath);
+                }
+
+                if (f2bfile != null)
+                {
+                    string f2bPath = Path.Combine(Server.MapPath("~/Content/Books"), Path.GetFileName(f2bfile.FileName));
+                    f2bfile.SaveAs(f2bPath);
+                }
+
+                if (epubfile != null)
+                {
+                    string epubPath = Path.Combine(Server.MapPath("~/Content/Books"), Path.GetFileName(epubfile.FileName));
+                    epubfile.SaveAs(epubPath);
+                }
+
+                Userdatabase.AddBook(title, author, category, availableCopies, buyPrice, borrowPrice, age, imageFile, pdffile, mobifile, f2bfile, epubfile);
+
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, ex });
+                return Json(new { success = false, message = ex.Message });
             }
         }
 

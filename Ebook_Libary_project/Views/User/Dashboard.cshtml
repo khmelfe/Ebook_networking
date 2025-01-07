@@ -493,18 +493,33 @@
                                 </div>
                             </div>
 
-                            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
-                                <!-- Submit button and Book File -->
+                            <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
                                 <div style="flex: 1;">
-                                    <label for="file" style="min-width: 80px;">Book File:</label>
-                                    <input type="file" id="file" name="file" accept=".pdf, .epub, .mobi" style="width: 100%;">
+                                    <label for="file" style="min-width: 80px;">Book File As Pdf format:</label>
+                                    <input type="file" id="pdffile" name="file" accept=".pdf" required style="width: 100%;">
                                 </div>
                                 <div style="flex: 1;">
-                                    <input type="submit" value="Add Book" style="padding: 5px 10px;">
+                                    <label for="file" style="min-width: 80px;">Book File As epub format:</label>
+                                    <input type="file" id="epubfile" name="file" accept=".epub" required style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="file" style="min-width: 80px;">Book File As mobi format:</label>
+                                    <input type="file" id="mobifile" name="file" accept=".mobi" required style="width: 100%;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="file" style="min-width: 80px;">Book File As f2b format:</label>
+                                    <input type="file" id="f2bfile" name="file" accept=".fb2" required style="width: 100%;">
+                                </div>
+                            </div>  
+
+                                <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
+                                    <!-- Submit button -->           
+                                    <div style="flex: 1;">
+                                        <input type="submit"  value="Add Book" style="padding: 5px 10px;">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </form>
             <form id="SearchBookForm" style="display: none;">
@@ -1141,7 +1156,6 @@
         form.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent form submission
             const formData = new FormData();
-
             const title = document.getElementById('title').value;
             const author = document.getElementById('author').value; 
             const category = document.getElementById('category').value;
@@ -1149,15 +1163,23 @@
             const borrowPrice = parseFloat(document.getElementById('borrowPrice').value);
             const copies = parseInt(document.getElementById('copies').value);
             const age = parseInt(document.getElementById('bookage').value);
-            const imageFile = document.getElementById('image').files[0]; // Get the image file
-            const bookFile = document.getElementById('file').files[0]; // Get the book file
 
-            if (imageFile) {
-                formData.append('imageFile', imageFile);
-            }
-            if (bookFile) {
-                formData.append('bookFile', bookFile);
-            }
+
+            const imageFile = document.getElementById('image').files[0]; // Get the image file
+            const bookFileAsPdf = document.getElementById('pdffile').files[0];//pdf 
+            const bookFileAsMobi = document.getElementById('mobifile').files[0]; // MOBI file
+            const bookFileAsF2b = document.getElementById('f2bfile').files[0]; // F2B file
+            const bookFileAsEpub = document.getElementById('epubfile').files[0];
+
+            //if (imageFile) {
+            //    formData.append('imageFile', imageFile);
+            //}
+            //if (bookFile) {
+            //    formData.append('pdffile', bookFileAsPdf);
+            //    formData.append('mobifile', bookFileAsmobi);
+            //    formData.append('f2bfile', bookFileAsf2b);
+            //    formData.append('epubfile', bookFileAsepub);
+            //}
             
             // Append form data
             formData.append('title', title);
@@ -1168,12 +1190,23 @@
             formData.append('availableCopies', copies);
             formData.append('age', age);
 
+            //Checking files.
             if (imageFile) {
                 formData.append('imageFile', imageFile);
             }
-            if (bookFile) {
-                formData.append('bookFile', bookFile);
+            if (bookFileAsPdf) {
+                formData.append('pdffile', bookFileAsPdf);
             }
+            if (bookFileAsMobi) {
+                formData.append('mobifile', bookFileAsMobi);
+            }
+            if (bookFileAsF2b) {
+                formData.append('f2bfile', bookFileAsF2b);
+            }
+            if (bookFileAsEpub) {
+                formData.append('epubfile', bookFileAsEpub);
+            }
+
            
             $.ajax({
                 url: '/Dashboard/Addingbook',
