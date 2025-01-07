@@ -22,8 +22,8 @@ namespace Ebook_Library_Project
 {
     public static class Userdatabase
     {
-        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -327,24 +327,146 @@ namespace Ebook_Library_Project
             }
         }
 
-        // Function to add a book to the Books table
+        //Function to add a book to the Books table
+        //public static void AddBook(
+        //     string title,
+        //     string author,
+        //     string category,
+        //     int availableCopies,
+        //     decimal buyPrice,
+        //     decimal borrowPrice, int age = 0,
+        //     HttpPostedFileBase imageFile = null,
+        //    HttpPostedFileBase pdffile = null,
+        //    HttpPostedFileBase mobifile = null,
+        //    HttpPostedFileBase f2bfile = null,
+        //    HttpPostedFileBase epubfile = null
+        //    )
+        //    {
+        //        // Define directories
+        //        string imageDirectory = HttpContext.Current.Server.MapPath("~/Content/Images/");
+        //        string bookDirectory = HttpContext.Current.Server.MapPath("~/Content/Books/");
+        //        string imagePath = null;
+        //        string bookFilePath = null;
+
+
+        //        // Handle the image upload
+        //        if (imageFile != null && imageFile.ContentLength > 0)
+        //        {
+        //            if (!Directory.Exists(imageDirectory))
+        //            {
+        //                Directory.CreateDirectory(imageDirectory);
+        //            }
+
+        //            string imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+        //            string fullImagePath = Path.Combine(imageDirectory, imageFileName);
+
+        //            imageFile.SaveAs(fullImagePath);
+        //            imagePath = "/Content/Images/" + imageFileName; // Relative path for database
+        //        }
+
+        //        // Handle the book files formats upload
+
+        //        if (pdffile != null && pdffile.ContentLength > 0)
+        //        {
+        //            if (!Directory.Exists(bookDirectory))
+        //            {
+        //                Directory.CreateDirectory(bookDirectory);
+        //            }
+
+        //            string pdfFileName = Guid.NewGuid().ToString() + Path.GetExtension(pdffile.FileName);
+        //            string fullPdfPath = Path.Combine(bookDirectory, pdfFileName);
+
+        //            pdffile.SaveAs(fullPdfPath);
+        //            bookFilePath = "/Content/Books/" + pdfFileName; // Relative path for database
+        //        }
+        //        else if (mobifile != null && mobifile.ContentLength > 0)
+        //        {
+        //            if (!Directory.Exists(bookDirectory))
+        //            {
+        //                Directory.CreateDirectory(bookDirectory);
+        //            }
+
+        //            string mobiFileName = Guid.NewGuid().ToString() + Path.GetExtension(mobifile.FileName);
+        //            string fullMobiPath = Path.Combine(bookDirectory, mobiFileName);
+
+        //            mobifile.SaveAs(fullMobiPath);
+        //            bookFilePath = "/Content/Books/" + mobiFileName; // Relative path for database
+        //        }
+        //        else if (f2bfile != null && f2bfile.ContentLength > 0)
+        //        {
+        //            if (!Directory.Exists(bookDirectory))
+        //            {
+        //                Directory.CreateDirectory(bookDirectory);
+        //            }
+
+        //            string f2bFileName = Guid.NewGuid().ToString() + Path.GetExtension(f2bfile.FileName);
+        //            string fullF2BPath = Path.Combine(bookDirectory, f2bFileName);
+
+        //            f2bfile.SaveAs(fullF2BPath);
+        //            bookFilePath = "/Content/Books/" + f2bFileName; // Relative path for database
+        //        }
+        //        else if (epubfile != null && epubfile.ContentLength > 0)
+        //        {
+        //            if (!Directory.Exists(bookDirectory))
+        //            {
+        //                Directory.CreateDirectory(bookDirectory);
+        //            }
+
+        //            string epubFileName = Guid.NewGuid().ToString() + Path.GetExtension(epubfile.FileName);
+        //            string fullEpubPath = Path.Combine(bookDirectory, epubFileName);
+
+        //            epubfile.SaveAs(fullEpubPath);
+        //            bookFilePath = "/Content/Books/" + epubFileName; // Relative path for database
+        //        }
+
+        //        // Define the SQL query
+        //        string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice,minage,Sale,category) " +
+        //             "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @minage,0,@Category)";
+
+        //        using (SqlConnection connection = new SqlConnection(connectionString))
+        //        {
+        //            SqlCommand command = new SqlCommand(query, connection);
+
+        //            // Add image path parameter
+        //            command.Parameters.AddWithValue("@ImagePath", string.IsNullOrEmpty(imagePath) ? DBNull.Value : (object)imagePath);
+
+        //            // Add book file path parameter
+        //            command.Parameters.AddWithValue("@BookFilePath", string.IsNullOrEmpty(bookFilePath) ? DBNull.Value : (object)bookFilePath);
+
+        //            command.Parameters.AddWithValue("@Name", title);
+        //            command.Parameters.AddWithValue("@Author", author);
+        //            command.Parameters.AddWithValue("@Category", category);
+        //            command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
+        //            command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
+        //            command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
+        //            command.Parameters.AddWithValue("@minage", age);
+        //            connection.Open();
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
         public static void AddBook(
-     string title,
-     string author,
-     string category,
-     int availableCopies,
-     decimal buyPrice,
-     decimal borrowPrice, int age = 0,
-     HttpPostedFileBase imageFile = null,
-     HttpPostedFileBase bookFile = null // Accept PDF, EPUB, or MOBI
- )
+        string title,
+        string author,
+        string category,
+        int availableCopies,
+        decimal buyPrice,
+        decimal borrowPrice,
+        int age = 0,
+        HttpPostedFileBase imageFile = null,
+        HttpPostedFileBase pdffile = null,
+        HttpPostedFileBase mobifile = null,
+        HttpPostedFileBase f2bfile = null,
+        HttpPostedFileBase epubfile = null
+    )
         {
             // Define directories
             string imageDirectory = HttpContext.Current.Server.MapPath("~/Content/Images/");
             string bookDirectory = HttpContext.Current.Server.MapPath("~/Content/Books/");
             string imagePath = null;
-            string bookFilePath = null;
-
+            string pdfPath = null;
+            string mobiPath = null;
+            string f2bPath = null;
+            string epubPath = null;
 
             // Handle the image upload
             if (imageFile != null && imageFile.ContentLength > 0)
@@ -361,54 +483,78 @@ namespace Ebook_Library_Project
                 imagePath = "/Content/Images/" + imageFileName; // Relative path for database
             }
 
-            // Handle the book file upload
-            if (bookFile != null && bookFile.ContentLength > 0)
+            // Handle book file uploads for each format
+            if (pdffile != null && pdffile.ContentLength > 0)
             {
-                string fileExtension = Path.GetExtension(bookFile.FileName).ToLower();
-                if (fileExtension == ".pdf" || fileExtension == ".epub" || fileExtension == ".mobi")
-                {
-                    if (!Directory.Exists(bookDirectory))
-                    {
-                        Directory.CreateDirectory(bookDirectory);
-                    }
+                string pdfFileName = Guid.NewGuid().ToString() + Path.GetExtension(pdffile.FileName);
+                string fullPdfPath = Path.Combine(bookDirectory, pdfFileName);
 
-                    string bookFileName = Guid.NewGuid().ToString() + fileExtension;
-                    string fullBookPath = Path.Combine(bookDirectory, bookFileName);
+                pdffile.SaveAs(fullPdfPath);
+                pdfPath = "/Content/Books/" + pdfFileName;
+            }
 
-                    bookFile.SaveAs(fullBookPath);
-                    bookFilePath = "/Content/Books/" + bookFileName; // Relative path for database
-                }
-                else
-                {
-                    throw new Exception("Invalid file type. Only .pdf, .epub, and .mobi files are allowed.");
-                }
+            if (mobifile != null && mobifile.ContentLength > 0)
+            {
+                string mobiFileName = Guid.NewGuid().ToString() + Path.GetExtension(mobifile.FileName);
+                string fullMobiPath = Path.Combine(bookDirectory, mobiFileName);
+
+                mobifile.SaveAs(fullMobiPath);
+                mobiPath = "/Content/Books/" + mobiFileName;
+            }
+
+            if (f2bfile != null && f2bfile.ContentLength > 0)
+            {
+                string f2bFileName = Guid.NewGuid().ToString() + Path.GetExtension(f2bfile.FileName);
+                string fullF2bPath = Path.Combine(bookDirectory, f2bFileName);
+
+                f2bfile.SaveAs(fullF2bPath);
+                f2bPath = "/Content/Books/" + f2bFileName;
+            }
+
+            if (epubfile != null && epubfile.ContentLength > 0)
+            {
+                string epubFileName = Guid.NewGuid().ToString() + Path.GetExtension(epubfile.FileName);
+                string fullEpubPath = Path.Combine(bookDirectory, epubFileName);
+
+                epubfile.SaveAs(fullEpubPath);
+                epubPath = "/Content/Books/" + epubFileName;
             }
 
             // Define the SQL query
-            string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice,minage,Sale,category) " +
-                 "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @minage,0,@Category)";
+            string query = @"
+        INSERT INTO Books (
+            ImagePath, BookFilePathpdf, BookFilePathmobi, BookFilePathpf2b, BookFilePathepub, 
+            Name, Author, AvailableCopies, BuyingPrice, BorrowPrice, minage, Sale, Category
+        ) 
+        VALUES (
+            @ImagePath, @PdfFilePath, @MobiFilePath, @F2bFilePath, @EpubFilePath, 
+            @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @minage, 0, @Category
+        )";
 
+            // Execute the query
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
 
-                // Add image path parameter
+                // Add parameters
                 command.Parameters.AddWithValue("@ImagePath", string.IsNullOrEmpty(imagePath) ? DBNull.Value : (object)imagePath);
-
-                // Add book file path parameter
-                command.Parameters.AddWithValue("@BookFilePath", string.IsNullOrEmpty(bookFilePath) ? DBNull.Value : (object)bookFilePath);
-
+                command.Parameters.AddWithValue("@PdfFilePath", string.IsNullOrEmpty(pdfPath) ? DBNull.Value : (object)pdfPath);
+                command.Parameters.AddWithValue("@MobiFilePath", string.IsNullOrEmpty(mobiPath) ? DBNull.Value : (object)mobiPath);
+                command.Parameters.AddWithValue("@F2bFilePath", string.IsNullOrEmpty(f2bPath) ? DBNull.Value : (object)f2bPath);
+                command.Parameters.AddWithValue("@EpubFilePath", string.IsNullOrEmpty(epubPath) ? DBNull.Value : (object)epubPath);
                 command.Parameters.AddWithValue("@Name", title);
                 command.Parameters.AddWithValue("@Author", author);
                 command.Parameters.AddWithValue("@Category", category);
                 command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
                 command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
                 command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
-                command.Parameters.AddWithValue("@minage", age); 
+                command.Parameters.AddWithValue("@minage", age);
+
                 connection.Open();
                 command.ExecuteNonQuery();
             }
         }
+
 
 
         public static void RemoveBook(int bookId)
