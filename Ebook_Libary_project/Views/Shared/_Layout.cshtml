@@ -26,7 +26,7 @@
                             <a class="nav-link" href="/Books">Books</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Ebook_libary_Home/SiteReview">Feedback</a>
+                            <a class="nav-link" href="javascript:void(0);" id="feedback-link">Feedback</a>
                         </li>
                         @*Only admins*@
                         <li class="nav-item" id="Dashboard" style="display:none">
@@ -76,8 +76,9 @@
             <div class="container" style="background-color:#f1f1f1">
 
                 <button type="button" div class="login_container" class="registerbtn" onclick="switchToRegister()">Register</button>
-                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
                 <button type="button" div class="login_container" onclick="switchToForgotPassword()">Forgot Password</button>
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+
             </div>
 
             <div id="errorMessage" style="color: red; display: none;">
@@ -180,6 +181,8 @@
     @RenderSection("scripts", required: false)
 
     <script>
+
+
         // Helper Functions
         function getCookie(name) {
             const value = `; ${document.cookie}`;
@@ -213,9 +216,9 @@
         document.getElementById('openLoginButton').onclick = function () {
             document.getElementById('id01').style.display = 'block';
         };
-        document.getElementById('openLoginButton').onclick = function () {
-            document.getElementById('id01').style.display = 'block';
-        };
+        //document.getElementById('openLoginButton').onclick = function () {
+        //    document.getElementById('id01').style.display = 'block';
+        //};
 
         document.querySelector('.close').onclick = function () {
             document.getElementById('id01').style.display = 'none';
@@ -226,6 +229,31 @@
                 document.getElementById('id01').style.display = 'none';
             }
         };
+        //For feedback (Making sure that a user , can't sumbit twice.)
+        $(document).ready(function () {
+            $('#feedback-link').on('click', function () {
+                $.ajax({
+                    url: '/Ebook_libary_Home/Check_webreview_ofuser', // Action method URL
+                    type: 'GET', // HTTP Method
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = '/';
+                        }
+                        else {
+                            window.location.href = '/Ebook_libary_Home/SiteReview'
+                        }
+                       
+                    },
+                    error: function () {
+                        // Handle errors
+                        $('#feedback-message').text('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+
+
 
         // Login Functionality
         document.getElementById("loginButton").onclick = function (event) {
