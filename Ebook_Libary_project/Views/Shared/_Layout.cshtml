@@ -7,150 +7,52 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <style>
-        /* Navbar Styling */
-        .navbar {
-            background-color: #002366; /* Deep Blue */
-            padding: 1rem 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-        }
-
-        .navbar-brand {
-            font-size: 1.8rem; /* Larger Font Size */
-            font-weight: 700; /* Bold */
-            text-transform: uppercase;
-            color: #FFD700 !important; /* Gold */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Subtle Shadow */
-            transition: transform 0.3s ease-in-out;
-        }
-
-            .navbar-brand:hover {
-                transform: scale(1.1); /* Slight Grow Effect */
-            }
-
-        .nav-link {
-            color: #FFFFFF !important; /* White */
-            font-weight: 600;
-        }
-
-            .nav-link:hover {
-                color: #FFD700 !important; /* Gold hover effect */
-                text-decoration: underline;
-            }
-
-        .navbar-toggler {
-            border: none;
-        }
-
-        /* Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, #0047AB, #003580); /* Gradient */
-            border: none;
-            color: #FFFFFF;
-            border-radius: 30px;
-            padding: 0.5rem 1.5rem;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 6px rgba(0, 71, 171, 0.3); /* 3D shadow */
-        }
-
-            .btn-primary:hover {
-                background: linear-gradient(135deg, #003580, #002244); /* Darker Gradient */
-                box-shadow: 0 6px 10px rgba(0, 53, 128, 0.5); /* Stronger shadow */
-                transform: scale(1.05); /* Slight grow effect */
-            }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #d9534f, #c9302c); /* Gradient */
-            border-radius: 30px;
-            padding: 0.5rem 1.5rem;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 6px rgba(217, 83, 79, 0.3); /* Shadow */
-        }
-
-            .btn-danger:hover {
-                background: linear-gradient(135deg, #c9302c, #a0211c); /* Darker Gradient */
-                box-shadow: 0 6px 10px rgba(201, 48, 44, 0.5); /* Stronger shadow */
-                transform: scale(1.05); /* Slight grow effect */
-            }
-
-        /* Cart Icon */
-        #viewCartButton img {
-            width: 40px;
-            height: 40px;
-            transition: transform 0.3s ease-in-out;
-        }
-
-            #viewCartButton img:hover {
-                transform: scale(1.2); /* Slight grow effect on hover */
-            }
-
-        /* Modal Styling */
-        .modal {
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent overlay */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #FFFFFF, #F0F0F0); /* Subtle gradient */
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 500px;
-        }
-
-        /* Responsive Adjustments */
-        @@media (max-width: 768px) {
-            .navbar-nav {
-                text-align: center;
-            }
-
-            .modal-content {
-                padding: 1.5rem;
-            }
-        }
-    </style>
-
-
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <!-- Enhanced Site Name -->
                 <a class="navbar-brand" href="/">My E-Book Library</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item" id="Dashboard" style="display:none"><a class="nav-link" href="/Dashboard/Index">Dashboard</a></li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Aligned to the right -->
-                        <li class="nav-item" id="viewCartButton" style="display:none">
-                            <a href="/User/Cart/CartView">
-                                <img src="Content/images/basket-icon.png" alt="Cart" style="width: 50px; height: 50px; margin-right: 20px;">
-                            </a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/Books">Books</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Ebook_libary_Home/SiteReview">Feedback</a>
+                        </li>
+                        @*Only admins*@
+                        <li class="nav-item" id="Dashboard" style="display:none">
+
+                            <a class="nav-link" href="/Dashboard/Index">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Login Button -->
                             <button id="openLoginButton" class="btn btn-primary" type="button">Login</button>
                         </li>
-                        <li class="nav-item" id="logoutButton" style="display: none;">
-                            <button id="logoutButtonElement" class="btn btn-danger">Logout</button>
-                        </li>
+
                     </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item" id="viewCartButton" style="display:none">
+                            <a class="btn btn-primary" href="/User/Cart/CartView">View Cart</a>
+
+
+                    </ul>
+                    <li class="nav-item" id="logoutButton" style="display: none;">
+                        <button id="logoutButtonElement" class="btn btn-danger">Logout</button>
+                    </li>
                 </div>
             </div>
         </nav>
     </header>
-
-
-    <div id="id01" class="modal" style="display: none;">
+    <div id="id01" class="modal">
         <!-- Login Form -->
         <form id="loginForm" class="modal-content animate">
             <div class="imgcontainer">
@@ -170,15 +72,98 @@
                     <input type="checkbox" checked="checked" name="remember"> Remember me
                 </label>
             </div>
+
             <div class="container" style="background-color:#f1f1f1">
-                <button type="button" class="registerbtn" onclick="switchToRegister()">Register</button>
+
+                <button type="button" div class="login_container" class="registerbtn" onclick="switchToRegister()">Register</button>
                 <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                <span class="psw">Forgot <a href="#">password?</a></span>
+                <button type="button" div class="login_container" onclick="switchToForgotPassword()">Forgot Password</button>
             </div>
-            <div id="errorMessage" style="color: red; display: none;">Invalid username or password. Please try again.</div>
+
+            <div id="errorMessage" style="color: red; display: none;">
+                Invalid username or password. Please try again.
+            </div>
+        </form>
+        <!-- Forgot Password Form -->
+        <form id="forgotPasswordForm" class="modal-content animate" style="display: none;">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="login_container">
+                <label for="email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Your Email Address" id="forgotEmail" name="email" required>
+
+                <label for="Uname_reset"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="Username_forreset" name="Uname_reset" required>
+
+
+                <button type="button" id="resetPasswordButton">Reset Password</button>
+
+                <div id="forgotPasswordMessage" style="display: none; color: green;">
+                    If this email is registered, a password reset link will be sent.
+                </div>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" div class="login_container" onclick="switchToLogin()">Back to Login</button>
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
+        <!-- Registration Form -->
+        <form id="registerForm" class="modal-content animate" style="display: none;">
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="login_container">
+                <label for="newUname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" id="newUsername" name="newUname" required>
+
+                <label for="email"><b>Email</b></label>
+                <input type="email" placeholder="Enter Email" id="email" name="email" required>
+
+                <label for="newPsw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" id="newPassword" name="newPsw" required>
+
+                <label for="confirmPsw"><b>Confirm Password</b></label>
+                <input type="password" placeholder="Confirm Password" id="confirmPassword" name="confirmPsw" required>
+
+                <label for="age"><b>Enter Age</b></label>
+                <input type="text" placeholder="Enter age" id="age" name="age" required>
+
+                <label for="isadmin">
+                    <input type="checkbox" id="isadmin" name="isadmin">
+                    Do you want to be an admin?
+                </label>
+
+                <button type="submit" id="registerButton">Register</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" div class="login_container" onclick="switchToLogin()">Back to Login</button>
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+
+            </div>
+        </form>
+    </div>
+    <div id="id01" class="modal">
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <img src="@Url.Content("~/Content/img_avatar2.png")" alt="Avatar" class="avatar">
+        </div>
+
+
+        <div id="errorMessage" style="color: red; display: none;">
+            Invalid username or password. Please try again.
+        </div>
+
         </form>
     </div>
 
+    <!-- Main Content -->
     <div class="container">
         @RenderBody()
     </div>
@@ -187,19 +172,59 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jquery")
     <script src="~/Scripts/site.js"></script>
+
     @Styles.Render("~/Content/bootstrap")
+
+
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
     <script>
-        // Open Login Modal
+        // Helper Functions
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        function deleteCookie(name) {
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            console.log("Deleted cookie:", name);
+        }
+
+        function switchToRegister() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('forgotPasswordForm').style.display = 'none';
+        }
+
+        function switchToLogin() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('forgotPasswordForm').style.display = 'none';
+        }
+
+        function switchToForgotPassword() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('forgotPasswordForm').style.display = 'block';
+        }
+
+        document.getElementById('openLoginButton').onclick = function () {
+            document.getElementById('id01').style.display = 'block';
+        };
         document.getElementById('openLoginButton').onclick = function () {
             document.getElementById('id01').style.display = 'block';
         };
 
-        // Close Login Modal
         document.querySelector('.close').onclick = function () {
             document.getElementById('id01').style.display = 'none';
+        };
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('id01')) {
+                document.getElementById('id01').style.display = 'none';
+            }
         };
 
         // Login Functionality
@@ -215,21 +240,69 @@
                 data: { username, password },
                 success: function (response) {
                     if (response.success) {
-                        localStorage.setItem('userId', response.userId);
-                        localStorage.setItem('isAdmin', response.isAdmin);
+                        document.cookie = `userId=${response.userId}; path=/; max-age=900;`;
+                        alert("Login successful!");
+                        window.location.reload(); // Reload the page to reflect login state
+                    } else {
+                        alert(response.message || "Invalid username or password.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Login error:", error);
+                    alert("An error occurred during login. Please try again.");
+                }
+            });
+        };
 
-                        // Hide Login Modal and Update UI
-                        document.getElementById('id01').style.display = 'none';
-                        document.getElementById('openLoginButton').style.display = 'none';
-                        document.getElementById('logoutButton').style.display = 'block';
-                        document.getElementById('viewCartButton').style.display = 'block';
+        // Registration Functionality
+        document.getElementById("registerButton").onclick = function (event) {
+            event.preventDefault();
 
-                        if (response.isAdmin) {
-                            alert('Welcome Admin!');
-                            document.getElementById('Dashboard').style.display = 'block';
-                        } else {
-                            alert('Login successful!');
-                        }
+            var username = document.getElementById("newUsername").value;
+            var password = document.getElementById("newPassword").value;
+            var email = document.getElementById("email").value;
+            var age = document.getElementById("age").value;
+            var con_password = document.getElementById("confirmPassword").value;
+            var isAdmin = document.getElementById("isadmin").checked;
+
+            if (!username || !password || !email || !age || !con_password) {
+                alert("Please fill in all required fields.");
+                return;
+            }
+
+            $.ajax({
+                url: '/Login/Checking_info_register',
+                type: 'POST',
+                data: { name: username, password, mail: email, age, con_pass: con_password, isadmin: isAdmin },
+                success: function (response) {
+                    if (response.success) {
+                        alert("User registered successfully!");
+                        switchToLogin();
+                    } else {
+                        alert(response.message || "An error occurred. Please try again.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Registration error:", error);
+                    alert("An unexpected error occurred. Please try again.");
+                }
+            });
+        };
+        //forgot password.
+        document.getElementById("resetPasswordButton").onclick = function (event) {
+            event.preventDefault();
+
+            var email = document.getElementById("forgotEmail").value;
+            var username = document.getElementById("Username_forreset").value;
+
+            $.ajax({
+                url: '/Login/email_pass_reset',
+                type: 'POST',
+                data: { email, username },
+                success: function (response) {
+                    if (response.success) {
+                        alert("An email has been sent with instructions to reset your password, if the address is associated with an account.");
+                        switchToLogin(); // Reload the page to reflect login state
                     } else {
                         alert(response.message || "Invalid username or password.");
                     }
@@ -243,31 +316,36 @@
 
         // Logout Functionality
         document.getElementById("logoutButtonElement").onclick = function () {
-            localStorage.clear();
-            document.getElementById('openLoginButton').style.display = 'block';
-            document.getElementById('logoutButton').style.display = 'none';
-            document.getElementById('viewCartButton').style.display = 'none';
-            document.getElementById('Dashboard').style.display = 'none';
+            deleteCookie("userId");
             alert("Logged out successfully.");
             window.location.href = '/';
         };
 
-        // Check Login State on Load
-        const userId = localStorage.getItem("userId");
+        // Check Login State
+        const userId = getCookie("userId");
+        var storedUserData = JSON.parse(localStorage.getItem("userData"));
         if (userId) {
-            document.getElementById('openLoginButton').style.display = 'none';
-            document.getElementById('logoutButton').style.display = 'block';
-            document.getElementById('viewCartButton').style.display = 'block';
-
-            if (localStorage.getItem('isAdmin')) {
-                document.getElementById('Dashboard').style.display = 'block';
+            if (storedUserData && storedUserData.isAdmin) {
+                document.getElementById("Dashboard").style.display = "block";
             }
+
+            document.getElementById("openLoginButton").style.display = "none";
+            document.getElementById("logoutButton").style.display = "block";
+            document.getElementById("viewCartButton").style.display = "block";
+            document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, User ${userId}!</p>`);
         } else {
-            document.getElementById('openLoginButton').style.display = 'block';
-            document.getElementById('logoutButton').style.display = 'none';
-            document.getElementById('viewCartButton').style.display = 'none';
+            document.getElementById("openLoginButton").style.display = "block";
+            document.getElementById("logoutButton").style.display = "none";
         }
     </script>
-</body>
 
+
+
+
+
+
+
+</body>
 </html>
+
+
