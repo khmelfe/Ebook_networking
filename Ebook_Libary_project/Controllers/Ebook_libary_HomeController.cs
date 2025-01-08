@@ -14,8 +14,7 @@ namespace Ebook_Libary_project.Controllers
 {
     public class Ebook_libary_HomeController : Controller
     {
-       
-        
+
         public ActionResult Ebook_home()
         {
             int userId = UserSession.GetCurrentUserId();
@@ -28,7 +27,7 @@ namespace Ebook_Libary_project.Controllers
                 ViewBag.BorrowedBooks = null;
                 return View();
             }
-            
+
 
             var boughtBooks = GetBoughtBooks(userId);
             var borrowedBooks = GetBorrowedBooksWithReturnDate(userId);
@@ -82,7 +81,7 @@ namespace Ebook_Libary_project.Controllers
         {
             try
             {
-               List<dynamic> webreviews = Userdatabase.GetWebReviews();
+                List<dynamic> webreviews = Userdatabase.GetWebReviews();
                 return Json(new { success = true, data = webreviews }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -90,8 +89,8 @@ namespace Ebook_Libary_project.Controllers
                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
-        
+
+
 
 
         private List<BookModel> GetBoughtBooks(int userId)
@@ -159,7 +158,7 @@ namespace Ebook_Libary_project.Controllers
             try
             {
                 Userdatabase.ReturnBook(UserSession.GetCurrentUserId(), bookId);
-                return Json(new { success = true, message = "Book"+bookId+" returned successfully." });
+                return Json(new { success = true, message = "Book" + bookId + " returned successfully." });
             }
             catch (Exception ex)
             {
@@ -192,10 +191,10 @@ namespace Ebook_Libary_project.Controllers
                     Id = book.Id,
                     Name = book.Title,
                     Author = book.Author,
-                    Category=book.Category,
+                    Category = book.Category,
                     BuyingPrice = book.Buyingprice.ToString("C"),
                     BorrowPrice = book.BorrowPrice.ToString("C"),
-                    minage=book.minage,
+                    minage = book.minage,
                     Sale = book.Sale,
                     DiscountedPrice = book.Sale > 0
                 ? (book.Buyingprice * (1 - book.Sale / 100m)).ToString("C")
@@ -206,13 +205,15 @@ namespace Ebook_Libary_project.Controllers
 
             // Return the list of books as JSON
             return Json(books);
-        }
+        } 
 
         [HttpPost]
         public JsonResult FilterBooks(string genre, string priceOrder)
         {
             var bookIds = Userdatabase.GetAllBookIds();
             List<BookModel> allb = new List<BookModel>();
+            List<BookModel> b = new List<BookModel>();
+            Debug.WriteLine("genre-", genre);
             foreach (var bookId in bookIds)
             {
                 var book = Userdatabase.GetBookById(bookId);
@@ -225,9 +226,26 @@ namespace Ebook_Libary_project.Controllers
             // Filter by genre
             if (!string.IsNullOrEmpty(genre))
             {
-                allb = allb.Where(book => book.Category == genre).ToList();
-            }
+                foreach (var book in allb)
+                {
+                    Debug.WriteLine("book-" + book.Category + book.Name);
 
+
+                    if (book.Category.Trim() == (genre.Trim()))
+                    {
+                        b.Add(book);
+
+                        Debug.WriteLine("equals-" + book.Category + genre);
+                    }
+                    else
+                    {
+                        Debug.WriteLine(book.Category, genre);
+
+                    }
+                }
+
+            }
+            Debug.WriteLine(allb.Count);
             // Order by buying or borrow price
             switch (priceOrder)
             {
@@ -245,7 +263,7 @@ namespace Ebook_Libary_project.Controllers
                     break;
             }
 
-            return Json(allb);
+            return Json(b);
         }
 
         [HttpGet]
