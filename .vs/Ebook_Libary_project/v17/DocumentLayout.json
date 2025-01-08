@@ -3,20 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\97254\\Desktop\\proj\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\97254\\desktop\\proj\\ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|C:\\Users\\97254\\Desktop\\proj\\ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|C:\\Users\\97254\\Desktop\\proj\\ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|C:\\Users\\97254\\Desktop\\proj\\ebook_libary_project\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|C:\\Users\\97254\\Desktop\\proj\\ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|C:\\Users\\97254\\Desktop\\proj\\ebook_libary_project\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_LocalDb__MSSQLLocalDB/User/True/SqlTable/dbo.Users.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +21,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 21,
+          "SelectedChildIndex": 19,
           "Children": [
             {
               "$type": "Bookmark",
@@ -102,40 +97,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Ebook_home.cshtml",
-              "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
-              "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
-              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
-              "RelativeToolTip": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
-              "ViewState": "AgIAANwBAAAAAAAAAAAAAJgCAAA/AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-08T14:18:18.343Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Userdatabase.cs",
-              "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Userdatabase.cs",
-              "RelativeDocumentMoniker": "Ebook_Libary_project\\Userdatabase.cs",
-              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Userdatabase.cs",
-              "RelativeToolTip": "Ebook_Libary_project\\Userdatabase.cs",
-              "ViewState": "AgIAAKoAAAAAAAAAAAAowLwAAABiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-08T14:10:08.709Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "EmailService.cs",
-              "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\EmailService.cs",
-              "RelativeDocumentMoniker": "Ebook_Libary_project\\EmailService.cs",
-              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\EmailService.cs",
-              "RelativeToolTip": "Ebook_Libary_project\\EmailService.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-08T13:07:49.151Z"
+              "Title": "dbo.Users [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_LocalDb__MSSQLLocalDB/User/True/SqlTable/dbo.Users.sql",
+              "ToolTip": "dbo.Users [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-01-08T20:20:00.601Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -143,11 +111,24 @@
               "Title": "Ebook_libary_HomeController.cs",
               "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
-              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs*",
-              "RelativeToolTip": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs*",
-              "ViewState": "AgIAAMIAAAAAAAAAAAAAANEAAAAJAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
+              "RelativeToolTip": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
+              "ViewState": "AgIAAOUAAAAAAAAAAAAAAOIAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-07T21:37:28.973Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\97254\\Desktop\\proj\\Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Ebook_Libary_project\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAHkBAAAAAAAAAAAuwIYBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-08T18:56:31.844Z",
               "EditorCaption": ""
             }
           ]

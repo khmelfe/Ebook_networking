@@ -382,7 +382,6 @@
         // Registration Functionality
         document.getElementById("registerButton").onclick = function (event) {
             event.preventDefault();
-
             var username = document.getElementById("newUsername").value;
             var password = document.getElementById("newPassword").value;
             var email = document.getElementById("email").value;
@@ -394,7 +393,8 @@
                 alert("Please fill in all required fields.");
                 return;
             }
-            document.getElementById('Id01').style.display = 'none';
+            alert("please wait while user is created!");
+     
             $.ajax({
                 url: '/Login/Checking_info_register',
                 type: 'POST',

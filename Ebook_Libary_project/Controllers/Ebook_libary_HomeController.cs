@@ -245,21 +245,22 @@ namespace Ebook_Libary_project.Controllers
                 }
 
             }
+            else { b = allb; }
             Debug.WriteLine(allb.Count);
             // Order by buying or borrow price
             switch (priceOrder)
             {
                 case "buy-low-to-high":
-                    allb = allb.OrderBy(book => book.BuyingPrice).ToList();
+                    b = b.OrderBy(book => book.BuyingPrice).ToList();
                     break;
                 case "buy-high-to-low":
-                    allb = allb.OrderByDescending(book => book.BuyingPrice).ToList();
+                    b = b.OrderByDescending(book => book.BuyingPrice).ToList();
                     break;
                 case "borrow-low-to-high":
-                    allb = allb.OrderBy(book => book.BorrowPrice).ToList();
+                    b = b.OrderBy(book => book.BorrowPrice).ToList();
                     break;
                 case "borrow-high-to-low":
-                    allb = allb.OrderByDescending(book => book.BorrowPrice).ToList();
+                    b = b.OrderByDescending(book => book.BorrowPrice).ToList();
                     break;
             }
 
