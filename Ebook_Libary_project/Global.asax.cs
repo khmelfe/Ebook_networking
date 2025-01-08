@@ -15,6 +15,7 @@ namespace Ebook_Libary_project
 
         protected void Application_Start()
         {
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
