@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\views\\ebook_libary_home\\bookviewer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\ebook_libary_home\\bookviewer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\views\\user\\webreview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\user\\webreview.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\controllers\\ebook_libary_homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\views\\ebook_libary_home\\ebook_home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|c:\\users\\filex\\source\\repos\\ebook_networking\\ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2F7655B-5F99-4839-A2FF-8A2EB5702BAB}|Ebook_Libary_project\\Ebook_Libary_project.csproj|solutionrelative:ebook_libary_project\\userdatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,8 +26,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 17,
+          "SelectedChildIndex": 18,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Ebook_libary_HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
+              "RelativeDocumentMoniker": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
+              "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
+              "RelativeToolTip": "Ebook_Libary_project\\Controllers\\Ebook_libary_HomeController.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAIwEQAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-07T19:19:01.087Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
@@ -95,14 +112,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "BookViewer.cshtml",
-              "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\Ebook_libary_Home\\BookViewer.cshtml",
-              "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\BookViewer.cshtml",
-              "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\Ebook_libary_Home\\BookViewer.cshtml",
-              "RelativeToolTip": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\BookViewer.cshtml",
-              "ViewState": "AgIAABAAAAAAAAAAAAAswBEAAAAAAAAAAAAAAA==",
+              "Title": "Webreview.cshtml",
+              "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\User\\Webreview.cshtml",
+              "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\User\\Webreview.cshtml",
+              "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\User\\Webreview.cshtml",
+              "RelativeToolTip": "Ebook_Libary_project\\Views\\User\\Webreview.cshtml",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAAAG8AAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-07T18:15:30.63Z",
+              "WhenOpened": "2025-01-07T19:32:19.944Z",
               "EditorCaption": ""
             },
             {
@@ -113,20 +130,20 @@
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
               "RelativeToolTip": "Ebook_Libary_project\\Views\\Ebook_libary_Home\\Ebook_home.cshtml",
-              "ViewState": "AgIAAIwCAAAAAAAAAAAQwIwCAAAPAAAAAAAAAA==",
+              "ViewState": "AgIAAFwCAAAAAAAAAAAQwIwCAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-01-07T15:50:03.511Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Userdatabase.cs",
               "DocumentMoniker": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeDocumentMoniker": "Ebook_Libary_project\\Userdatabase.cs",
               "ToolTip": "C:\\Users\\filex\\source\\repos\\Ebook_networking\\Ebook_Libary_project\\Userdatabase.cs",
               "RelativeToolTip": "Ebook_Libary_project\\Userdatabase.cs",
-              "ViewState": "AgIAAHoEAAAAAAAAAAAewIYEAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAHMGAAAAAAAAAAApwH4GAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-07T12:11:09.139Z",
               "EditorCaption": ""
