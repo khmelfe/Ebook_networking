@@ -124,6 +124,19 @@ namespace Ebook_Libary_project.Controllers
 
             controller.Ebook_home();//going to home page.
         }
+        [HttpGet]
+        public ActionResult status()
+        {
+            int currentuser = UserSession.GetCurrentUserId();
+            if (currentuser != 0)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
     }
 }
 
