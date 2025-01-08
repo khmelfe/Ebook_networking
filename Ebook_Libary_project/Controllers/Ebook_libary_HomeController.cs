@@ -18,6 +18,7 @@ namespace Ebook_Libary_project.Controllers
         public ActionResult Ebook_home()
         {
             int userId = UserSession.GetCurrentUserId();
+            CheckAndHandleBorrowedBooks();
 
             if (userId == 0)
             {
@@ -26,6 +27,7 @@ namespace Ebook_Libary_project.Controllers
                 ViewBag.BorrowedBooks = null;
                 return View();
             }
+            
 
             var boughtBooks = GetBoughtBooks(userId);
             var borrowedBooks = GetBorrowedBooksWithReturnDate(userId);
@@ -300,5 +302,95 @@ namespace Ebook_Libary_project.Controllers
         }
 
 
+        public void CheckAndHandleBorrowedBooks()
+        {
+            Debug.WriteLine("Started processing borrowed books...");
+            try
+            {
+                // Query to get all borrowed books
+                string query = "SELECT UserID, BookID, ReturnDate, Emailsent FROM BorrowedBooks";
+                using (SqlConnection connection = new SqlConnection(Userdatabase.connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int userId = (int)reader["UserID"];
+                            int bookId = (int)reader["BookID"];
+                            DateTime returnDate = (DateTime)reader["ReturnDate"];
+                            int emailSent = reader["Emailsent"] != DBNull.Value ? (int)reader["Emailsent"] : 0;
+                            DateTime today = DateTime.Today;
+
+                            Debug.WriteLine($"{returnDate} - {today} = {(returnDate - today).Days}");
+
+                            // Check if the book is due today
+                            if (returnDate.Date == today)
+                            {
+                                // Automatically return the book
+                                Userdatabase.ReturnBook(userId, bookId);
+                                Debug.WriteLine($"Book ID {bookId} returned for user ID {userId}.");
+                            }
+                            else if ((returnDate - today).Days <= 5 && emailSent == 0)
+                            {
+                                // Send a warning email if the book is due in 5 days and email hasn't been sent
+                                string email = Userdatabase.GetUserEmailById(userId);
+                                string userName = Userdatabase.GetUserNameById(userId);
+                                var emailService = new EmailService();
+                                string subject = "Reminder: Book Return Due in 5 Days";
+                                string body = $@"
+                            Dear {userName},
+
+                            This is a friendly reminder that the book you borrowed {Userdatabase.getbooknamebyid(bookId)}) is due to be returned in 5 days.
+                            Please make arrangements to return the book on time to avoid late fees.
+
+                            Thank you,
+                            Ebook Library Team";
+
+                                emailService.SendEmail(email, subject, body);
+                                Debug.WriteLine($"Reminder email sent to {userName}.");
+
+                                // Update the Emailsent column to 1
+                                UpdateEmailSentStatus(bookId, userId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in CheckAndHandleBorrowedBooks: {ex.Message}");
+            }
+        }
+
+        // Method to update Emailsent column
+        private void UpdateEmailSentStatus(int bookId, int userId)
+        {
+            try
+            {
+                string query = "UPDATE BorrowedBooks SET Emailsent = 1 WHERE BookID = @BookID AND UserID = @UserID";
+                using (SqlConnection connection = new SqlConnection(Userdatabase.connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@BookID", bookId);
+                    command.Parameters.AddWithValue("@UserID", userId);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    Debug.WriteLine(rowsAffected > 0
+                        ? $"Emailsent updated for Book ID {bookId}, User ID {userId}."
+                        : $"No update made for Book ID {bookId}, User ID {userId}.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating Emailsent status: {ex.Message}");
+            }
+        }
+
+
+
+
     }
 }
+    

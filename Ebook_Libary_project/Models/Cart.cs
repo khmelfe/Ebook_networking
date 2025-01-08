@@ -6,12 +6,12 @@ namespace Ebook_Libary_project.Models
     public class Cart
     {
         // Key: BookId, Value: (Action, Price, Format)
-        public Dictionary<int, (string Action, decimal Price, string Format)> Items { get; set; }
+        public Dictionary<int, (string Action, decimal Price)> Items { get; set; }
 
         // Constructor to initialize the cart
         public Cart()
         {
-            Items = new Dictionary<int, (string Action, decimal Price, string Format)>();
+            Items = new Dictionary<int, (string Action, decimal Price)>();
         }
 
         private static Cart _cart = new Cart();
@@ -23,17 +23,17 @@ namespace Ebook_Libary_project.Models
         }
 
         // Method to add or update a book in the cart
-        public void AddBookToCart(int bookId, string action, decimal price, string format)
+        public void AddBookToCart(int bookId, string action, decimal price)
         {
             if (Items.ContainsKey(bookId))
             {
                 // Update the existing item in the cart
-                Items[bookId] = (action, price, format);
+                Items[bookId] = (action, price);
             }
             else
             {
                 // Add a new item to the cart
-                Items.Add(bookId, (action, price, format));
+                Items.Add(bookId, (action, price));
             }
         }
 

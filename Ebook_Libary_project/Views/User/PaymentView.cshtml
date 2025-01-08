@@ -118,7 +118,7 @@
 
                 <!-- Payment Form -->
                 <h3>Payment Details</h3>
-                <form method="post" action="/Payment/paymentconfirm">
+                <form method="post" action="/Payment/paymentconfirm" onsubmit="return validatePaymentForm()">
                     <div>
                         <label for="cardNumber">Card Number:</label>
                         <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" placeholder="1234 5678 9012 3456" maxlength="19" />
@@ -158,3 +158,34 @@
     </div>
 </div>
 
+<script>
+    function validatePaymentForm() {
+        const expiry = document.getElementById('expiry').value;
+        const expiryRegex = /^\d{2}\/\d{2}$/;
+
+        if (!expiryRegex.test(expiry)) {
+            alert('Invalid expiry date format. Please use MM/YY.');
+            return false;
+        }
+
+        const [month, year] = expiry.split('/').map(Number);
+
+        if (month < 1 || month > 12) {
+            alert('Invalid month. Please enter a value between 01 and 12.');
+            return false;
+        }
+
+        const currentYear = new Date().getFullYear() % 100; // Get last two digits of the current year
+        const currentMonth = new Date().getMonth() + 1;
+
+        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+            alert('Expiry date cannot be in the past.');
+            return false;
+        }
+
+        return true; // All validations passed
+    }
+</script>
+
+
+    

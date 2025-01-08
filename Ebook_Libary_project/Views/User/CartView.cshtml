@@ -110,7 +110,6 @@
                     <tr>
                         <th>Book Title</th>
                         <th>Action</th>
-                        <th>Format</th>
                         <th>Price</th>
                         <th>Remove</th>
                     </tr>
@@ -123,7 +122,6 @@
                         <tr>
                             <td>@Ebook_Library_Project.Userdatabase.GetBookById(bookId).Name</td>
                             <td>@details.Action</td>
-                            <td>@details.Format</td>
                             <td>@details.Price.ToString("C")</td>
                             <td>
                                 <form method="post" action="/User/Cart/RemoveFromCart">

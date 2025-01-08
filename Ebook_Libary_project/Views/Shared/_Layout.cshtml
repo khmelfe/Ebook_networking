@@ -397,7 +397,7 @@
                 alert("Please fill in all required fields.");
                 return;
             }
-
+            document.getElementById('Id01').style.display = 'none';
             $.ajax({
                 url: '/Login/Checking_info_register',
                 type: 'POST',
@@ -499,6 +499,8 @@
                 });
             });
         });
+
+
     </script>
 
 </body>
