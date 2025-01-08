@@ -186,7 +186,7 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserID", userId);
                 command.Parameters.AddWithValue("@BookID", bookId);
-                command.Parameters.AddWithValue("@ReturnDate", DateTime.Now.AddDays(14)); // Example: 2-week borrow period
+                command.Parameters.AddWithValue("@ReturnDate", DateTime.Now.AddDays(30)); // month borrow period
 
                 connection.Open();
                 command.ExecuteNonQuery();
