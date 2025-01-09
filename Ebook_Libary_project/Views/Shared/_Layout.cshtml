@@ -141,7 +141,7 @@
                         <!-- Aligned to the right -->
                         <li class="nav-item" id="viewCartButton" style="display:none">
                             <a href="/User/Cart/CartView">
-                                <img src="~/Content/images/basket-icon.png" alt="Cart" style="width: 50px; height: 50px; margin-right: 20px;">
+                                <img src="`Content/images/basket-icon.png" alt="Cart" style="width: 50px; height: 50px; margin-right: 20px;">
                             </a>
                         </li>
                         <li class="nav-item">
@@ -355,7 +355,7 @@
                         document.cookie = `userId=${response.userId}; path=/; max-age=900;`;
                         localStorage.setItem('userId', response.userId);
                         localStorage.setItem('isAdmin', response.isAdmin);
-                        // Hide Login Modal and Update UI
+                       
                         document.getElementById('id01').style.display = 'none';
                         document.getElementById('openLoginButton').style.display = 'none';
                         document.getElementById('logoutButton').style.display = 'block';
@@ -367,7 +367,7 @@
                         } else {
                             alert('Login successful!');
                         }
-                        window.location.reload(); // Reload the page to reflect login state
+                        window.location.reload(); 
                     } else {
                         alert(response.message || "Invalid username or password.");
                     }
@@ -427,7 +427,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert("An email has been sent with instructions to reset your password, if the address is associated with an account.");
-                        switchToLogin(); // Reload the page to reflect login state
+                        switchToLogin(); 
                     } else {
                         alert(response.message || "Invalid username or password.");
                     }
@@ -465,7 +465,7 @@
                 document.getElementById("logoutButton").style.display = "block";
                 document.getElementById("viewCartButton").style.display = "block";
                 document.getElementById("feedback-link").style.display = "block";
-                document.body.insertAdjacentHTML("afterbegin", `<p> Welcome, User ${ userId} !</p>`);
+               // document.body.insertAdjacentHTML("afterbegin", `<p> Welcome, User ${ userId} !</p>`);
             if (localStorage.getItem('isAdmin')=="true") {
                    document.getElementById('Dashboard').style.display = 'block';
                 } 

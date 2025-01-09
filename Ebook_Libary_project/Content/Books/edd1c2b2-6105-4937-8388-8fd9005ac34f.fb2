@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:l="http://www.w3.org/1999/xlink">
+<description>
+    <title-info>
+        <genre>antique</genre>
+        <author><first-name></first-name><last-name>Unknown</last-name></author>
+        <book-title>in</book-title>
+        <lang>en</lang>
+    </title-info>
+    <document-info>
+        <author><first-name></first-name><last-name>Unknown</last-name></author>
+        <program-used>calibre 6.23.0</program-used>
+        <date>7.1.2025</date>
+        <id>c6755b62-43ea-438d-aa16-a3a62d12b8cc</id>
+        <version>1.0</version>
+    </document-info>
+    <publish-info>
+    </publish-info>
+</description>
+<body>
+<section>
+<p><strong>Introduction to Computer Communications – Project —a website in MVC </strong></p>
+<empty-line/>
+<p><strong>The project – eBook Library Service </strong></p>
+<p><strong>Instructions:  </strong></p>
+<p>1.  The project can be developed in pairs in MVC <strong>ONLY</strong>.</p>
+<p>2.  The project is to be defended during the dates published in Moodle (later in the course). Both partners must be present during the defense. <strong>Both partners will be graded separately. </strong></p>
+<p>3.  The project must be submitted til  <strong>11/01/2025</strong> into Moodle. Both partners should submit the project and the names of both partners must be included. <strong>Don’t</strong> write the partners’ names in the comments section in Moodle!</p>
+<p>4.  The delay can be granted <strong>only</strong> due to the sickness and military reservation service (miluim). The delay can be asked <strong>only</strong> via a student request with the attachment of relevant documents.</p>
+<p>5.  Copying ANY part is strongly prohibited and wil  be graded by 0, al  the students wil  stand to disciplinary committee in this case.</p>
+<p>You are to develop a website for managing the <strong>eBook Library Service </strong>(localhost) using all the technologies taught during the lab sessions.</p>
+<p>The user types and their permissions, respectfully: admin (managing the site) and users (buying/borrowing an eBook and confirming the payment). Other users can be added with their permissions.</p>
+<p>Different types of users should get a separate page view according to their permissions.</p>
+<p><strong>eBook Library Service </strong>is a slight version of the real Audible app (where you can borrow/buy audio books) or a Libby app, which should manage borrowing/buying a book, book library catalog, waiting list, payments, etc.</p>
+<p><strong>The following is a necessary list of requirements to be implemented in the project. </strong>You are responsible of taking care of other possible constraints (e.g., different users are simultaneously trying to borrow the last copy of the same book while browsing the site from the same localhost, etc.). All the constraints, which do not meet requirements, must give a relative error message.</p>
+<p><strong>Admin</strong> is responsible for:</p>
+<p>•  adding/removing books; books must be suggested in 4 different formats: epub, f2b, mobi and PDF.</p>
+<p>•  managing the prices. The borrow price is lower than buying a book.  If an eBook has a price decrease, show the strikethrough previous price, and a new price. The discount is given for a limited time only (a week at the most).</p>
+<p>•  managing the waiting list (in case of borrowing a book). There are only 3 copies of the book to borrow. While it’s a user’s turn to get a book, (s)he gets notified that the book is available.</p>
+<p>•  managing the book catalog</p>
+<p>•  managing the borrow time frame – a user can borrow a book for 30 days only. 5 days before the return time, the reader wil  get a reminder notification.</p>
+<p>•  Not al  eBooks can be borrowed, some of them are BUY ONLY, especial y the most popular ones.</p>
+<p>•  Managing the registered users in the database.</p>
+<p>•  etc.</p>
+<empty-line/>
+<p><strong>Users</strong> can:</p>
+<p>•  choose a book according to its title, author and publisher</p>
+<p>•  search for a needed eBook in the search field. The search can be performed even after a user enters a partial query (for example, “Harry Potter” instead of “Harry Potter and the Philosopher’s stone”. In this case al  the books in the series are shown as the result of the book search.</p>
+<p>•  borrow an available book, a user can borrow up to 3 books for the same period of time.</p>
+<p>•  buy an available book, a user can buy an unlimited number of eBooks.</p>
+<p>•  borrow the last book while browsing the site from the same localhost. The first person to request the last copy wil  be able to borrow the book for 30 days. Al  other users wil  be given a chance to enter a waiting list, which shows how many people are waiting for the same book and after how many days the book wil  be available to borrow. A user then can decide if (s)he wants to enter the waiting list.</p>
+<p>•  Make a payment using a credit card. Please notice – no credit card number must be stored in the database! The user wil  be asked for a credit card number every time (s)he borrows/buys the book.</p>
+<p>•  See the eBooks in his/her <strong>personal library page</strong>.</p>
+<p>o  If it’s a borrowed book, the remaining borrow time is showing. After the return time, a borrowed eBook disappears from the library).</p>
+<p>o  If a user bought an eBook, it remains in his/her library forever (or til  the user decided to delete it from the library. “Are you sure? Option must pop up for the user in this case.</p>
+<p>•  Rate / give feedback to an eBook (a user can only rate a book in case (s)he bought or borrowed it ONLY. It’s impossible to rate a book if it wasn’t in the user’s personal library.)  The rating/feedback must be published on the relevant book page. Example:</p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-</a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">ebook/dp/B019PIOJYU/ref=sr_1_1?crid=13I09X56OTOPK&amp;dib=eyJ2IjoiMSJ9.XNlU_MOvNApoUs</a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">alNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-</a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncK</a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">PxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-</a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks&amp; </a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">dib_tag=se&amp;keywords=harry+potter+and+the+sorcerer%27s+stone&amp;qid=1731430476&amp;sprefix=</a></p>
+<p><a l:href="https://www.amazon.com/Harry-Potter-Philosophers-Stone-Rowling-ebook/dp/B019PIOJYU/ref%3dsr_1_1?crid%3d13I09X56OTOPK%26dib%3deyJ2IjoiMSJ9.XNlU_MOvNApoUsalNqzrCkielD6FZZVf14ykPxtvjenzBevlpGvmoj-hrKMSNzNi9ZWxy548TFOPYd0XhWIHUx9kj05OA_N0jL7WMkfr130nZEUFR4kIfcOMgC3me_vncKPxEFdb6E5hJGMwOBIjpPbGu4KXxvk8N9CHpDTUZ3VWQDzbKSjZrRcLgZaiZknTkxrNisy5SGL-6M5qREvGJcs9WdkKukhAGgZmRYNvrJg.U6ifeuEavucIh9avxT7Ac8omrY_3CWrOR9pNyaDO7Ks%26dib_tag%3dse%26keywords%3dharry%2bpotter%2band%2bthe%2bsorcerer%27s%2bstone%26qid%3d1731430476%26sprefix%3dharry%2bpotter%2band%2b%2caps%2c277%26sr%3d8-1">harry+potter+and+%2Caps%2C277&amp;sr=8-1 </a></p>
+<p>See the feedback at the end of the page.</p>
+<p>•  Rate / give feedback to a borrowing/buying experience on the website. The rating/feedback must be published on the main page in the dedicated space “What users think about our service”.</p>
+<p>•  Etc.</p>
+<p><strong> eBook gallery: </strong></p>
+<p>•  has a list of eBooks with their covers, titles, author(s)’ names, publishers, price (for borrowing and for buying), year of publishing</p>
+<p>•  has at least 25 books in its database – the dynamic number of books is shown on the main page and changes dynamically once the books are added or deleted</p>
+<p>•  has an age limitation (books 18+, 8+, etc.)</p>
+<p>•  a book list can be ordered according to</p>
+<p>o  price increase (from low to high)</p>
+<p>o  price decrease (from high to low) o  most popular</p>
+<p>o  genre (fiction, nonfiction, mystery, etc.)</p>
+<p>o  year of publishing</p>
+<p>•  Users can choose a book of a specific author/genre/buying or borrow method/price range.</p>
+<p>•  eBooks list can be filtered to show only books with the discounted price (on sale).</p>
+<p>•  Some books can have different years of publication and different publishing houses. For instance, “Harry Potter and the Philosopher’s stone” may be published in 2000, 2024 and any other year (starting from June 26, 1997 – its first publication date) published by Bloomsbury or Scholastic publishing houses)</p>
+<p>•  eBooks options are Borrow and Buy (that is there are two buttons to choose from) with their prices</p>
+<p>•  etc.</p>
+<p><strong>Buying/Borrowing an eBook: </strong></p>
+<p>•  Users can choose to borrow or buy an eBook</p>
+<p>•  In case of borrowing an eBook, a user can borrow it immediately or enter a waiting list (for a limited time) as stated earlier. Once a book is available for borrowing, a user is notified by email and (s)he can borrow it if (s)he is among the first three people on the waiting list.</p>
+<p>•  In case of buying or borrowing, a user wil  see the book in his/her library and wil  be able to download it to the computer (there must be a download button for that!).</p>
+<p>•  A buying/borrowing option can be changed only before pressing “confirm” button in payment section.</p>
+<p>•  It’s impossible to borrow an unavailable copy of the book.</p>
+<p>•  It’s impossible to borrow more than 3 eBooks from the service (as stated earlier).</p>
+<p>•  It’s impossible to borrow a book when it’s not a user’s turn.</p>
+<p>•  Only registered users can buy/borrow an eBook. It’s obligatory to store an email so that the user wil  be notified by email in all the relevant cases.</p>
+<p>•  An email notification must be sent after processing the payment.</p>
+<p>•  Etc.</p>
+<p><strong>Payment</strong>:</p>
+<p>•  Managing a shopping cart</p>
+<p>•  Processing a payment (using SSL certificate – there are free ones online – is a <strong>must</strong>)</p>
+<p>•  <strong>No</strong> credit card must be stored in the database</p>
+<p>•  <strong>Option: </strong>the ability to pay with a PayPal (redirection to a PayPal site using its API)</p>
+<p>•  The user can choose to enter an eBook to a shopping cart and process the payment from it or pay directly from the main page by pressing the button “Buy Now”.</p>
+<p>•  Show notification message after the payment is accepted or failed. After that, a user is redirected to Home page.</p>
+<p>•  Etc.</p>
+<p>All data must be managed in the Database according to the user permissions. For any violation, the points wil  be taken.</p>
+<p><strong>Note</strong>: You are responsible of other logical constraints as stated before!</p>
+<empty-line/>
+<p><strong>Good Luck!! </strong></p>
+<empty-line/>
+</section>
+</body>
+
+</FictionBook>

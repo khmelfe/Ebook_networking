@@ -18,15 +18,6 @@ namespace Ebook_Libary_project.Controllers.user
     {
         public ActionResult Index()
         {
-            //List<int> userIds = Userdatabase.getallusersid();
-            //var model = new DashboardViewModel
-            //{
-            //    UserCount = Userdatabase.Amount_of_users(),
-            //    BookAmount = Userdatabase.Amount_of_books(),
-            //    Userids = userIds,//all users ids.
-            //};
-
-
 
             return View("~/Views/User/Dashboard.cshtml");
         }
@@ -100,10 +91,8 @@ namespace Ebook_Libary_project.Controllers.user
 
             bool user = Userdatabase.userexistbyid(userId);
 
-            // Check if user is found
             if (user)
             {
-                // Add the user details to ViewBag or ViewModel
                 ViewBag.Username = Userdatabase.GetUserNameById(userId);
                 ViewBag.Email = Userdatabase.GetUserEmailById(userId);
                 ViewBag.BorrowedBooks = Userdatabase.GetBorrowedBookIdsByUser(userId);
@@ -113,7 +102,6 @@ namespace Ebook_Libary_project.Controllers.user
                 return PartialView("~/Views/User/_UserDetailsPartial.cshtml");
             }
 
-            // Return a view with an error or empty data if user is not found
             return PartialView("~/Views/Shared/_ErrorPartial.cshtml");
         }
 
@@ -122,7 +110,6 @@ namespace Ebook_Libary_project.Controllers.user
 
             var users = Userdatabase.GetUsersByUsername(searchTerm);
 
-            // Return the list of matching users in JSON format
             return Json(users, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
@@ -143,7 +130,7 @@ namespace Ebook_Libary_project.Controllers.user
         {
             if (Userdatabase.userexistbyid(userId))
             {
-                bool isGranted = Userdatabase.GrantAdminById(userId); // Replace with your actual logic
+                bool isGranted = Userdatabase.GrantAdminById(userId); 
 
                 if (isGranted)
                 {
@@ -222,14 +209,13 @@ namespace Ebook_Libary_project.Controllers.user
 
         public JsonResult GetAllBooks()
         {
-            return Json(Userdatabase.GetAllBookIds()); // Return all books in JSON format
+            return Json(Userdatabase.GetAllBookIds()); 
         }
         public JsonResult SearchBooks(string searchTerm)
         {
 
             var users = Userdatabase.GetBooksBySearchTerm(searchTerm);
 
-            // Return the list of matching users in JSON format
             return Json(users, JsonRequestBehavior.AllowGet);
         }
         public JsonResult updateprice(int bookId, decimal newPrice, string action)

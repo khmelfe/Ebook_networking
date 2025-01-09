@@ -272,26 +272,21 @@ namespace Ebook_Libary_project.Controllers
         {
             try
             {
-                // Retrieve the full file path
                 string relativePath = Userdatabase.GetBookpathbyid(bookId, format);
                 string filePath = Server.MapPath("~" + relativePath);
 
 
-                // Ensure the file exists
                 if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
                 {
                     return new HttpStatusCodeResult(404, "File not found or invalid format.");
                 }
 
-                // Extract the MIME type of the file
                 string mimeType = MimeMapping.GetMimeMapping(filePath);
 
-                // Return the file content directly for download/viewing
                 return File(filePath, mimeType, Path.GetFileName(filePath));
             }
             catch (Exception ex)
             {
-                // Log the error and return an appropriate HTTP status
                 return new HttpStatusCodeResult(500, $"Error occurred: {ex.Message}");
             }
         }
@@ -300,23 +295,19 @@ namespace Ebook_Libary_project.Controllers
         {
             try
             {
-                // Retrieve the file path for the book
                 string relativePath = Userdatabase.GetBookpathbyid(bookId, "pdf");
                 string filePath = Server.MapPath("~" + relativePath);
 
-                // Ensure the file exists
                 if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
                 {
                     return HttpNotFound("PDF file not found.");
                 }
 
-                // Pass the relative path of the PDF to the view
-                string pdfUrl = Url.Content("~" + relativePath); // Generate the URL for embedding
+                string pdfUrl = Url.Content("~" + relativePath); 
                 return View("BookViewer", model: pdfUrl);
             }
             catch (Exception ex)
             {
-                // Handle errors gracefully
                 return new HttpStatusCodeResult(500, $"Error occurred: {ex.Message}");
             }
         }
@@ -327,7 +318,6 @@ namespace Ebook_Libary_project.Controllers
             Debug.WriteLine("Started processing borrowed books...");
             try
             {
-                // Query to get all borrowed books
                 string query = "SELECT UserID, BookID, ReturnDate, Emailsent FROM BorrowedBooks";
                 using (SqlConnection connection = new SqlConnection(Userdatabase.connectionString))
                 {
@@ -345,10 +335,8 @@ namespace Ebook_Libary_project.Controllers
 
                             Debug.WriteLine($"{returnDate} - {today} = {(returnDate - today).Days}");
 
-                            // Check if the book is due today
                             if (returnDate.Date == today)
                             {
-                                // Automatically return the book
                                 Userdatabase.ReturnBook(userId, bookId);
                                 Debug.WriteLine($"Book ID {bookId} returned for user ID {userId}.");
                             }
@@ -371,7 +359,6 @@ namespace Ebook_Libary_project.Controllers
                                 emailService.SendEmail(email, subject, body);
                                 Debug.WriteLine($"Reminder email sent to {userName}.");
 
-                                // Update the Emailsent column to 1
                                 UpdateEmailSentStatus(bookId, userId);
                             }
                         }
@@ -384,7 +371,6 @@ namespace Ebook_Libary_project.Controllers
             }
         }
 
-        // Method to update Emailsent column
         private void UpdateEmailSentStatus(int bookId, int userId)
         {
             try

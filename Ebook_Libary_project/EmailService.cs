@@ -26,7 +26,7 @@ public class EmailService
                     From = new MailAddress(smtpSection.From),
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true // Set to true if sending HTML content
+                    IsBodyHtml = true 
                 };
                 mailMessage.To.Add(toEmail);
 
@@ -35,7 +35,6 @@ public class EmailService
         }
         catch (Exception ex)
         {
-            // Log exception or handle as needed
             throw new Exception("An error occurred while sending the email: " + ex.Message);
         }
     }

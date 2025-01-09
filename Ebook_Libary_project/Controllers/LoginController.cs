@@ -20,7 +20,7 @@ namespace Ebook_Libary_project.Controllers
 
         public ActionResult Login()
         {
-            return View(); // Returns the login view to show the form
+            return View(); 
         }
 
         [HttpPost]
