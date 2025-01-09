@@ -22,8 +22,8 @@ namespace Ebook_Library_Project
 { //no
     public static class Userdatabase
     {
-        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -200,12 +200,11 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(querya, connection);
                 command.Parameters.AddWithValue("@BookID", bookId);
 
-                connection.Open(); // Open the connection before executing the command
+                connection.Open(); 
                 int rowsAffected = command.ExecuteNonQuery();
 
                 if (rowsAffected == 0)
                 {
-                    // No rows affected means no copies are available
                     throw new Exception("No available copies of the book to borrow.");
                 }
             }
@@ -227,13 +226,10 @@ namespace Ebook_Library_Project
             }
 
 
-            // Check if action is 'buying' and if newPrice is greater than the borrow price
             if (action == "BuyPrice")
             {
-                // Get the current borrow price
                 decimal currentBorrowPrice = GetCurrentBorrowPrice(bookId);
 
-                // Ensure BuyPrice is greater than BorrowPrice
                 if (newPrice < currentBorrowPrice)
                 {
                     throw new InvalidOperationException("Buying price must be higher than borrowing price.");
@@ -259,7 +255,6 @@ namespace Ebook_Library_Project
             }
         }
 
-        // Helper method to get the current borrow price for a book
         private static decimal GetCurrentBorrowPrice(int bookId)
         {
             decimal borrowPrice = 0;
@@ -312,7 +307,6 @@ namespace Ebook_Library_Project
             }
         }
 
-        // Function to remove a user from all tables and return borrowed books
         public static void RemoveUser(int userId)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -346,123 +340,7 @@ namespace Ebook_Library_Project
             }
         }
 
-        //Function to add a book to the Books table
-        //public static void AddBook(
-        //     string title,
-        //     string author,
-        //     string category,
-        //     int availableCopies,
-        //     decimal buyPrice,
-        //     decimal borrowPrice, int age = 0,
-        //     HttpPostedFileBase imageFile = null,
-        //    HttpPostedFileBase pdffile = null,
-        //    HttpPostedFileBase mobifile = null,
-        //    HttpPostedFileBase f2bfile = null,
-        //    HttpPostedFileBase epubfile = null
-        //    )
-        //    {
-        //        // Define directories
-        //        string imageDirectory = HttpContext.Current.Server.MapPath("~/Content/Images/");
-        //        string bookDirectory = HttpContext.Current.Server.MapPath("~/Content/Books/");
-        //        string imagePath = null;
-        //        string bookFilePath = null;
-
-
-        //        // Handle the image upload
-        //        if (imageFile != null && imageFile.ContentLength > 0)
-        //        {
-        //            if (!Directory.Exists(imageDirectory))
-        //            {
-        //                Directory.CreateDirectory(imageDirectory);
-        //            }
-
-        //            string imageFileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-        //            string fullImagePath = Path.Combine(imageDirectory, imageFileName);
-
-        //            imageFile.SaveAs(fullImagePath);
-        //            imagePath = "/Content/Images/" + imageFileName; // Relative path for database
-        //        }
-
-        //        // Handle the book files formats upload
-
-        //        if (pdffile != null && pdffile.ContentLength > 0)
-        //        {
-        //            if (!Directory.Exists(bookDirectory))
-        //            {
-        //                Directory.CreateDirectory(bookDirectory);
-        //            }
-
-        //            string pdfFileName = Guid.NewGuid().ToString() + Path.GetExtension(pdffile.FileName);
-        //            string fullPdfPath = Path.Combine(bookDirectory, pdfFileName);
-
-        //            pdffile.SaveAs(fullPdfPath);
-        //            bookFilePath = "/Content/Books/" + pdfFileName; // Relative path for database
-        //        }
-        //        else if (mobifile != null && mobifile.ContentLength > 0)
-        //        {
-        //            if (!Directory.Exists(bookDirectory))
-        //            {
-        //                Directory.CreateDirectory(bookDirectory);
-        //            }
-
-        //            string mobiFileName = Guid.NewGuid().ToString() + Path.GetExtension(mobifile.FileName);
-        //            string fullMobiPath = Path.Combine(bookDirectory, mobiFileName);
-
-        //            mobifile.SaveAs(fullMobiPath);
-        //            bookFilePath = "/Content/Books/" + mobiFileName; // Relative path for database
-        //        }
-        //        else if (f2bfile != null && f2bfile.ContentLength > 0)
-        //        {
-        //            if (!Directory.Exists(bookDirectory))
-        //            {
-        //                Directory.CreateDirectory(bookDirectory);
-        //            }
-
-        //            string f2bFileName = Guid.NewGuid().ToString() + Path.GetExtension(f2bfile.FileName);
-        //            string fullF2BPath = Path.Combine(bookDirectory, f2bFileName);
-
-        //            f2bfile.SaveAs(fullF2BPath);
-        //            bookFilePath = "/Content/Books/" + f2bFileName; // Relative path for database
-        //        }
-        //        else if (epubfile != null && epubfile.ContentLength > 0)
-        //        {
-        //            if (!Directory.Exists(bookDirectory))
-        //            {
-        //                Directory.CreateDirectory(bookDirectory);
-        //            }
-
-        //            string epubFileName = Guid.NewGuid().ToString() + Path.GetExtension(epubfile.FileName);
-        //            string fullEpubPath = Path.Combine(bookDirectory, epubFileName);
-
-        //            epubfile.SaveAs(fullEpubPath);
-        //            bookFilePath = "/Content/Books/" + epubFileName; // Relative path for database
-        //        }
-
-        //        // Define the SQL query
-        //        string query = "INSERT INTO Books (ImagePath,BookFilePath, Name, Author, AvailableCopies, BuyingPrice, BorrowPrice,minage,Sale,category) " +
-        //             "VALUES (@ImagePath, @BookFilePath, @Name, @Author, @AvailableCopies, @BuyingPrice, @BorrowPrice, @minage,0,@Category)";
-
-        //        using (SqlConnection connection = new SqlConnection(connectionString))
-        //        {
-        //            SqlCommand command = new SqlCommand(query, connection);
-
-        //            // Add image path parameter
-        //            command.Parameters.AddWithValue("@ImagePath", string.IsNullOrEmpty(imagePath) ? DBNull.Value : (object)imagePath);
-
-        //            // Add book file path parameter
-        //            command.Parameters.AddWithValue("@BookFilePath", string.IsNullOrEmpty(bookFilePath) ? DBNull.Value : (object)bookFilePath);
-
-        //            command.Parameters.AddWithValue("@Name", title);
-        //            command.Parameters.AddWithValue("@Author", author);
-        //            command.Parameters.AddWithValue("@Category", category);
-        //            command.Parameters.AddWithValue("@AvailableCopies", availableCopies);
-        //            command.Parameters.AddWithValue("@BuyingPrice", buyPrice);
-        //            command.Parameters.AddWithValue("@BorrowPrice", borrowPrice);
-        //            command.Parameters.AddWithValue("@minage", age);
-        //            connection.Open();
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
+       
         public static void AddBook(
         string title,
         string author,
@@ -502,7 +380,6 @@ namespace Ebook_Library_Project
                 imagePath = "/Content/Images/" + imageFileName; // Relative path for database
             }
 
-            // Handle book file uploads for each format
             if (pdffile != null && pdffile.ContentLength > 0)
             {
                 string pdfFileName = Guid.NewGuid().ToString() + Path.GetExtension(pdffile.FileName);
@@ -584,7 +461,6 @@ namespace Ebook_Library_Project
                 {
                     connection.Open();
 
-                    // Step 1: Delete the book from BorrowedBooks if it exists
                     string deleteBorrowedBooksQuery = "DELETE FROM BorrowedBooks WHERE BookID = @BookID";
                     using (SqlCommand command = new SqlCommand(deleteBorrowedBooksQuery, connection))
                     {
@@ -592,7 +468,6 @@ namespace Ebook_Library_Project
                         command.ExecuteNonQuery();
                     }
 
-                    // Step 2: Delete the book from WaitingList if it exists
                     string deleteWaitingListQuery = "DELETE FROM WaitingList WHERE BookID = @BookID";
                     using (SqlCommand command = new SqlCommand(deleteWaitingListQuery, connection))
                     {
@@ -600,7 +475,6 @@ namespace Ebook_Library_Project
                         command.ExecuteNonQuery();
                     }
 
-                    // Step 3: Delete the book from the Books table
                     string deleteBookQuery = "DELETE FROM Books WHERE Id = @BookID";
                     using (SqlCommand command = new SqlCommand(deleteBookQuery, connection))
                     {
@@ -612,7 +486,6 @@ namespace Ebook_Library_Project
             }
             catch (Exception ex)
             {
-                // Log the exception if necessary
                 Console.WriteLine("Error: " + ex.Message);
             }
         }
@@ -636,15 +509,15 @@ namespace Ebook_Library_Project
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%"); // Use parameterized query
+                command.Parameters.AddWithValue("@SearchTerm", "%" + searchTerm + "%"); 
                 connection.Open();
 
-                List<dynamic> books = new List<dynamic>(); // List of anonymous objects
+                List<dynamic> books = new List<dynamic>(); 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        // Add an anonymous object with the fields you want to return
+                        
                         books.Add(new
                         {
                             Id = (int)reader["Id"],
@@ -661,7 +534,7 @@ namespace Ebook_Library_Project
                     }
                 }
 
-                return books; // Returning list of anonymous objects
+                return books; 
             }
         }
 
@@ -675,7 +548,6 @@ namespace Ebook_Library_Project
             {
                 connection.Open();
 
-                // Get the next available queue number for the given book
                 string queueQuery = "SELECT ISNULL(MAX(NumberInQueue), 0) + 1 FROM WaitingList WHERE BookID = @BookID";
                 int nextQueueNumber = 1;
 
@@ -685,7 +557,6 @@ namespace Ebook_Library_Project
                     nextQueueNumber = (int)queueCommand.ExecuteScalar();
                 }
 
-                // Add the user to the waiting list with the calculated queue number
                 string insertQuery = "INSERT INTO WaitingList (UserID, BookID, NumberInQueue) VALUES (@UserID, @BookID, @NumberInQueue)";
                 using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
                 {
@@ -733,28 +604,23 @@ namespace Ebook_Library_Project
         //Reset password
         public static void Sendemail_for_resetpass(string email, string username, int port)
         {
-            // Corrected query with proper parameter references
             string query = "SELECT COUNT(*) FROM Users WHERE Name = @Name AND Mail = @Mail";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
 
-                // Add the parameters with the correct names
                 command.Parameters.AddWithValue("@Mail", email);
                 command.Parameters.AddWithValue("@Name", username);
 
                 connection.Open();
 
-                // Execute the query to get the count of matching records
                 int count = (int)command.ExecuteScalar();
 
-                if (count > 0) // There is at least one matching record
+                if (count > 0) 
                 {
-                    // Construct the reset URL
                     var url = $"http://localhost:{port}/Login/Resetpassword";
 
-                    // Email service and message
                     var emailService = new EmailService();
                     string subject = "Reset Your Password";
                     string body = $@"
@@ -946,9 +812,7 @@ namespace Ebook_Library_Project
 
 
         }
-        //public static string GetUser_name(int id) { 
-        //}
-
+     
 
         ////Is admin
 
@@ -1351,64 +1215,7 @@ namespace Ebook_Library_Project
                 }
             }
         }
-        ////Decrease_borrowed_time.
-        //public static void Decrease_borrowed_time(int userId, int bookId, int decreaseDays)
-        //{
-        //    string query = "SELECT BorrowedDate, ReturnDate FROM BorrowedBooks WHERE UserId = @UserId AND BookId = @BookId";
-
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        SqlCommand command = new SqlCommand(query, connection);
-        //        command.Parameters.AddWithValue("@UserId", userId);
-        //        command.Parameters.AddWithValue("@BookId", bookId);
-
-        //        connection.Open();
-        //        using (SqlDataReader reader = command.ExecuteReader())
-        //        {
-        //            if (reader.Read())
-        //            {
-        //                // Get the BorrowedDate and ReturnDate
-        //                DateTime borrowedDate = (DateTime)reader["BorrowedDate"];
-        //                DateTime returnDate = (DateTime)reader["ReturnDate"];
-
-        //                // Calculate remaining days
-        //                TimeSpan remainingTimeSpan = returnDate - DateTime.Now;
-        //                int remainingDays = remainingTimeSpan.Days;
-
-        //                // Subtract decreaseDays from the remaining time
-        //                remainingDays -= decreaseDays;
-
-        //                // If remaining days are <= 0, delete the record from the BorrowedBooks table
-        //                if (remainingDays <= 0)
-        //                {
-        //                    // Delete the book from the BorrowedBooks table
-        //                    string deleteQuery = "DELETE FROM BorrowedBooks WHERE UserId = @UserId AND BookId = @BookId";
-        //                    SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
-        //                    deleteCommand.Parameters.AddWithValue("@UserId", userId);
-        //                    deleteCommand.Parameters.AddWithValue("@BookId", bookId);
-        //                    deleteCommand.ExecuteNonQuery();
-        //                    Console.WriteLine("The borrowed book record has been removed because the borrowed time has expired.");
-        //                }
-        //                else
-        //                {
-        //                    // Update the ReturnDate based on the new remaining time
-        //                    DateTime newReturnDate = DateTime.Now.AddDays(remainingDays);
-        //                    string updateQuery = "UPDATE BorrowedBooks SET ReturnDate = @NewReturnDate WHERE UserId = @UserId AND BookId = @BookId";
-        //                    SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
-        //                    updateCommand.Parameters.AddWithValue("@NewReturnDate", newReturnDate);
-        //                    updateCommand.Parameters.AddWithValue("@UserId", userId);
-        //                    updateCommand.Parameters.AddWithValue("@BookId", bookId);
-        //                    updateCommand.ExecuteNonQuery();
-        //                    Console.WriteLine($"Updated the borrowed time. New return date is: {newReturnDate.ToShortDateString()}");
-        //                }
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine("No record found for the given UserId and BookId.");
-        //            }
-        //        }
-        //    }
-        //}
+     
 
 
         public static int numborrowed(int userId)
@@ -1808,7 +1615,6 @@ namespace Ebook_Library_Project
 
                     while (reader.Read())
                     {
-                        // Get the BookID from the database
                         int bookId = (int)reader["BookID"];
                         int length_list = GetWaitingListLengthsize(bookId);
 
@@ -1816,7 +1622,6 @@ namespace Ebook_Library_Project
                         string bookName = GetBookNamebyid(bookId);
 
 
-                        // Create an object with the BookID and BookName
                         var book = new
                         {
                             BookID = bookId,
@@ -1876,7 +1681,6 @@ namespace Ebook_Library_Project
             {
                 connection.Open();
 
-                // Step 1: Remove the specified user from the waiting list
                 string removeFromWaitingListQuery = "DELETE FROM WaitingList WHERE BookID = @BookID AND UserID = @UserID";
 
                 using (SqlCommand removeCommand = new SqlCommand(removeFromWaitingListQuery, connection))
@@ -1886,7 +1690,6 @@ namespace Ebook_Library_Project
                     removeCommand.ExecuteNonQuery();
                 }
 
-                // Step 2: Update the queue numbers for the remaining users
                 string updateQueueQuery = @"
             WITH CTE AS (
                 SELECT 
@@ -1916,7 +1719,6 @@ namespace Ebook_Library_Project
             {
                 SqlCommand command = new SqlCommand(query, connection);
 
-                // Add parameters for the user ID and book ID
                 command.Parameters.AddWithValue("@UserId", userid);
                 command.Parameters.AddWithValue("@BookId", bookid);
 
