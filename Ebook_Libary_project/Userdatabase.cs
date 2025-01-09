@@ -22,8 +22,8 @@ namespace Ebook_Library_Project
 { //no
     public static class Userdatabase
     {
-       // public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -186,7 +186,7 @@ namespace Ebook_Library_Project
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@UserID", userId);
                 command.Parameters.AddWithValue("@BookID", bookId);
-                command.Parameters.AddWithValue("@ReturnDate", DateTime.Now.AddDays(14)); // Example: 2-week borrow period
+                command.Parameters.AddWithValue("@ReturnDate", DateTime.Now.AddDays(30)); // month borrow period
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -1954,6 +1954,8 @@ namespace Ebook_Library_Project
                 }
             }
         }
+
+
 
 
 

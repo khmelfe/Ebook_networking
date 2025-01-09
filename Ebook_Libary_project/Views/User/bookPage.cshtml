@@ -166,12 +166,7 @@
         <!-- Buying/Borrowing Actions -->
         <div class="col-md-6 d-flex">
             <div class="frame actions flex-fill">
-                <h4>Choose Format</h4>
-                <select id="formatSelect" class="form-select">
-                    <option value="ebook">Ebook</option>
-                    <option value="hardcover">Hardcover</option>
-                    <option value="paperback">Paperback</option>
-                </select>
+                
                 <h4>Choose Action</h4>
                 <div>
                     <input type="radio" id="borrowOption" name="action" value="borrow" checked />
@@ -232,13 +227,12 @@
 
     // Add to Cart functionality
     document.getElementById('addToCartButton').onclick = function () {
-        const format = document.getElementById('formatSelect').value;
         const action = document.querySelector('input[name="action"]:checked').value;
 
         $.ajax({
             url: '/User/AddToCart',
             type: 'POST',
-            data: { bookId: bookId, action: action, format: format },
+            data: { bookId: bookId, action: action },
             success: function (response) {
                 if (!response.success && response.waitingListLength !== undefined) {
                     // Show the waiting list prompt
@@ -247,7 +241,7 @@
                         $.ajax({
                             url: '/User/AddToCart',
                             type: 'POST',
-                            data: { bookId: bookId, action: action, format: format, joinWaitingList: true },
+                            data: { bookId: bookId, action: action,  joinWaitingList: true },
                             success: function (res) {
                                 alert(res.message);
                             },
@@ -269,13 +263,12 @@
     };
 
     document.getElementById('buyNowButton').onclick = function () {
-        const format = document.getElementById('formatSelect').value;
         const action = document.querySelector('input[name="action"]:checked').value;
 
         $.ajax({
             url: '/User/Buynow',
             type: 'POST',
-            data: { bookId: bookId, action: action, format: format },
+            data: { bookId: bookId, action: action },
             success: function (response) {
                 if (response.success && response.action === "payment") {
                     // Redirect to payment page
@@ -291,7 +284,7 @@
                         $.ajax({
                             url: '/User/Buynow',
                             type: 'POST',
-                            data: { bookId: bookId, action: action, format: format, joinWaitingList: true },
+                            data: { bookId: bookId, action: action, joinWaitingList: true },
                             success: function (res) {
                                 if (res.success && res.action === "payment") {
                                     window.location.href = '/Payment';

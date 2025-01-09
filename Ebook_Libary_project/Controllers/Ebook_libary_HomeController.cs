@@ -14,11 +14,11 @@ namespace Ebook_Libary_project.Controllers
 {
     public class Ebook_libary_HomeController : Controller
     {
-       
-        
+
         public ActionResult Ebook_home()
         {
             int userId = UserSession.GetCurrentUserId();
+            CheckAndHandleBorrowedBooks();
 
             if (userId == 0)
             {
@@ -27,6 +27,7 @@ namespace Ebook_Libary_project.Controllers
                 ViewBag.BorrowedBooks = null;
                 return View();
             }
+
 
             var boughtBooks = GetBoughtBooks(userId);
             var borrowedBooks = GetBorrowedBooksWithReturnDate(userId);
@@ -80,7 +81,7 @@ namespace Ebook_Libary_project.Controllers
         {
             try
             {
-               List<dynamic> webreviews = Userdatabase.GetWebReviews();
+                List<dynamic> webreviews = Userdatabase.GetWebReviews();
                 return Json(new { success = true, data = webreviews }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -88,8 +89,8 @@ namespace Ebook_Libary_project.Controllers
                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-        
-        
+
+
 
 
         private List<BookModel> GetBoughtBooks(int userId)
@@ -157,7 +158,7 @@ namespace Ebook_Libary_project.Controllers
             try
             {
                 Userdatabase.ReturnBook(UserSession.GetCurrentUserId(), bookId);
-                return Json(new { success = true, message = "Book"+bookId+" returned successfully." });
+                return Json(new { success = true, message = "Book" + bookId + " returned successfully." });
             }
             catch (Exception ex)
             {
@@ -190,10 +191,10 @@ namespace Ebook_Libary_project.Controllers
                     Id = book.Id,
                     Name = book.Title,
                     Author = book.Author,
-                    Category=book.Category,
+                    Category = book.Category,
                     BuyingPrice = book.Buyingprice.ToString("C"),
                     BorrowPrice = book.BorrowPrice.ToString("C"),
-                    minage=book.minage,
+                    minage = book.minage,
                     Sale = book.Sale,
                     DiscountedPrice = book.Sale > 0
                 ? (book.Buyingprice * (1 - book.Sale / 100m)).ToString("C")
@@ -204,7 +205,7 @@ namespace Ebook_Libary_project.Controllers
 
             // Return the list of books as JSON
             return Json(books);
-        }
+        } 
 
         [HttpPost]
         public JsonResult FilterBooks(string genre, string priceOrder)
@@ -212,7 +213,7 @@ namespace Ebook_Libary_project.Controllers
             var bookIds = Userdatabase.GetAllBookIds();
             List<BookModel> allb = new List<BookModel>();
             List<BookModel> b = new List<BookModel>();
-            Debug.WriteLine("genre-",genre);
+            Debug.WriteLine("genre-", genre);
             foreach (var bookId in bookIds)
             {
                 var book = Userdatabase.GetBookById(bookId);
@@ -221,44 +222,45 @@ namespace Ebook_Libary_project.Controllers
                     allb.Add(book);
                 }
             }
-            
+
             // Filter by genre
             if (!string.IsNullOrEmpty(genre))
             {
                 foreach (var book in allb)
                 {
-                    Debug.WriteLine("book-" + book.Category+book.Name);
+                    Debug.WriteLine("book-" + book.Category + book.Name);
 
 
                     if (book.Category.Trim() == (genre.Trim()))
                     {
                         b.Add(book);
 
-                        Debug.WriteLine("equals-"+book.Category+genre);
+                        Debug.WriteLine("equals-" + book.Category + genre);
                     }
                     else
                     {
-                        Debug.WriteLine(book.Category,genre);
+                        Debug.WriteLine(book.Category, genre);
 
                     }
                 }
-                
+
             }
+            else { b = allb; }
             Debug.WriteLine(allb.Count);
             // Order by buying or borrow price
             switch (priceOrder)
             {
                 case "buy-low-to-high":
-                    allb = allb.OrderBy(book => book.BuyingPrice).ToList();
+                    b = b.OrderBy(book => book.BuyingPrice).ToList();
                     break;
                 case "buy-high-to-low":
-                    allb = allb.OrderByDescending(book => book.BuyingPrice).ToList();
+                    b = b.OrderByDescending(book => book.BuyingPrice).ToList();
                     break;
                 case "borrow-low-to-high":
-                    allb = allb.OrderBy(book => book.BorrowPrice).ToList();
+                    b = b.OrderBy(book => book.BorrowPrice).ToList();
                     break;
                 case "borrow-high-to-low":
-                    allb = allb.OrderByDescending(book => book.BorrowPrice).ToList();
+                    b = b.OrderByDescending(book => book.BorrowPrice).ToList();
                     break;
             }
 
@@ -320,5 +322,95 @@ namespace Ebook_Libary_project.Controllers
         }
 
 
+        public void CheckAndHandleBorrowedBooks()
+        {
+            Debug.WriteLine("Started processing borrowed books...");
+            try
+            {
+                // Query to get all borrowed books
+                string query = "SELECT UserID, BookID, ReturnDate, Emailsent FROM BorrowedBooks";
+                using (SqlConnection connection = new SqlConnection(Userdatabase.connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int userId = (int)reader["UserID"];
+                            int bookId = (int)reader["BookID"];
+                            DateTime returnDate = (DateTime)reader["ReturnDate"];
+                            int emailSent = reader["Emailsent"] != DBNull.Value ? (int)reader["Emailsent"] : 0;
+                            DateTime today = DateTime.Today;
+
+                            Debug.WriteLine($"{returnDate} - {today} = {(returnDate - today).Days}");
+
+                            // Check if the book is due today
+                            if (returnDate.Date == today)
+                            {
+                                // Automatically return the book
+                                Userdatabase.ReturnBook(userId, bookId);
+                                Debug.WriteLine($"Book ID {bookId} returned for user ID {userId}.");
+                            }
+                            else if ((returnDate - today).Days <= 5 && emailSent == 0)
+                            {
+                                // Send a warning email if the book is due in 5 days and email hasn't been sent
+                                string email = Userdatabase.GetUserEmailById(userId);
+                                string userName = Userdatabase.GetUserNameById(userId);
+                                var emailService = new EmailService();
+                                string subject = "Reminder: Book Return Due in 5 Days";
+                                string body = $@"
+                            Dear {userName},
+
+                            This is a friendly reminder that the book you borrowed {Userdatabase.getbooknamebyid(bookId)}) is due to be returned in 5 days.
+                            Please make arrangements to return the book on time to avoid late fees.
+
+                            Thank you,
+                            Ebook Library Team";
+
+                                emailService.SendEmail(email, subject, body);
+                                Debug.WriteLine($"Reminder email sent to {userName}.");
+
+                                // Update the Emailsent column to 1
+                                UpdateEmailSentStatus(bookId, userId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in CheckAndHandleBorrowedBooks: {ex.Message}");
+            }
+        }
+
+        // Method to update Emailsent column
+        private void UpdateEmailSentStatus(int bookId, int userId)
+        {
+            try
+            {
+                string query = "UPDATE BorrowedBooks SET Emailsent = 1 WHERE BookID = @BookID AND UserID = @UserID";
+                using (SqlConnection connection = new SqlConnection(Userdatabase.connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@BookID", bookId);
+                    command.Parameters.AddWithValue("@UserID", userId);
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    Debug.WriteLine(rowsAffected > 0
+                        ? $"Emailsent updated for Book ID {bookId}, User ID {userId}."
+                        : $"No update made for Book ID {bookId}, User ID {userId}.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating Emailsent status: {ex.Message}");
+            }
+        }
+
+
+
+
     }
 }
+    

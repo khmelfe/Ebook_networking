@@ -28,7 +28,6 @@ public class EmailService
                     Body = body,
                     IsBodyHtml = true // Set to true if sending HTML content
                 };
-
                 mailMessage.To.Add(toEmail);
 
                 client.Send(mailMessage);

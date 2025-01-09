@@ -39,7 +39,7 @@ namespace Ebook_Libary_project.Controllers.user
 
 
         [HttpPost]
-        public ActionResult AddToCart(int bookId, string action, string format, bool? joinWaitingList = null)
+        public ActionResult AddToCart(int bookId, string action, bool? joinWaitingList = null)
         {
             Debug.WriteLine("AddToCart start.");
 
@@ -129,7 +129,7 @@ namespace Ebook_Libary_project.Controllers.user
                         : book.BorrowPrice * ((100m - book.Sale) / 100m);
 
                     // Add the book to the cart
-                    cart.AddBookToCart(bookId, action, price, format);
+                    cart.AddBookToCart(bookId, action, price);
                     Debug.WriteLine($"Book added to cart successfully.!! Action: {action}");
 
                     return Json(new { success = true, message = "Book added to cart successfully!", action });
@@ -159,7 +159,7 @@ namespace Ebook_Libary_project.Controllers.user
             }
 
             // Attempt to add the item to the cart
-            var addToCartResult = AddToCart(bookId, action, format, joinWaitingList) as JsonResult;
+            var addToCartResult = AddToCart(bookId, action,joinWaitingList) as JsonResult;
 
             if (addToCartResult != null)
             {
