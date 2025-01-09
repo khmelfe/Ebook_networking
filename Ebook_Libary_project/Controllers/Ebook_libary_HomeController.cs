@@ -211,6 +211,8 @@ namespace Ebook_Libary_project.Controllers
         {
             var bookIds = Userdatabase.GetAllBookIds();
             List<BookModel> allb = new List<BookModel>();
+            List<BookModel> b = new List<BookModel>();
+            Debug.WriteLine("genre-",genre);
             foreach (var bookId in bookIds)
             {
                 var book = Userdatabase.GetBookById(bookId);
@@ -219,13 +221,30 @@ namespace Ebook_Libary_project.Controllers
                     allb.Add(book);
                 }
             }
-
+            
             // Filter by genre
             if (!string.IsNullOrEmpty(genre))
             {
-                allb = allb.Where(book => book.Category == genre).ToList();
-            }
+                foreach (var book in allb)
+                {
+                    Debug.WriteLine("book-" + book.Category+book.Name);
 
+
+                    if (book.Category.Trim() == (genre.Trim()))
+                    {
+                        b.Add(book);
+
+                        Debug.WriteLine("equals-"+book.Category+genre);
+                    }
+                    else
+                    {
+                        Debug.WriteLine(book.Category,genre);
+
+                    }
+                }
+                
+            }
+            Debug.WriteLine(allb.Count);
             // Order by buying or borrow price
             switch (priceOrder)
             {
@@ -243,7 +262,7 @@ namespace Ebook_Libary_project.Controllers
                     break;
             }
 
-            return Json(allb);
+            return Json(b);
         }
 
         [HttpGet]
