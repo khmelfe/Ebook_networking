@@ -622,7 +622,7 @@ namespace Ebook_Library_Project
                     var url = $"http://localhost:{port}/Login/Resetpassword";
 
                     var emailService = new EmailService();
-                    string subject = "Reset Your Password";
+                    string subject = "payment confirmed";
                     string body = $@"
                             <html>
                             <body>

@@ -3,6 +3,8 @@ using Ebook_Library_Project;
 using EbookLibraryProject.Models;
 using System;
 using System.Diagnostics;
+using System.Security.Policy;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace Ebook_Libary_project.Controllers
@@ -43,6 +45,19 @@ namespace Ebook_Libary_project.Controllers
                     Userdatabase.AddToWaitingList(UserSession.GetCurrentUserId(), bookId);
                 }
             }
+            var emailService = new EmailService();
+            string subject = "Reset Your Password";
+            string body = $@"
+        <html>
+        <body>
+            <p>Dear {Userdatabase.GetUserNameById(UserSession.GetCurrentUserId())},</p>
+            <p>payment exepted</p>
+          
+        </body>
+        </html>";
+
+            // Send the email
+            emailService.SendEmail(Userdatabase.GetUserEmailById(UserSession.GetCurrentUserId()), subject, body);
             cart.Items.Clear();
             return RedirectToAction("Ebook_home", "Ebook_libary_Home");
         }
