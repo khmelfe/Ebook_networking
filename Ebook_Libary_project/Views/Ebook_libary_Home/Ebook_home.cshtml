@@ -552,12 +552,26 @@
                         <p>Category: ${book.Category}</p>
                         <p>Minimum Age: ${book.minage}</p>
                         <p>Buying Price: ${book.BuyingPrice}</p>
+
                         ${book.Sale > 0
                             ? `
                             <p style="text-decoration: line-through; color: red;">Original Price: ${book.BuyingPrice}</p>
                             <p style="color: green;">Discounted Price: ${book.DiscountedPrice}</p>`
                             : ''}
-                        <p>Borrow Price: ${book.BorrowPrice}</p>
+                        ${book.Sale > 0
+                            ? `
+    <p style="text-decoration: line-through; color: red;">Original Price: ${book.BorrowPrice}</p>
+    <p style="color: green;">
+    Discounted Price: ${(
+                            parseFloat(String(book.BorrowPrice).trim().replace(/[^\d.-]/g, '')) -
+                            parseFloat(String(book.BorrowPrice).trim().replace(/[^\d.-]/g, '')) *
+                            parseFloat(String(book.Sale).trim().replace(/[^\d.-]/g, '')) *
+                            0.01
+                        ).toFixed(2)}
+</p>
+
+`
+                            : ''}
                     </a>
                 `;
                     scrollMenu.appendChild(column);
@@ -611,13 +625,27 @@
                         <p>Author: ${book.Author}</p>
                         <p>Category: ${book.Category}</p>
                         <p>Minimum Age: ${book.minage}</p>
-                        <p>Buying Price: ${book.BuyingPrice}</p>
                         ${book.Sale > 0
                             ? `
                             <p style="text-decoration: line-through; color: red;">Original Price: ${book.BuyingPrice}</p>
-                            <p style="color: green;">Discounted Price: ${book.DiscountedPrice}</p>`
+                            <p style="color: green;">Discounted Price: ${(
+                            parseFloat(String(book.BuyingPrice).trim().replace(/[^\d.-]/g, '')) -
+                            parseFloat(String(book.BuyingPrice).trim().replace(/[^\d.-]/g, '')) *
+                            parseFloat(String(book.Sale).trim().replace(/[^\d.-]/g, '')) *
+                            0.01
+                        ).toFixed(2)}</p>`
                             : ''}
-                        <p>Borrow Price: ${book.BorrowPrice}</p>
+                         ${book.Sale > 0
+                            ? `
+     <p style="text-decoration: line-through; color: red;">Original Price: ${book.BorrowPrice}</p>
+     <p style="color: green;">Discounted Price: ${(
+                            parseFloat(String(book.BorrowPrice).trim().replace(/[^\d.-]/g, '')) -
+                            parseFloat(String(book.BorrowPrice).trim().replace(/[^\d.-]/g, '')) *
+                            parseFloat(String(book.Sale).trim().replace(/[^\d.-]/g, '')) *
+                            0.01
+                        ).toFixed(2)}</p>`
+                            : ''}
+
                     </a>
                 `;
                     scrollMenu.appendChild(column);
