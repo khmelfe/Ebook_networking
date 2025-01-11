@@ -129,7 +129,7 @@
         <div class="col-md-6 d-flex">
             <div class="frame book-details flex-fill">
                 <h2>@Model.Name</h2>
-                <img src="@Model.ImagePath" alt="@Model.Name" />
+                <img src="@Url.Content(Model.ImagePath?.Trim())" alt="@Model.Name" />
                 <p><strong>Author:</strong> @Model.Author</p>
                 <p>
                     <strong>Buying Price:</strong>
