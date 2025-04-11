@@ -11,10 +11,14 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
 using System.Xml.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 
 
@@ -22,8 +26,8 @@ namespace Ebook_Library_Project
 { //no
     public static class Userdatabase
     {
-        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -41,6 +45,16 @@ namespace Ebook_Library_Project
                     }
                     return bookIds;
                 }
+            }
+        }
+        //Hash 256 Passwords.
+        private static string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(password);
+                byte[] hash = sha256.ComputeHash(bytes);
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
             }
         }
 
@@ -595,7 +609,7 @@ namespace Ebook_Library_Project
                     insertCommand.Parameters.AddWithValue("@Mail", mail);
                     insertCommand.Parameters.AddWithValue("@Admin", admin);
                     insertCommand.Parameters.AddWithValue("@Age", age);
-                    insertCommand.Parameters.AddWithValue("@Password", password);
+                    insertCommand.Parameters.AddWithValue("@Password", HashPassword(password));
 
                     insertCommand.ExecuteNonQuery();
                 }
@@ -652,7 +666,7 @@ namespace Ebook_Library_Project
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Password", newPassword);
+                command.Parameters.AddWithValue("@Password", HashPassword(newPassword));
                 command.Parameters.AddWithValue("@Username", username);  
 
                 connection.Open();
@@ -731,7 +745,7 @@ namespace Ebook_Library_Project
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Name", name);
-                command.Parameters.AddWithValue("@Password", password);
+                command.Parameters.AddWithValue("@Password", HashPassword(password));
 
                 connection.Open();
 
@@ -794,7 +808,7 @@ namespace Ebook_Library_Project
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Name", name);
-                command.Parameters.AddWithValue("@Password", password);
+                command.Parameters.AddWithValue("@Password", HashPassword(password));
 
                 connection.Open();
 
