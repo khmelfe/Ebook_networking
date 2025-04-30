@@ -1,28 +1,27 @@
 ﻿@{
     ViewBag.Title = "Payment";
     var cart = ViewBag.Cart;
+    var creditCard = ViewBag.CreditCard;
 }
 
 <h2>Payment</h2>
+
 <style>
-    /* General Frame Styling */
     .frame {
         background-color: #f9f9f9;
         border: 1px solid #ddd;
         border-radius: 10px;
         padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
     }
 
-    /* Header Styling */
     h2, h3 {
-        color: #002366; /* Deep Blue */
+        color: #002366;
         font-weight: bold;
         text-align: center;
     }
 
-    /* Input Field Styling */
     input[type="text"] {
         width: 100%;
         padding: 8px;
@@ -34,12 +33,11 @@
     }
 
         input[type="text"]:focus {
-            border-color: #002366; /* Deep Blue */
-            box-shadow: 0 0 5px rgba(0, 35, 102, 0.5); /* Blue glow */
+            border-color: #002366;
+            box-shadow: 0 0 5px rgba(0, 35, 102, 0.5);
             outline: none;
         }
 
-    /* Button Styling */
     .btn {
         padding: 8px 16px;
         border-radius: 15px;
@@ -48,19 +46,19 @@
     }
 
     .btn-success {
-        background-color: #0047AB; /* Medium Blue */
+        background-color: #0047AB;
         color: white;
         border: none;
     }
 
         .btn-success:hover {
-            background-color: #003580; /* Darker Blue */
-            transform: scale(1.05); /* Slight grow effect */
+            background-color: #003580;
+            transform: scale(1.05);
         }
 
     .btn-paypal {
-        background-color: #ffc439; /* PayPal Yellow */
-        color: #002366; /* Deep Blue */
+        background-color: #ffc439;
+        color: #002366;
         border: none;
         text-transform: uppercase;
         font-weight: bold;
@@ -69,33 +67,30 @@
     }
 
         .btn-paypal:hover {
-            background-color: #f5b800; /* Darker Yellow */
+            background-color: #f5b800;
             transform: scale(1.05);
         }
 
-    /* Cart Total Styling */
     .cart-total {
         font-size: 1.3rem;
         font-weight: bold;
-        color: #0047AB; /* Medium Blue */
+        color: #0047AB;
         text-align: center;
         margin-bottom: 20px;
     }
 
-    /* Payment Form Alignment */
     form {
         max-width: 400px;
-        margin: 0 auto; /* Center align the form */
+        margin: 0 auto;
     }
 
     label {
         font-weight: bold;
-        color: #002366; /* Deep Blue */
+        color: #002366;
         display: block;
         margin-bottom: 5px;
     }
 
-    /* Align PayPal Button */
     .paypal-container {
         display: flex;
         justify-content: center;
@@ -107,53 +102,48 @@
     <div class="frame">
         <h2>Payment</h2>
 
-        @if (cart != null)
+        @if (cart != null && cart.Items.Count > 0)
         {
-            if (cart.Items.Count > 0)
-            {
-                <!-- Cart Total -->
-                <div class="cart-total">
-                    Total: @cart.CalculateTotalPrice().ToString("C")
+            <div class="cart-total">
+                Total: @cart.CalculateTotalPrice().ToString("C")
+            </div>
+
+            <h3>Payment Details</h3>
+            <form method="post" action="/Payment/paymentconfirm" onsubmit="return validatePaymentForm()">
+                <div>
+                    <label for="cardNumber">Card Number:</label>
+                    <input type="text" id="cardNumber" name="cardNumber" required pattern="^\d{16}$" maxlength="16"
+                           placeholder="1234567812345678"
+                           value="@(creditCard != null ? creditCard.CreditCardNumber : "")" />
                 </div>
 
-                <!-- Payment Form -->
-                <h3>Payment Details</h3>
-                <form method="post" action="/Payment/paymentconfirm" onsubmit="return validatePaymentForm()">
-                    <div>
-                        <label for="cardNumber">Card Number:</label>
-                        <input type="text" id="cardNumber" name="cardNumber" required pattern="\d{16}" placeholder="1234 5678 9012 3456" maxlength="19" />
-                    </div>
-
-                    <div>
-                        <label for="expiry">Expiry Date:</label>
-                        <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required pattern="\d{2}/\d{2}" />
-                    </div>
-
-                    <div>
-                        <label for="cvv">CVV:</label>
-                        <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3" />
-                    </div>
-
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button type="submit" class="btn btn-success">Confirm Payment</button>
-                    </div>
-                </form>
-
-                <!-- PayPal Button -->
-                <div class="paypal-container">
-                    <a href="https://www.paypal.com/il/home" target="_blank">
-                        <button class="btn btn-paypal">Pay with PayPal</button>
-                    </a>
+                <div>
+                    <label for="expiry">Expiry Date (MM/YY):</label>
+                    <input type="text" id="expiry" name="expiry" required pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+                           placeholder="MM/YY"
+                           value="@(creditCard != null ? creditCard.ValidDate : "")" />
                 </div>
-            }
-            else
-            {
-                <p>Your cart is currently empty. You cannot proceed with payment.</p>
-            }
+
+                <div>
+                    <label for="cvv">CVC:</label>
+                    <input type="text" id="cvv" name="cvv" required pattern="^\d{3}$" maxlength="3"
+                           value="@(creditCard != null ? creditCard.CVC : "")" />
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit" class="btn btn-success">Confirm Payment</button>
+                </div>
+            </form>
+
+            <div class="paypal-container">
+                <a href="https://www.paypal.com/il/home" target="_blank">
+                    <button class="btn btn-paypal">Pay with PayPal</button>
+                </a>
+            </div>
         }
         else
         {
-            <p>Unable to retrieve cart details.</p>
+            <p>Your cart is currently empty. You cannot proceed with payment.</p>
         }
     </div>
 </div>
@@ -161,7 +151,7 @@
 <script>
     function validatePaymentForm() {
         const expiry = document.getElementById('expiry').value;
-        const expiryRegex = /^\d{2}\/\d{2}$/;
+        const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
 
         if (!expiryRegex.test(expiry)) {
             alert('Invalid expiry date format. Please use MM/YY.');
@@ -169,13 +159,7 @@
         }
 
         const [month, year] = expiry.split('/').map(Number);
-
-        if (month < 1 || month > 12) {
-            alert('Invalid month. Please enter a value between 01 and 12.');
-            return false;
-        }
-
-        const currentYear = new Date().getFullYear() % 100; // Get last two digits of the current year
+        const currentYear = new Date().getFullYear() % 100;
         const currentMonth = new Date().getMonth() + 1;
 
         if (year < currentYear || (year === currentYear && month < currentMonth)) {
@@ -183,9 +167,6 @@
             return false;
         }
 
-        return true; // All validations passed
+        return true;
     }
 </script>
-
-
-    

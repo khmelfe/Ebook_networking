@@ -146,6 +146,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="creditcard.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\Ebook_libary_HomeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -159,6 +160,7 @@
     </Compile>
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\CreditCardModel.cs" />
     <Compile Include="Models\DashboardModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\Registration.cs" />
@@ -368,7 +370,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Ebook_libary_Home\Ebook_home.cshtml" />
-    <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\User\bookPage.cshtml" />
     <Content Include="Views\User\CartView.cshtml" />
     <Content Include="Views\User\PaymentView.cshtml" />

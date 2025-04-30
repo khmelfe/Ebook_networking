@@ -1,11 +1,6 @@
-﻿using Ebook_Libary_project.Models;
+﻿using System.Web.Mvc;
 using Ebook_Library_Project;
-using EbookLibraryProject.Models;
-using System;
-using System.Diagnostics;
-using System.Security.Policy;
-using System.Web.Helpers;
-using System.Web.Mvc;
+using Ebook_Libary_project.Models;
 
 namespace Ebook_Libary_project.Controllers
 {
@@ -15,8 +10,13 @@ namespace Ebook_Libary_project.Controllers
         public ActionResult Paymentvi()
         {
             var cart = Cart.GetCart();
-          
+            int userId = UserSession.GetCurrentUserId();
+
+            var creditCard = Userdatabase.GetCreditCardByUserId(userId);
+
             ViewBag.Cart = cart;
+            ViewBag.CreditCard = creditCard;
+
             return View("~/Views/User/PaymentView.cshtml");
         }
 
@@ -24,7 +24,29 @@ namespace Ebook_Libary_project.Controllers
         public ActionResult paymentconfirm()
         {
             var cart = Cart.GetCart();
-            Debug.WriteLine("paying.");
+            int userId = UserSession.GetCurrentUserId();
+
+            // Check if credit card exists, if not - save it
+            var existingCard = Userdatabase.GetCreditCardByUserId(userId);
+            if (existingCard == null)
+            {
+                string cardNumber = Request.Form["cardNumber"];
+                string expiryDate = Request.Form["expiry"];
+                string cvc = Request.Form["cvv"];
+
+                // Save the new credit card
+                Userdatabase.AddCreditCard(
+                    userId,
+                    Userdatabase.GetUserNameById(userId), // First name from user
+                    "LastName", // Dummy last name
+                    "123456789", // Dummy IsraeliID
+                    cardNumber,
+                    expiryDate,
+                    cvc
+                );
+            }
+
+            // Handle payment logic
             foreach (var item in cart.Items)
             {
                 int bookId = item.Key;
@@ -32,32 +54,28 @@ namespace Ebook_Libary_project.Controllers
 
                 if (action == "borrow")
                 {
-                    Debug.WriteLine("Book borrowed successfully.");
-                    Userdatabase.BorrowBook(UserSession.GetCurrentUserId(), bookId);
+                    Userdatabase.BorrowBook(userId, bookId);
                 }
                 else if (action == "buy")
                 {
-                    Debug.WriteLine("Book purchased successfully.");
-                    Userdatabase.BuyBook(bookId, UserSession.GetCurrentUserId());
+                    Userdatabase.BuyBook(bookId, userId);
                 }
                 else
                 {
-                    Userdatabase.AddToWaitingList(UserSession.GetCurrentUserId(), bookId);
+                    Userdatabase.AddToWaitingList(userId, bookId);
                 }
             }
-            var emailService = new EmailService();
-            string subject = "Reset Your Password";
-            string body = $@"
-        <html>
-        <body>
-            <p>Dear {Userdatabase.GetUserNameById(UserSession.GetCurrentUserId())},</p>
-            <p>payment exepted</p>
-          
-        </body>
-        </html>";
 
-            // Send the email
-            emailService.SendEmail(Userdatabase.GetUserEmailById(UserSession.GetCurrentUserId()), subject, body);
+            var emailService = new EmailService();
+            string subject = "Payment Confirmation";
+            string body = $@"
+            <html><body>
+            <p>Dear {Userdatabase.GetUserNameById(userId)},</p>
+            <p>Your payment haas been accepted successfully.</p>
+            </body></html>";
+
+            emailService.SendEmail(Userdatabase.GetUserEmailById(userId), subject, body);
+
             cart.Items.Clear();
             return RedirectToAction("Ebook_home", "Ebook_libary_Home");
         }

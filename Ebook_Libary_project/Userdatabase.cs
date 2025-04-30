@@ -26,8 +26,8 @@ namespace Ebook_Library_Project
 { //no
     public static class Userdatabase
     {
-        //public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
-        public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
+        public static string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=User;Integrated Security=True";
+        //public static string connectionString = @"Data Source=DESKTOP-UFMJ78P; Integrated Security=True; TrustServerCertificate=True;";
         public static List<int> GetBoughtBookIdsByUser(int userId)
         {
             string query = "SELECT BookID FROM BoughtBooks WHERE UserID = @UserId";
@@ -48,7 +48,8 @@ namespace Ebook_Library_Project
             }
         }
         //Hash 256 Passwords.
-        private static string HashPassword(string password)
+        //temp
+        public static string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -739,31 +740,53 @@ namespace Ebook_Library_Project
         }
         public static bool userexist(string name, string password)
         {
-            string query = "SELECT COUNT(*) FROM Users WHERE name = @Name AND password = @Password";
+            string query = "SELECT password FROM Users WHERE name = @Name";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Name", name);
-                command.Parameters.AddWithValue("@Password", HashPassword(password));
 
                 connection.Open();
 
-                int count = (int)command.ExecuteScalar();
-
-                if (count > 0)
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    // Get the user ID
-                    int userId = GetUser_details(name, password);
-                    Debug.WriteLine(" id" + userId);
-                    // Set the userId in a cookie
-                    HttpContext.Current.Response.Cookies["userId"].Value = userId.ToString();
-                    HttpContext.Current.Response.Cookies["userId"].Path = "/";
-                }
+                    if (reader.Read())
+                    {
+                        string hashedPasswordFromDatabase = reader.GetString(0);
 
-                return count > 0;
+                        string hashedPasswordFromInput = HashPassword(password);
+
+                        Debug.WriteLine($"Entered password: {password}");
+                        Debug.WriteLine($"Hashed password from input: {hashedPasswordFromInput}");
+                        Debug.WriteLine($"Hashed password from database: {hashedPasswordFromDatabase}");
+
+                        // Now compare
+                        if (hashedPasswordFromInput == hashedPasswordFromDatabase)
+                        {
+                            int userId = GetUser_details(name, password);
+                            Debug.WriteLine("User ID found: " + userId);
+
+                            HttpContext.Current.Response.Cookies["userId"].Value = userId.ToString();
+                            HttpContext.Current.Response.Cookies["userId"].Path = "/";
+
+                            return true;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Passwords do not match.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("No user found with that name.");
+                        return false;
+                    }
+                }
             }
         }
+
         public static bool userexistbyname(string name)
         {
             string query = "SELECT COUNT(*) FROM Users WHERE name = @Name";
@@ -800,7 +823,7 @@ namespace Ebook_Library_Project
             }
         }
 
-        public static int GetUser_details(string name, string password)
+      /*  public static int GetUser_details(string name, string password)
         {
             int currentId = 0;
             string query = "SELECT id FROM Users WHERE name = @Name AND password = @Password";
@@ -825,7 +848,7 @@ namespace Ebook_Library_Project
             }
 
 
-        }
+        }*/
      
 
         ////Is admin
@@ -1772,7 +1795,291 @@ namespace Ebook_Library_Project
         }
 
 
+        //add credit cards
+        public static void AddCreditCard(int userId, string firstName, string lastName, string israeliId, string creditCardNumber, string validDate, string cvc)
+        {
+            string query = "INSERT INTO CreditCards (UserId, FirstName, LastName, IsraeliID, CreditCardNumber, ValidDate, CVC) " +
+                           "VALUES (@UserId, @FirstName, @LastName, @IsraeliID, @CreditCardNumber, @ValidDate, @CVC)";
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@FirstName", firstName);
+                command.Parameters.AddWithValue("@LastName", lastName);
+                command.Parameters.AddWithValue("@IsraeliID", israeliId); // <- שים לב כאן!
+                command.Parameters.AddWithValue("@CreditCardNumber", creditCardNumber);
+                command.Parameters.AddWithValue("@ValidDate", validDate);
+                command.Parameters.AddWithValue("@CVC", cvc);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+
+
+        /*public static CreditCardModel GetCreditCardByUserId(int userId)
+            {
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    string query = "SELECT CreditCardNumber, ValidDate, CVC FROM CreditCards WHERE UserId = @UserId";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new CreditCardModel
+                            {
+                                CreditCardNumber = reader["CreditCardNumber"].ToString(),
+                                ValidDate = reader["ValidDate"].ToString(),
+                                CVC = reader["CVC"].ToString()
+                            };
+                        }
+                        else
+                        {
+                            return null; // No credit card found
+                        }
+                    }
+                } }
+
+
+
+            //temp
+            public static string GetPasswordByUsername(string username)
+                {
+                    string hashedPassword = null;
+
+                    string query = "SELECT password FROM Users WHERE name = @Name";
+
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@Name", username);
+
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                hashedPassword = reader.GetString(0);
+                            }
+                        }
+                    }
+
+                    return hashedPassword;
+                }
+
+        public static string GetPasswordByEmail(string email)
+        {
+            string password = null;
+            string query = "SELECT Password FROM Users WHERE RTRIM(LTRIM(Mail)) = RTRIM(LTRIM(@Email))";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Email", email);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        password = reader["Password"].ToString();
+                    }
+                }
+            }
+
+            return password;
+        }
+
+
+        public static int GetUserIdByEmail(string email)
+        {
+            int userId = 0;
+            string query = "SELECT Id FROM Users WHERE RTRIM(LTRIM(Mail)) = RTRIM(LTRIM(@Email))";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Email", email);
+
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        userId = (int)reader["Id"];
+                    }
+                }
+            }
+
+            return userId;
+        }*/
+
+
+        public static CreditCardModel GetCreditCardByUserId(int userId)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                // SAFE: string query = "SELECT CreditCardNumber, ValidDate, CVC FROM CreditCards WHERE UserId = @UserId";
+                // SqlCommand command = new SqlCommand(query, connection);
+                // command.Parameters.AddWithValue("@UserId", userId);
+
+                string query = "SELECT CreditCardNumber, ValidDate, CVC FROM CreditCards WHERE UserId = " + userId;
+                SqlCommand command = new SqlCommand(query, connection);
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new CreditCardModel
+                        {
+                            CreditCardNumber = reader["CreditCardNumber"].ToString(),
+                            ValidDate = reader["ValidDate"].ToString(),
+                            CVC = reader["CVC"].ToString()
+                        };
+                    }
+                    else
+                    {
+                        return null; // No credit card found
+                    }
+                }
+            }
+        }
+
+        public static string GetPasswordByUsername(string username)
+        {
+            string hashedPassword = null;
+
+            // SAFE: string query = "SELECT password FROM Users WHERE name = @Name";
+            // SqlCommand command = new SqlCommand(query, connection);
+            // command.Parameters.AddWithValue("@Name", username);
+
+            string query = "SELECT password FROM Users WHERE name = '" + username + "'";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        hashedPassword = reader.GetString(0);
+                    }
+                }
+            }
+
+            return hashedPassword;
+        }
+
+        public static string GetPasswordByEmail(string email)
+        {
+            string password = null;
+            // SAFE: string query = "SELECT Password FROM Users WHERE RTRIM(LTRIM(Mail)) = RTRIM(LTRIM(@Email))";
+            string query = "SELECT Password FROM Users WHERE Mail = '" + email + "'";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        password = reader["Password"].ToString();
+                    }
+                }
+            }
+
+            return password;
+        }
+
+        public static int GetUserIdByEmail(string email)
+        {
+            int userId = 0;
+            // SAFE: string query = "SELECT Id FROM Users WHERE RTRIM(LTRIM(Mail)) = RTRIM(LTRIM(@Email))";
+            string query = "SELECT Id FROM Users WHERE Mail = '" + email + "'";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        userId = (int)reader["Id"];
+                    }
+                }
+            }
+
+            return userId;
+        }
+
+        public static int GetUser_details(string name, string password)
+        {
+            int currentId = 0;
+            // SAFE: string query = "SELECT id FROM Users WHERE name = @Name AND password = @Password";
+            string query = "SELECT id FROM Users WHERE name = '" + name + "' AND password = '" + HashPassword(password) + "'";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        currentId = reader.GetInt32(0);
+                        Debug.WriteLine(" id" + currentId);
+                    }
+                }
+                return currentId;
+            }
+        }
+
+        public static List<CreditCardModel> GetAllCreditCards()
+        {
+            List<CreditCardModel> creditCards = new List<CreditCardModel>();
+
+            string query = "SELECT UserId, FirstName, LastName, IsraeliID, CreditCardNumber, ValidDate, CVC FROM CreditCards";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CreditCardModel card = new CreditCardModel
+                        {
+                            UserId = (int)reader["UserId"],
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            IsraeliID = reader["IsraeliID"].ToString(),
+                            CreditCardNumber = reader["CreditCardNumber"].ToString(),
+                            ValidDate = reader["ValidDate"].ToString(),
+                            CVC = reader["CVC"].ToString()
+                        };
+
+                        creditCards.Add(card);
+                    }
+                }
+            }
+
+            return creditCards;
+        }
 
 
     }

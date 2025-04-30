@@ -3,9 +3,9 @@
 
 }
 @{
-    
-        Layout = null;
-    
+
+    Layout = null;
+
 }
 
 <!DOCTYPE html>
@@ -103,7 +103,7 @@
                 <label for="Username">
                     Username:
                 </label>
-                <input type="Username" id="Username" name="Username" 
+                <input type="Username" id="Username" name="Username"
                        placeholder="Enter your Username" required />
 
             </div>
@@ -112,7 +112,7 @@
                     Password:
                 </label>
 
-                <input type="password" id="password" name="password" 
+                <input type="password" id="password" name="password"
                        placeholder="Enter your Password" required>
             </div>
             <div class="wrap">
@@ -141,6 +141,38 @@
 </body>
 
 </html>
+<script>
+    function submitLogin() {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+
+        fetch('/Login/Submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username, password: password })
+        })
+            .then(response => response.json())
+            .then(data => {
+                let message =
+                    "Entered Password: " + data.enteredPassword + "\n" +
+                    "Hashed Password from Input: " + data.hashedPasswordFromInput + "\n" +
+                    "Hashed Password from Database: " + data.hashedPasswordFromDatabase + "\n" +
+                    "Login Success: " + data.success;
+
+                alert(message);
+
+                if (data.success) {
+                    // Optional: redirect after successful login
+                    // window.location.href = "/Home/Index";
+                }
+            })
+            .catch(error => {
+                alert("Error: " + error);
+            });
+    }
+</script>
 
 
 

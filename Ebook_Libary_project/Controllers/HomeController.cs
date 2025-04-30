@@ -3,29 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ebook_Library_Project; // <-- Correct project namespace
 
-namespace Ebook_Libary_project.Controllers
+namespace Ebook_Library_Project.Controllers // <-- Correct spelling
 {
     public class HomeController : Controller
     {
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        //public ActionResult About()
-        //{
-        //    ViewBag.Message = "Your application description page.";
-
-        //    return View();
-        //}
-
-        //public ActionResult Contact()
-        //{
-        //    ViewBag.Message = "Your contact page.";
-
-        //    return View();
-        //}
-      
+        public ActionResult FillDatabase()
+        {
+            creditcard.FillDatabase(); // This triggers your file
+            return Content("Database filled successfully!");
+        }
     }
 }

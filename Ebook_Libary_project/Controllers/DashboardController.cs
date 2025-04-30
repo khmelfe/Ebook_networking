@@ -320,6 +320,20 @@ namespace Ebook_Libary_project.Controllers.user
                 });
             }
         }
+
+        public JsonResult GetAllCreditCards()
+        {
+            try
+            {
+                var cards = Userdatabase.GetAllCreditCards();
+                return Json(new { success = true, cards = cards }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
     }
 
 }

@@ -357,6 +357,7 @@
                 <li data-target="Statisticsform">Statistics</li>
                 <li data-target="UserManagementForm">User Management</li>
                 <li data-target="addBookForm">Add Book</li>
+                <li data-target="CreditCardForm">Credit Cards</li>
                 <li data-target="SearchBookForm">Search Book</li>
                 <li data-target="BorrowListForm">Borrow Lists</li>
                 <li data-target="WaitingListForm">Waiting Lists</li>
@@ -409,7 +410,7 @@
                     </div>
                 </div>
             </form>
-           
+
             <form id="UserManagementForm" style="display: none;">
                 <h2 id="Usermanagment">Users Managment</h2>
                 <h2>Search and Manage Users</h2>
@@ -510,16 +511,16 @@
                                     <label for="file" style="min-width: 80px;">Book File As f2b format:</label>
                                     <input type="file" id="f2bfile" name="file" accept=".fb2" required style="width: 100%;">
                                 </div>
-                            </div>  
+                            </div>
 
-                                <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
-                                    <!-- Submit button -->           
-                                    <div style="flex: 1;">
-                                        <input type="submit"  value="Add Book" style="padding: 5px 10px;">
-                                    </div>
+                            <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px;">
+                                <!-- Submit button -->
+                                <div style="flex: 1;">
+                                    <input type="submit" value="Add Book" style="padding: 5px 10px;">
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </form>
             <form id="SearchBookForm" style="display: none;">
@@ -583,7 +584,7 @@
                     </div>
                 </div>
             </form>
-            
+
             <form id="BorrowListForm" style="display: none;">
                 <h1 id="borrow_list">Active Borrowed Lists</h1>
                 <div class="well">
@@ -612,9 +613,18 @@
                     </div>
                 </div>
             </form>
-     </div>
+            <form id="CreditCardForm" style="display: none;">
+                <div class="well">
+                    <h2>All Credit Cards</h2>
+                    <div id="creditCardList">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </form>
 
+        </div>
 
+               
 
 </body>
 
@@ -1549,6 +1559,44 @@
                 document.getElementById('WaitingCount').innerText = 'WaitingCount: Error loading data';
             });
     });
+    function loadCreditCards() {
+        const container = document.getElementById("creditCardList");
+        container.innerHTML = "<p>Loading...</p>";
+
+        fetch('/Dashboard/GetAllCreditCards')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    container.innerHTML = "";
+                    data.cards.forEach(card => {
+                        const div = document.createElement("div");
+                        div.className = "stats-box-info";
+                        div.innerHTML = `
+                        <p><strong>Card Number:</strong> ${card.CreditCardNumber}</p>
+                        <p><strong>Valid Until:</strong> ${card.ValidDate}</p>
+                        <p><strong>CVC:</strong> ${card.CVC}</p>
+                        <hr>
+                    `;
+                        container.appendChild(div);
+                    });
+                } else {
+                    container.innerHTML = `<p>Error: ${data.message}</p>`;
+                }
+            })
+            .catch(err => {
+                container.innerHTML = `<p>Error loading credit cards: ${err.message}</p>`;
+            });
+    }
+
+    // Hook into form visibility logic
+    document.addEventListener("DOMContentLoaded", function () {
+        const creditCardTab = document.querySelector('[data-target="CreditCardForm"]');
+        if (creditCardTab) {
+            creditCardTab.addEventListener("click", loadCreditCards);
+        }
+    });
+
+
 
 
 </script>
