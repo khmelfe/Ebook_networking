@@ -15,6 +15,7 @@ namespace Ebook_Libary_project.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public JsonResult Submit(string username, string password)
         {
@@ -23,44 +24,24 @@ namespace Ebook_Libary_project.Controllers
                 username = username?.Trim();
                 password = password?.Trim();
 
-                /* Validate email format
+                if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                    return Json(new { success = false, message = "Email and password are required." });
+
                 if (!IsValidEmail(username))
-                {
                     return Json(new { success = false, message = "Invalid email format." });
-                }*/
 
-                string hashedPasswordFromInput = Userdatabase.HashPassword(password);
-                string hashedPasswordFromDatabase = Userdatabase.GetPasswordByEmail(username)?.Trim(); // <<< add .Trim()
+                string hashedInputPassword = Userdatabase.HashPassword(password);
+                string hashedDbPassword = Userdatabase.GetPasswordByEmail(username)?.Trim();
 
-                string emailFromInput = username;
-                string emailFromDatabase = username; // assumed same (you search by email)
-
-                /*if (hashedPasswordFromDatabase != null && hashedPasswordFromInput == hashedPasswordFromDatabase)
+                if (!string.IsNullOrEmpty(hashedDbPassword) && hashedInputPassword == hashedDbPassword)
                 {
                     int userId = Userdatabase.GetUserIdByEmail(username);
                     bool isAdmin = Userdatabase.IsUser_admin(userId);
-
-                    return Json(new { success = true, userId, isAdmin });
-                }*/
-                int userId = Userdatabase.GetUser_details(username, password);
-                if (userId > 0)
-                {
-                    bool isAdmin = Userdatabase.IsUser_admin(userId);
                     return Json(new { success = true, userId, isAdmin });
                 }
-              
-
                 else
                 {
-                    return Json(new
-                    {
-                        success = false,
-                        message = "Invalid email or password.\n" /*+
-                                  "Input Email: " + (emailFromInput ?? "null") + "\n" +
-                                  "Database Email: " + (emailFromDatabase ?? "null") + "\n" +
-                                  "Hashed Password (Input): " + (hashedPasswordFromInput ?? "null") + "\n" +
-                                  "Hashed Password (Database): " + (hashedPasswordFromDatabase ?? "null")*/
-                    });
+                    return Json(new { success = false, message = "Invalid email or password." });
                 }
             }
             catch (Exception ex)
@@ -69,37 +50,38 @@ namespace Ebook_Libary_project.Controllers
             }
         }
 
-
         [HttpPost]
         public JsonResult Checking_info_register(string name, string password, string con_pass, string mail, string age, bool isadmin)
         {
             Debug.WriteLine("Checking_info_register called");
             try
             {
-                // Validate email format before registration
                 if (!IsValidEmail(mail))
-                {
                     return Json(new { success = false, message = "Invalid email format." });
-                }
 
-                password = password?.Trim();
-                con_pass = con_pass?.Trim();
+                if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(con_pass))
+                    return Json(new { success = false, message = "All fields are required." });
 
-                bool Valid = RegistrationModel.ValitdateUser(name, password, con_pass, mail, age, isadmin);
-                int age_dig = int.Parse(age);
-                if (Valid)
+                password = password.Trim();
+                con_pass = con_pass.Trim();
+
+                bool isValid = RegistrationModel.ValitdateUser(name, password, con_pass, mail, age, isadmin);
+                if (!int.TryParse(age, out int ageValue))
+                    return Json(new { success = false, message = "Invalid age." });
+
+                if (isValid)
                 {
-                    Ebook_Library_Project.Userdatabase.AddUser(name.Trim(), mail.Trim(), password, age_dig, isadmin);
-
+                    Userdatabase.AddUser(name.Trim(), mail.Trim(), password, ageValue, isadmin);
 
                     var emailService = new EmailService();
                     string subject = "Welcome to Your App!";
-                    string body = $"Hi {(name)},<br><br>Thank you for registering at Your App!";
+                    string body = $"Hi {name},<br><br>Thank you for registering at Your App!";
                     emailService.SendEmail(mail, subject, body);
 
                     return Json(new { success = true, message = "User was created." });
                 }
-                return Json(new { success = false });
+
+                return Json(new { success = false, message = "Validation failed." });
             }
             catch (Exception ex)
             {
@@ -107,7 +89,10 @@ namespace Ebook_Libary_project.Controllers
             }
         }
 
-        [HttpPost]
+    
+
+
+      [HttpPost]
         public JsonResult email_pass_reset(string email, string username)
         {
             try
